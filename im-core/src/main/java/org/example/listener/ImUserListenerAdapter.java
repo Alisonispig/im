@@ -1,21 +1,21 @@
 package org.example.listener;
 
-import org.example.config.ImChannelContext;
 import org.example.packets.User;
+import org.tio.core.ChannelContext;
 
 public abstract class ImUserListenerAdapter implements ImUserListener {
 
-    public abstract void doAfterBind(ImChannelContext imChannelContext, User user);
+    public abstract void doAfterBind(ChannelContext channelContext, User user);
 
-    public abstract void doAfterUnbind(ImChannelContext imChannelContext, User user);
+    public abstract void doAfterUnbind(ChannelContext channelContext, User user);
 
     @Override
-    public void onAfterBind(ImChannelContext imChannelContext, User user) {
-        doAfterBind(imChannelContext, user);
+    public void onAfterBind(ChannelContext channelContext, User user) {
+        doAfterBind(channelContext, user);
     }
 
     @Override
-    public void onAfterUnbind(ImChannelContext imChannelContext, User user) {
-        doAfterUnbind(imChannelContext, user);
+    public void onAfterUnbind(ChannelContext channelContext, User user) {
+        doAfterUnbind(channelContext, user);
     }
 }

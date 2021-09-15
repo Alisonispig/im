@@ -53,10 +53,6 @@ public class Im {
                 return false;
             }
             imSessionContext.getImClientNode().setUser(user);
-//            ImUserListener imUserListener = imConfig.getImUserListener();
-//            if(Objects.nonNull(imUserListener)){
-//                imUserListener.onAfterBind(imChannelContext, user);
-//            }
         }catch (Exception e) {
             log.error(e.getMessage(), e);
             return false;

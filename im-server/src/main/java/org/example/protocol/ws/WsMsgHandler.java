@@ -1,9 +1,13 @@
 package org.example.protocol.ws;
 
+import cn.hutool.core.util.ObjectUtil;
+import com.alibaba.fastjson.JSON;
+import org.example.commond.AbstractCmdHandler;
 import org.example.commond.CommandManager;
 import org.example.commond.handler.LoginReqHandler;
 import org.example.config.Im;
 import org.example.enums.CommandEnum;
+import org.example.packets.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.tio.core.ChannelContext;
@@ -23,24 +27,14 @@ public class WsMsgHandler implements IWsMsgHandler {
     public HttpResponse handshake(HttpRequest httpRequest, HttpResponse httpResponse, ChannelContext channelContext) throws Exception {
         String clientip = httpRequest.getClientIp();
         String username = httpRequest.getParam("username");
-
-//        Tio.bindUser(channelContext, username);
-//		channelContext.setUserid(username);
         log.info("收到来自{}的ws握手包\r\n{}", clientip, httpRequest);
-//        RespBody heartbeatBody = new RespBody(CommandEnum.COMMAND_HANDSHAKE_REQ).setData(new HeartbeatBody((byte) -128));
-//        httpResponse.setBody(heartbeatBody.toByte());
-//        ImPacket imPacket = new ImPacket(CommandEnum.COMMAND_HANDSHAKE_RESP, );
-//        String str = "{cmd:13,data:-128}";
-//        WsResponse wsResponse = WsResponse.fromText(str, ImConfig.CHARSET);
-//        Tio.send(channelContext, wsResponse);
         return httpResponse;
     }
 
     @Override
     public void onAfterHandshaked(HttpRequest httpRequest, HttpResponse httpResponse, ChannelContext channelContext) throws Exception {
         LoginReqHandler loginHandler = (LoginReqHandler) CommandManager.getCommand(CommandEnum.COMMAND_LOGIN_REQ);
-        WsResponse response = loginHandler.handler(httpRequest, channelContext);
-        Im.send(channelContext, response);
+        loginHandler.handler(httpRequest, channelContext);
         log.info("握手完毕{},{}", "66", "666");
     }
 
@@ -58,8 +52,16 @@ public class WsMsgHandler implements IWsMsgHandler {
     @Override
     public Object onText(WsRequest wsRequest, String text, ChannelContext channelContext) throws Exception {
         log.info("socket消息:{}", text);
+
+        Message message = JSON.parseObject(text, Message.class);
+        CommandEnum commandEnum = CommandEnum.forNumber(message.getCmd());
+        AbstractCmdHandler command = CommandManager.getCommand(commandEnum);
+        WsResponse wsResponse = command.handler(wsRequest, channelContext);
+        if (ObjectUtil.isNotNull(wsResponse)) {
+            Im.send(channelContext, wsResponse);
+        }
 //        ChatBody chatBody = ChatKit.toChatBody(wsRequest.getBody(), channelContext);
 
-        return "{cmd:13,data:-128}";
+        return null;
     }
 }

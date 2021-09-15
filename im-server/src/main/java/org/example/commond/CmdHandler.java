@@ -25,6 +25,6 @@ public interface CmdHandler
 	 * 处理Cmd命令
 	 * @date 2016年11月18日 下午1:08:45
 	 */
-	WsResponse handler(Packet packet, ChannelContext imChannelContext);
+	WsResponse handler(Packet packet, ChannelContext channelContext);
 	
 }

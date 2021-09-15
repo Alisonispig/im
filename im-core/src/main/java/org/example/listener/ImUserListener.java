@@ -1,11 +1,11 @@
 package org.example.listener;
 
-import org.example.config.ImChannelContext;
 import org.example.packets.User;
+import org.tio.core.ChannelContext;
 
 public interface ImUserListener {
 
-    void onAfterBind(ImChannelContext imChannelContext, User user);
+    void onAfterBind(ChannelContext channelContext, User user);
 
-    void onAfterUnbind(ImChannelContext imChannelContext, User user);
+    void onAfterUnbind(ChannelContext channelContext, User user);
 }

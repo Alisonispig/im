@@ -1,9 +1,9 @@
 package org.example.util;
 
 import com.alibaba.fastjson.JSON;
-import org.example.config.ImChannelContext;
 import org.example.config.ImConfig;
 import org.example.config.ImSessionContext;
+import org.example.enums.KeyEnum;
 import org.example.packets.ChatBody;
 import org.example.packets.User;
 import org.slf4j.Logger;
@@ -19,8 +19,7 @@ public class ChatKit {
     public static ChatBody toChatBody(byte[] body, ChannelContext channelContext) {
         ChatBody chatReqBody = parseChatBody(body);
         if(chatReqBody != null){
-            ImChannelContext imChannelContext =  (ImChannelContext)channelContext;
-            ImSessionContext sessionContext = imChannelContext.getSessionContext();
+            ImSessionContext sessionContext = (ImSessionContext)channelContext.get(KeyEnum.IM_CHANNEL_CONTEXT_KEY.getKey());
 
             User user = sessionContext.getImClientNode().getUser();
             if(user != null){

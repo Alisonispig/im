@@ -1,10 +1,8 @@
 package org.example.commond.handler;
 
-import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
 import org.example.commond.AbstractCmdHandler;
 import org.example.config.Im;
-import org.example.config.ImChannelContext;
 import org.example.config.ImConfig;
 import org.example.enums.CommandEnum;
 import org.example.packets.RespBody;
@@ -35,7 +33,7 @@ public class LoginReqHandler extends AbstractCmdHandler {
         User build = User.builder()._id(username).username(username).status(Status.online()).avatar("123").build();
         log.info("登录{},{}", username, password);
         Im.bindUser(channelContext, build);
-        return WsResponse.fromText(RespBody.success(CommandEnum.COMMAND_LOGIN_RESP, build), ImConfig.CHARSET);
+        return null;
     }
 
 }

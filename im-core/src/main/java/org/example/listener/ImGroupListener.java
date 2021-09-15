@@ -1,11 +1,11 @@
 package org.example.listener;
 
-import org.example.config.ImChannelContext;
 import org.example.packets.Group;
+import org.tio.core.ChannelContext;
 
 public interface ImGroupListener {
 
-    void onAfterBind(ImChannelContext imChannelContext, Group build);
+    void onAfterBind(ChannelContext channelContext, Group build);
 
-    void onAfterUnbind(ImChannelContext imChannelContext, Group build);
+    void onAfterUnbind(ChannelContext channelContext, Group build);
 }
