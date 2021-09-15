@@ -16,14 +16,11 @@ public interface CmdHandler
 {
 	/**
 	 * 功能描述：[命令主键]
-	 * @author：WChao 创建时间: 2017年7月17日 下午2:31:51
-	 * @return
 	 */
 	CommandEnum command();
 
 	/**
 	 * 处理Cmd命令
-	 * @date 2016年11月18日 下午1:08:45
 	 */
 	WsResponse handler(Packet packet, ChannelContext channelContext);
 	
