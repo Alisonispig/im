@@ -12,6 +12,7 @@ import org.example.packets.User;
 import org.tio.core.ChannelContext;
 import org.tio.core.intf.Packet;
 import org.tio.http.common.HttpRequest;
+import org.tio.websocket.common.WsRequest;
 import org.tio.websocket.common.WsResponse;
 
 @Slf4j
@@ -37,7 +38,8 @@ public class LoginReqHandler extends AbstractCmdHandler {
         log.info("登录{},{}", username, password);
         Im.bindUser(channelContext, user);
 
-
+        WsRequest wsRequest = new WsRequest();
+        wsRequest.setWsBodyText("");
 
         return null;
     }

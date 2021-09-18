@@ -3,7 +3,9 @@ package org.example.config;
 import org.example.listener.ImGroupListenerAdapter;
 import org.example.listener.ImServerAioListener;
 import org.example.listener.ImServerGroupListener;
+import org.example.listener.ImServerUserListener;
 import org.example.protocol.ws.WsMsgHandler;
+import org.example.store.RedisMessageHelper;
 import org.tio.server.ServerTioConfig;
 import org.tio.websocket.server.WsServerStarter;
 
@@ -27,8 +29,9 @@ public class ImServerWebSocketStart {
 
     public static void start() throws Exception {
 
-        ImServerConfig imConfig = new ImServerConfig() ;
-
+        ImServerConfig imServerConfig = new ImServerConfig();
+        imServerConfig.setMessageHelper(new RedisMessageHelper());
+        imServerConfig.setImUserListener(new ImServerUserListener());
 
 
         ImServerWebSocketStart appStarter = new ImServerWebSocketStart(ImServerConfig.SERVER_PORT, WsMsgHandler.me);

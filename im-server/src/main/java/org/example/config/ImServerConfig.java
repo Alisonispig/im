@@ -3,6 +3,11 @@ package org.example.config;
 import org.tio.utils.time.Time;
 
 public class ImServerConfig extends ImConfig {
+
+    ImServerConfig(){
+        ImServerConfig.Global.set(this);
+    }
+
     /**
      * 协议名字(可以随便取，主要用于开发人员辨识)
      */
@@ -33,4 +38,17 @@ public class ImServerConfig extends ImConfig {
         public static final Long DURATION_1 = Time.MINUTE_1 * 5;
         public static final Long[] IPSTAT_DURATIONS = new Long[] { DURATION_1 };
     }
+
+    public static class Global{
+        private static ImServerConfig imServerConfig;
+
+        public static ImServerConfig get() {
+            return imServerConfig;
+        }
+
+        public static void set(ImServerConfig imServerConfig) {
+            Global.imServerConfig = imServerConfig;
+        }
+    }
+
 }

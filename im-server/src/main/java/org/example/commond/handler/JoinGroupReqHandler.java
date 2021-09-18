@@ -1,9 +1,7 @@
 package org.example.commond.handler;
 
 import org.example.commond.AbstractCmdHandler;
-import org.example.config.Im;
 import org.example.enums.CommandEnum;
-import org.example.packets.ImPacket;
 import org.tio.core.ChannelContext;
 import org.tio.core.intf.Packet;
 import org.tio.http.common.HttpRequest;
@@ -20,7 +18,7 @@ public class JoinGroupReqHandler extends AbstractCmdHandler {
     public WsResponse handler(Packet packet, ChannelContext channelContext) {
 
         HttpRequest request = (HttpRequest) packet;
-        Im.bindGroup(channelContext, request.);
+//        Im.bindGroup(channelContext, request.);
         return null;
     }
 }
