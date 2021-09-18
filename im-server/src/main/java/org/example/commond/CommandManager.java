@@ -1,10 +1,7 @@
 package org.example.commond;
 
 import lombok.extern.slf4j.Slf4j;
-import org.example.commond.handler.HeartbeatReqHandler;
-import org.example.commond.handler.LoginReqHandler;
-import org.example.commond.handler.MessageReqHandler;
-import org.example.commond.handler.UserReqHandler;
+import org.example.commond.handler.*;
 import org.example.enums.CommandEnum;
 
 import java.util.HashMap;
@@ -22,6 +19,7 @@ public class CommandManager {
             registerCommand(new LoginReqHandler());
             registerCommand(new UserReqHandler());
             registerCommand(new MessageReqHandler());
+            registerCommand(new JoinGroupReqHandler());
         } catch (Exception e) {
             log.info("注册处理器失败");
         }

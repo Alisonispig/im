@@ -3,9 +3,8 @@ package org.example.config;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.codec.binary.StringUtils;
 import org.example.enums.KeyEnum;
-import org.example.listener.ImUserListener;
+import org.example.packets.Group;
 import org.example.packets.User;
 import org.tio.core.ChannelContext;
 import org.tio.core.Tio;
@@ -18,45 +17,52 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 @Slf4j
 public class Im {
 
-    public static boolean bSend(ChannelContext channelContext, Packet packet){
-        if(channelContext == null || packet == null){
+    public static boolean bSend(ChannelContext channelContext, Packet packet) {
+        if (channelContext == null || packet == null) {
             return false;
         }
-        return Tio.bSend(channelContext,packet);
+        return Tio.bSend(channelContext, packet);
     }
 
-    public static boolean send(ChannelContext channelContext, Packet packet){
-        if(channelContext == null || packet == null){
+    public static boolean send(ChannelContext channelContext, Packet packet) {
+        if (channelContext == null || packet == null) {
             return false;
         }
-        return Tio.send(channelContext,packet);
+        return Tio.send(channelContext, packet);
+    }
+
+    public static boolean bindGroup(ChannelContext channelContext, Group group) {
+        String groupId = group.getRoomId();
+        Tio.bindGroup(channelContext, groupId);
+        return true;
     }
 
     /**
      * 绑定用户(如果配置了回调函数执行回调)
+     *
      * @param channelContext IM通道上下文
-     * @param user 绑定用户信息
+     * @param user           绑定用户信息
      */
-    public static boolean bindUser(ChannelContext channelContext, User user){
-        if(Objects.isNull(user)|| StrUtil.isBlank(user.get_id())){
+    public static boolean bindUser(ChannelContext channelContext, User user) {
+        if (Objects.isNull(user) || StrUtil.isBlank(user.get_id())) {
             log.error("user or userId is null");
             return false;
         }
         String userId = user.get_id();
-        ImSessionContext imSessionContext = (ImSessionContext)channelContext.get(KeyEnum.IM_CHANNEL_SESSION_CONTEXT_KEY.getKey());
+        ImSessionContext imSessionContext = (ImSessionContext) channelContext.get(KeyEnum.IM_CHANNEL_SESSION_CONTEXT_KEY.getKey());
         Tio.bindUser(channelContext, userId);
         SetWithLock<ChannelContext> channelContextSetWithLock = Tio.getByUserid(channelContext.tioConfig, userId);
         ReentrantReadWriteLock.ReadLock lock = channelContextSetWithLock.getLock().readLock();
         try {
             lock.lock();
-            if(CollUtil.isEmpty(channelContextSetWithLock.getObj())){
+            if (CollUtil.isEmpty(channelContextSetWithLock.getObj())) {
                 return false;
             }
             imSessionContext.getImClientNode().setUser(user);
-        }catch (Exception e) {
+        } catch (Exception e) {
             log.error(e.getMessage(), e);
             return false;
-        }finally {
+        } finally {
             lock.unlock();
         }
         return true;

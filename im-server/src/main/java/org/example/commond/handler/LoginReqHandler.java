@@ -5,6 +5,7 @@ import org.example.commond.AbstractCmdHandler;
 import org.example.config.Im;
 import org.example.config.ImConfig;
 import org.example.enums.CommandEnum;
+import org.example.packets.Group;
 import org.example.packets.RespBody;
 import org.example.packets.Status;
 import org.example.packets.User;
@@ -30,9 +31,14 @@ public class LoginReqHandler extends AbstractCmdHandler {
         String success = RespBody.success(CommandEnum.COMMAND_LOGIN_RESP);
         Im.bSend(channelContext, WsResponse.fromText(success, ImConfig.CHARSET));
 
-        User build = User.builder()._id(username).username(username).status(Status.online()).avatar("123").build();
+        User user = User.builder()._id(username).username(username).status(Status.online()).avatar("123").build();
+        Group group = Group.builder().roomId("100").roomName("群组").build();
+        user.addGroup(group);
         log.info("登录{},{}", username, password);
-        Im.bindUser(channelContext, build);
+        Im.bindUser(channelContext, user);
+
+
+
         return null;
     }
 

@@ -1,11 +1,14 @@
 package org.example.packets;
 
 import lombok.Builder;
+import lombok.Data;
 
+import java.io.Serializable;
 import java.util.List;
 
+@Data
 @Builder
-public class Group {
+public class Group implements Serializable {
 
     /**
      * 群组ID

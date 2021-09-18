@@ -2,7 +2,6 @@ package org.example.packets;
 
 import cn.hutool.core.util.ObjectUtil;
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.serializer.SerializerFeature;
 import org.example.enums.CommandEnum;
 import org.tio.core.intf.Packet;
 
@@ -16,16 +15,16 @@ public class ImPacket extends Packet {
     /**
      * 消息体;
      */
-    protected byte[] body;
+    protected String body;
     /**
      * 消息命令;
      */
     private CommandEnum command;
 
 
-    public ImPacket(CommandEnum command, Object data){
-        if(ObjectUtil.isNotNull(data)){
-            this.body = JSON.toJSONBytes(data, SerializerFeature.DisableCircularReferenceDetect);
+    public ImPacket(CommandEnum command, Object data) {
+        if (ObjectUtil.isNotNull(data)) {
+            this.body = JSON.toJSONString(data);
         }
         this.command = command;
     }

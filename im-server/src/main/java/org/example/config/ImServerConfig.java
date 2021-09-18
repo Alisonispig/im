@@ -2,7 +2,7 @@ package org.example.config;
 
 import org.tio.utils.time.Time;
 
-public class ImServerConfig {
+public class ImServerConfig extends ImConfig {
     /**
      * 协议名字(可以随便取，主要用于开发人员辨识)
      */

@@ -12,4 +12,8 @@ public abstract class ImConfig extends MapWithLockPropSupport {
     public static final String CHARSET = "utf-8";
 
     protected TioConfig tioConfig;
+
+    public ImGroupListener imGroupListener;
+
+    public ImUserListener imUserListener;
 }
