@@ -20,6 +20,7 @@ public class CommandManager {
             registerCommand(new UserReqHandler());
             registerCommand(new MessageReqHandler());
             registerCommand(new JoinGroupReqHandler());
+            registerCommand(new ChatReqHandler());
         } catch (Exception e) {
             log.info("注册处理器失败");
         }

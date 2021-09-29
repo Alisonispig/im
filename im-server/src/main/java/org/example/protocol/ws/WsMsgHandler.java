@@ -52,8 +52,6 @@ public class WsMsgHandler implements IWsMsgHandler {
     @Override
     public Object onText(WsRequest wsRequest, String text, ChannelContext channelContext) throws Exception {
         log.info("socket消息:{}", text);
-
-
         Message message = JSON.parseObject(text, Message.class);
         CommandEnum commandEnum = CommandEnum.forNumber(message.getCmd());
         AbstractCmdHandler command = CommandManager.getCommand(commandEnum);

@@ -1,5 +1,6 @@
 package org.example.listener;
 
+import org.example.config.ImConfig;
 import org.example.packets.Group;
 import org.tio.core.ChannelContext;
 
@@ -12,6 +13,9 @@ public abstract class AbstractImGroupListener implements ImGroupListener {
     // TODO 消息持久化
     @Override
     public void onAfterBind(ChannelContext channelContext, Group group) {
+        System.out.println("消息持久化");
+        // 将绑定信息持久化到Redis
+        ImConfig.get().messageHelper.onAfterGroupBind(channelContext, group);
         doAfterBind(channelContext, group);
     }
 

@@ -1,9 +1,6 @@
 package org.example.config;
 
-import org.example.listener.ImGroupListenerAdapter;
-import org.example.listener.ImServerAioListener;
-import org.example.listener.ImServerGroupListener;
-import org.example.listener.ImServerUserListener;
+import org.example.listener.*;
 import org.example.protocol.ws.WsMsgHandler;
 import org.example.store.RedisMessageHelper;
 import org.tio.server.ServerTioConfig;
@@ -13,28 +10,27 @@ import java.io.IOException;
 
 public class ImServerWebSocketStart {
 
-    private WsServerStarter wsServerStarter;
-    private ServerTioConfig serverTioConfig;
+    private final WsServerStarter wsServerStarter;
+    private final ServerTioConfig serverTioConfig;
 
     public ImServerWebSocketStart(int port, WsMsgHandler wsMsgHandler) throws IOException {
         wsServerStarter = new WsServerStarter(port, wsMsgHandler);
 
         serverTioConfig = wsServerStarter.getServerTioConfig();
         serverTioConfig.setGroupListener(new ImGroupListenerAdapter(new ImServerGroupListener()));
-        serverTioConfig.setName(ImServerConfig.PROTOCOL_NAME);
+        serverTioConfig.setName(ImConfig.PROTOCOL_NAME);
         serverTioConfig.setServerAioListener(ImServerAioListener.me);
-        serverTioConfig.ipStats.addDurations(ImServerConfig.IpStatDuration.IPSTAT_DURATIONS);
-        serverTioConfig.setHeartbeatTimeout(ImServerConfig.HEARTBEAT_TIMEOUT);
+        serverTioConfig.ipStats.addDurations(ImConfig.IpStatDuration.IPSTAT_DURATIONS);
+        serverTioConfig.setHeartbeatTimeout(ImConfig.HEARTBEAT_TIMEOUT);
     }
 
     public static void start() throws Exception {
 
-        ImServerConfig imServerConfig = new ImServerConfig();
+        ImConfig imServerConfig = new ImConfig();
         imServerConfig.setMessageHelper(new RedisMessageHelper());
-        imServerConfig.setImUserListener(new ImServerUserListener());
+        imServerConfig.setImUserListener(new ImUserListenerAdapter(new ImServerUserListener()));
 
-
-        ImServerWebSocketStart appStarter = new ImServerWebSocketStart(ImServerConfig.SERVER_PORT, WsMsgHandler.me);
+        ImServerWebSocketStart appStarter = new ImServerWebSocketStart(ImConfig.SERVER_PORT, WsMsgHandler.me);
         appStarter.wsServerStarter.start();
     }
 }

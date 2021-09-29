@@ -16,23 +16,6 @@ public class ChatKit {
    private static final Logger log = LoggerFactory.getLogger(ChatKit.class);
 
 
-    public static ChatBody toChatBody(byte[] body, ChannelContext channelContext) {
-        ChatBody chatReqBody = parseChatBody(body);
-        if(chatReqBody != null){
-            ImSessionContext sessionContext = (ImSessionContext)channelContext.get(KeyEnum.IM_CHANNEL_CONTEXT_KEY.getKey());
-
-            User user = sessionContext.getImClientNode().getUser();
-            if(user != null){
-                // TODO
-//                chatReqBody.setFrom(user.getNick());
-            }else{
-                // TODO
-//                chatReqBody.setFrom(imChannelContext.getId());
-            }
-        }
-        return chatReqBody;
-    }
-
     private static ChatBody parseChatBody(byte[] body) {
         if(body == null) {
             return null;

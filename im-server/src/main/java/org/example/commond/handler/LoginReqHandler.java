@@ -1,7 +1,9 @@
 package org.example.commond.handler;
 
+import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
 import org.example.commond.AbstractCmdHandler;
+import org.example.commond.CommandManager;
 import org.example.config.Im;
 import org.example.config.ImConfig;
 import org.example.enums.CommandEnum;
@@ -14,6 +16,8 @@ import org.tio.core.intf.Packet;
 import org.tio.http.common.HttpRequest;
 import org.tio.websocket.common.WsRequest;
 import org.tio.websocket.common.WsResponse;
+
+import java.util.List;
 
 @Slf4j
 public class LoginReqHandler extends AbstractCmdHandler {
@@ -32,15 +36,20 @@ public class LoginReqHandler extends AbstractCmdHandler {
         String success = RespBody.success(CommandEnum.COMMAND_LOGIN_RESP);
         Im.bSend(channelContext, WsResponse.fromText(success, ImConfig.CHARSET));
 
-        User user = User.builder()._id(username).username(username).status(Status.online()).avatar("123").build();
-        Group group = Group.builder().roomId("100").roomName("群组").build();
+        User user = User.builder()._id(username).username("吴迪").status(Status.online()).avatar("https://t1.huishahe.com/uploads/tu/202107/9999/7690765ea7.jpg").build();
+        Group group = Group.builder().roomId("100").roomName("朋友圈").build();
         user.addGroup(group);
         log.info("登录{},{}", username, password);
         Im.bindUser(channelContext, user);
 
-        WsRequest wsRequest = new WsRequest();
-        wsRequest.setWsBodyText("");
-
+        List<Group> groups = user.getGroups();
+        for (Group group1 : groups) {
+            WsRequest hr = new WsRequest();
+            hr.setWsBodyText(JSON.toJSONString(group1));
+            // 绑定群组
+            AbstractCmdHandler command = CommandManager.getCommand(CommandEnum.COMMAND_JOIN_GROUP_REQ);
+            command.handler(hr, channelContext);
+        }
         return null;
     }
 

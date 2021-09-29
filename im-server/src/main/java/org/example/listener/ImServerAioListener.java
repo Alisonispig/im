@@ -12,7 +12,6 @@ public class ImServerAioListener extends WsServerAioListener {
 
     public static final ImServerAioListener me = new ImServerAioListener();
 
-
     @Override
     public boolean onHeartbeatTimeout(ChannelContext channelContext, Long interval, int heartbeatTimeoutCount) {
         return false;

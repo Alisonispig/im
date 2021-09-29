@@ -1,27 +1,24 @@
 package org.example.commond.handler;
 
-import com.alibaba.fastjson.JSON;
 import org.example.commond.AbstractCmdHandler;
-import org.example.config.Im;
 import org.example.enums.CommandEnum;
-import org.example.packets.Group;
 import org.tio.core.ChannelContext;
 import org.tio.core.intf.Packet;
+import org.tio.http.common.HttpPacket;
 import org.tio.websocket.common.WsRequest;
 import org.tio.websocket.common.WsResponse;
 
-public class JoinGroupReqHandler extends AbstractCmdHandler {
+public class ChatReqHandler extends AbstractCmdHandler {
 
     @Override
     public CommandEnum command() {
-        return CommandEnum.COMMAND_JOIN_GROUP_REQ;
+        return CommandEnum.COMMAND_CHAT_REQ;
     }
 
     @Override
     public WsResponse handler(Packet packet, ChannelContext channelContext) {
-        WsRequest request = (WsRequest) packet;
-        Group group = JSON.parseObject(request.getWsBodyText(),Group.class);
-        Im.bindGroup(channelContext, group);
+        WsRequest httpPacket = (WsRequest) packet;
+        System.out.println(httpPacket.getWsBodyText());
         return null;
     }
 }

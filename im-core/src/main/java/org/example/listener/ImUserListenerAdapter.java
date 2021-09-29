@@ -3,19 +3,21 @@ package org.example.listener;
 import org.example.packets.User;
 import org.tio.core.ChannelContext;
 
-public abstract class ImUserListenerAdapter implements ImUserListener {
+public class ImUserListenerAdapter implements ImUserListener {
 
-    public abstract void doAfterBind(ChannelContext channelContext, User user);
+    private ImUserListener imUserListener;
 
-    public abstract void doAfterUnbind(ChannelContext channelContext, User user);
+    public ImUserListenerAdapter(ImUserListener imUserListener) {
+        this.imUserListener = imUserListener;
+    }
 
     @Override
     public void onAfterBind(ChannelContext channelContext, User user) {
-        doAfterBind(channelContext, user);
+        imUserListener.onAfterBind(channelContext, user);
     }
 
     @Override
     public void onAfterUnbind(ChannelContext channelContext, User user) {
-        doAfterUnbind(channelContext, user);
+        imUserListener.onAfterBind(channelContext, user);
     }
 }

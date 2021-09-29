@@ -34,6 +34,7 @@ public class Im {
     public static boolean bindGroup(ChannelContext channelContext, Group group) {
         String groupId = group.getRoomId();
         Tio.bindGroup(channelContext, groupId);
+
         return true;
     }
 
@@ -59,6 +60,7 @@ public class Im {
                 return false;
             }
             imSessionContext.getImClientNode().setUser(user);
+            ImConfig.get().imUserListener.onAfterBind(channelContext, user);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             return false;
