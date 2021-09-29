@@ -325,7 +325,7 @@
         var content = document.getElementById('content').value;
         if (content == "")
             return;
-        var msg = "{\"from\": \"" + username + "\",\"createTime\":" + createTime + ",\"cmd\":11,\"groupId\":\"100\",\"chatType\":\"1\",\"msgType\":\"0\",\"content\": \"" + content + "\"}";
+        var msg = "{\"senderId\": \"" + username + "\",\"createTime\":" + createTime + ",\"cmd\":11,\"roomId\":\"100\",\"chatType\":\"1\",\"msgType\":\"0\",\"content\": \"" + content + "\"}";
         socket.send(msg);
         var chatObj = eval("(" + msg + ")");
         var createTime = new Date(chatObj.createTime).Format("yyyy/MM/dd HH:mm:ss");
