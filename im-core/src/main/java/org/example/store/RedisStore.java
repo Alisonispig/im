@@ -2,7 +2,6 @@ package org.example.store;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 
@@ -21,8 +20,8 @@ public class RedisStore {
         config.setMaxTotal(30);
         config.setMaxIdle(10);
 
-        pool = new JedisPool(config, "106.12.118.54", 6379, 2000, "mima");
-//        pool = new JedisPool(config, "127.0.0.1", 6379, 2000);
+//        pool = new JedisPool(config, "106.12.118.54", 6379, 2000, "mima");
+        pool = new JedisPool(config, "127.0.0.1", 6379, 2000);
     }
 
     public static List<String> list(String key) {
