@@ -33,10 +33,15 @@ public class RedisMessageHelper implements MessageHelper {
         }
         List<User> users = new ArrayList<>();
         for (String userId : groupUserIds) {
-            User user = RedisStore.get(userId + StrUtil.C_COLON + KeyEnum.IM_USER_INFO_KEY.getKey(), User.class);
+            User user = getUserInfo(userId);
             users.add(user);
         }
         return users;
+    }
+
+    @Override
+    public User getUserInfo(String userId) {
+        return RedisStore.get(userId + StrUtil.C_COLON + KeyEnum.IM_USER_INFO_KEY.getKey(), User.class);
     }
 
     private List<String> getGroupUserIds(String roomId) {

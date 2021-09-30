@@ -32,4 +32,10 @@ public interface MessageHelper {
      */
     List<User> getGroupUsers(String roomId);
 
+    /**
+     * 获取用户信息
+     * @param userId 用户ID
+     * @return 用户信息
+     */
+    User getUserInfo(String userId);
 }

@@ -1,21 +1,26 @@
 package org.example.config;
 
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.example.enums.CommandEnum;
 import org.example.enums.KeyEnum;
+import org.example.packets.ChatRepBody;
 import org.example.packets.Group;
+import org.example.packets.RespBody;
 import org.example.packets.User;
 import org.tio.core.ChannelContext;
 import org.tio.core.Tio;
 import org.tio.core.intf.Packet;
 import org.tio.utils.lock.SetWithLock;
+import org.tio.websocket.common.WsResponse;
 
-import java.util.Objects;
+import java.util.*;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 @Slf4j
-public class Im {
+public class Im extends ImConfig {
 
     public static boolean bSend(ChannelContext channelContext, Packet packet) {
         if (channelContext == null || packet == null) {
@@ -60,7 +65,7 @@ public class Im {
                 return false;
             }
             imSessionContext.getImClientNode().setUser(user);
-            ImConfig.get().imUserListener.onAfterBind(channelContext, user);
+            get().imUserListener.onAfterBind(channelContext, user);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             return false;
@@ -68,5 +73,39 @@ public class Im {
             lock.unlock();
         }
         return true;
+    }
+
+    public static void sendToGroup(ChatRepBody chatRepBody, ChannelContext channelContext) {
+        // 构建消息体
+        User userInfo = get().messageHelper.getUserInfo(chatRepBody.getSenderId());
+
+        chatRepBody.setAvatar(userInfo.getAvatar());
+        chatRepBody.setUsername(userInfo.getUsername());
+        Date date = new Date();
+        chatRepBody.setDate(DateUtil.formatDate(date));
+        chatRepBody.setTimestamp(DateUtil.formatTime(date));
+        chatRepBody.setDeleted(false);
+        chatRepBody.setSystem(false);
+
+        WsResponse wsResponse = WsResponse.fromText(RespBody.success(CommandEnum.COMMAND_CHAT_REQ, chatRepBody), CHARSET);
+        SetWithLock<ChannelContext> users = Tio.getByGroup(channelContext.tioConfig, chatRepBody.getRoomId());
+        List<ChannelContext> channelContexts = convertChannel(users);
+        for (ChannelContext context : channelContexts) {
+            send(context, wsResponse);
+        }
+    }
+
+    private static List<ChannelContext> convertChannel(SetWithLock<ChannelContext> channelContextSetWithLock) {
+        ReentrantReadWriteLock.ReadLock lock = channelContextSetWithLock.getLock().readLock();
+        try {
+            lock.lock();
+            Set<ChannelContext> channelContexts = channelContextSetWithLock.getObj();
+            return new ArrayList<>(channelContexts);
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+        } finally {
+            lock.unlock();
+        }
+        return null;
     }
 }

@@ -78,6 +78,7 @@
     let username;
     let onSelected;
     let curUser;
+    let t;
     const friends = [];
     const groups = [];
 
@@ -147,9 +148,14 @@
             logDiv.innerHTML += "<font color='green' size='1'>连接成功...</font><br>";
             var userCmd = "{\"cmd\":17,\"type\":\"0\",\"userId\":\"" + username + "\"}";
             var msgCmd = "{\"cmd\":19,\"type\":\"0\",\"userId\":\"" + username + "\"}";
-            setInterval(() => {
-                heartbeatCmd()
+            t = setInterval(() => {
+                if(curUser){
+                    heartbeatCmd()
+                } else {
+                    clearInterval(t)
+                }
             }, 30000)
+
             socket.send(userCmd);//获取登录用户信息;
             socket.send(msgCmd);//获取用户离线消息(好友+群组);
             scrollToBottom();
@@ -319,7 +325,7 @@
         var content = document.getElementById('content').value;
         if (content == "")
             return;
-        var msg = "{\"from\": \"" + username + "\",\"createTime\":" + createTime + ",\"cmd\":11,\"groupId\":\"100\",\"chatType\":\"1\",\"msgType\":\"0\",\"content\": \"" + content + "\"}";
+        var msg = "{\"senderId\": \"" + username + "\",\"createTime\":" + createTime + ",\"cmd\":11,\"roomId\":\"100\",\"chatType\":\"1\",\"msgType\":\"0\",\"content\": \"" + content + "\"}";
         socket.send(msg);
         var chatObj = eval("(" + msg + ")");
         var createTime = new Date(chatObj.createTime).Format("yyyy/MM/dd HH:mm:ss");
