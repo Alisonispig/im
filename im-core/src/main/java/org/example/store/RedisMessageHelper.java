@@ -1,13 +1,13 @@
 package org.example.store;
 
-import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.StrUtil;
+import org.example.config.Im;
 import org.example.config.ImSessionContext;
 import org.example.enums.KeyEnum;
 import org.example.packets.Group;
+import org.example.packets.Status;
 import org.example.packets.User;
 import org.tio.core.ChannelContext;
-import redis.clients.jedis.Jedis;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,8 +21,8 @@ public class RedisMessageHelper implements MessageHelper {
 
     @Override
     public void onAfterUserBind(ChannelContext channelContext, User user) {
-        User build = User.builder()._id(user.get_id()).avatar(user.getAvatar()).status(user.getStatus()).username(user.getUsername()).build();
-        RedisStore.set(user.get_id() + StrUtil.C_COLON + KeyEnum.IM_USER_INFO_KEY.getKey(), build);
+        User build = user.clone();
+        updateUserInfo(build);
     }
 
     @Override
@@ -44,18 +44,39 @@ public class RedisMessageHelper implements MessageHelper {
         return RedisStore.get(userId + StrUtil.C_COLON + KeyEnum.IM_USER_INFO_KEY.getKey(), User.class);
     }
 
+    @Override
+    public List<Group> getUserGroups(String userId) {
+        String key = userId + StrUtil.C_COLON + KeyEnum.IM_USER_GROUPS_KEY.getKey();
+        List<String> groupIds = RedisStore.list(key);
+        List<Group> groups = new ArrayList<>();
+        groupIds.forEach(x -> groups.add(getGroupInfo(x)));
+        return groups;
+    }
+
+    @Override
+    public void userOffline(ChannelContext channelContext) {
+        User user = Im.getUser(channelContext);
+        User userInfo = getUserInfo(user.get_id());
+        userInfo.setStatus(Status.offline());
+        updateUserInfo(userInfo);
+    }
+
+    private void updateUserInfo(User user) {
+        RedisStore.set(user.get_id() + StrUtil.C_COLON + KeyEnum.IM_USER_INFO_KEY.getKey(), user);
+    }
+
+    private Group getGroupInfo(String roomId) {
+        return RedisStore.get(roomId + StrUtil.C_COLON + KeyEnum.IM_GROUP_INFO_KEY.getKey(), Group.class);
+    }
+
     private List<String> getGroupUserIds(String roomId) {
-        Group group = RedisStore.get(roomId + StrUtil.C_COLON + KeyEnum.IM_GROUP_INFO_KEY.getKey(), Group.class);
-        if (group == null) {
-            return null;
-        }
+
         return RedisStore.list(roomId + StrUtil.C_COLON + KeyEnum.IM_GROUP_USERS_KEY.getKey());
     }
 
     private void initGroupUsers(ChannelContext channelContext, Group group) {
         String roomId = group.getRoomId();
-        ImSessionContext imSessionContext = (ImSessionContext) channelContext.get(KeyEnum.IM_CHANNEL_SESSION_CONTEXT_KEY.getKey());
-        User user = imSessionContext.getImClientNode().getUser();
+        User user = Im.getUser(channelContext);
 
         String key = roomId + StrUtil.C_COLON + KeyEnum.IM_GROUP_USERS_KEY.getKey();
 

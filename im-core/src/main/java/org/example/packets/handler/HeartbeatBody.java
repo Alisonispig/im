@@ -1,9 +1,10 @@
 /**
  * 
  */
-package org.example.packets;
+package org.example.packets.handler;
 
 import lombok.Data;
+import org.example.packets.Message;
 
 /**
  * @author WChao

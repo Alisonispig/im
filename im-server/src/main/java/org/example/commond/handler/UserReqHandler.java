@@ -3,14 +3,13 @@ package org.example.commond.handler;
 import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
 import org.example.commond.AbstractCmdHandler;
+import org.example.config.Im;
 import org.example.config.ImConfig;
-import org.example.config.ImSessionContext;
 import org.example.enums.CommandEnum;
-import org.example.enums.KeyEnum;
 import org.example.packets.Group;
-import org.example.packets.RespBody;
+import org.example.packets.handler.RespBody;
 import org.example.packets.User;
-import org.example.packets.UserReqBody;
+import org.example.packets.handler.UserReqBody;
 import org.tio.core.ChannelContext;
 import org.tio.core.intf.Packet;
 import org.tio.websocket.common.WsRequest;
@@ -31,8 +30,7 @@ public class UserReqHandler extends AbstractCmdHandler {
         WsRequest wsRequest = (WsRequest) packet;
         UserReqBody userReqBody = JSON.parseObject(wsRequest.getWsBodyText(), UserReqBody.class);
         log.info("userReqBody : {}", userReqBody);
-        ImSessionContext sessionContext = (ImSessionContext) channelContext.get(KeyEnum.IM_CHANNEL_SESSION_CONTEXT_KEY.getKey());
-        User user = sessionContext.getImClientNode().getUser();
+        User user = Im.getUser(channelContext);
 
         for (Group group : user.getGroups()) {
             String roomId = group.getRoomId();

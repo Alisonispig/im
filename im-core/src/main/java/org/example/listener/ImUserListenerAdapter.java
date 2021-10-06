@@ -18,6 +18,6 @@ public class ImUserListenerAdapter implements ImUserListener {
 
     @Override
     public void onAfterUnbind(ChannelContext channelContext, User user) {
-        imUserListener.onAfterBind(channelContext, user);
+        imUserListener.onAfterUnbind(channelContext, user);
     }
 }

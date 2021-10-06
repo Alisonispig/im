@@ -15,7 +15,11 @@ public class Status {
 
     private String lastChanged;
 
-    public static Status online(){
-       return  new Status("ONLINE", DateUtil.format(new Date(), DatePattern.NORM_DATETIME_PATTERN));
+    public static Status online() {
+        return new Status("ONLINE", DateUtil.format(new Date(), DatePattern.NORM_DATETIME_PATTERN));
+    }
+
+    public static Status offline() {
+        return new Status("OFFLINE", DateUtil.format(new Date(), DatePattern.NORM_DATETIME_PATTERN));
     }
 }

@@ -1,17 +1,20 @@
 package org.example.commond.handler;
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.IdUtil;
 import com.alibaba.fastjson.JSONObject;
+import lombok.extern.slf4j.Slf4j;
 import org.example.commond.AbstractCmdHandler;
 import org.example.config.Im;
 import org.example.enums.CommandEnum;
-import org.example.packets.ChatRepBody;
-import org.example.packets.ChatReqBody;
+import org.example.packets.handler.ChatRespBody;
+import org.example.packets.handler.ChatReqBody;
 import org.tio.core.ChannelContext;
 import org.tio.core.intf.Packet;
 import org.tio.websocket.common.WsRequest;
 import org.tio.websocket.common.WsResponse;
 
+@Slf4j
 public class ChatReqHandler extends AbstractCmdHandler {
 
     @Override
@@ -25,10 +28,9 @@ public class ChatReqHandler extends AbstractCmdHandler {
         System.out.println(httpPacket.getWsBodyText());
         ChatReqBody request = JSONObject.parseObject(httpPacket.getWsBodyText(), ChatReqBody.class);
 
-        ChatRepBody response = new ChatRepBody();
+        ChatRespBody response = BeanUtil.copyProperties(request, ChatRespBody.class);
         response.set_id(IdUtil.getSnowflake().nextId());
-        response.setSenderId(request.getSenderId());
-        response.setRoomId(request.getRoomId());
+
 
         Im.sendToGroup(response, channelContext);
 

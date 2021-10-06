@@ -34,8 +34,23 @@ public interface MessageHelper {
 
     /**
      * 获取用户信息
+     *
      * @param userId 用户ID
      * @return 用户信息
      */
     User getUserInfo(String userId);
+
+    /**
+     * 获取用户下的群组信息
+     *
+     * @param userId 用户ID
+     * @return 群组信息
+     */
+    List<Group> getUserGroups(String userId);
+
+    /**
+     * 用户下线
+     * @param channelContext 上下文信息
+     */
+    void userOffline(ChannelContext channelContext);
 }

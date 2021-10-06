@@ -1,11 +1,12 @@
-package org.example.packets;
+package org.example.packets.handler;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.example.packets.Message;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class UserReqBody extends Message{
+public class UserReqBody extends Message {
 
     /**
      * 用户id;

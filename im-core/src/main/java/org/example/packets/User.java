@@ -1,5 +1,6 @@
 package org.example.packets;
 
+import cn.hutool.core.bean.BeanUtil;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -25,11 +26,15 @@ public class User implements Serializable {
 
     private List<Group> groups;
 
-    public void addGroup(Group group){
-        if(groups == null){
+    public void addGroup(Group group) {
+        if (groups == null) {
             groups = new ArrayList<>();
         }
         groups.add(group);
+    }
+
+    public User clone() {
+        return BeanUtil.copyProperties(this, User.class, "groups");
     }
 
 }

@@ -167,6 +167,14 @@ public enum CommandEnum {
      * <code>COMMAND_GET_MESSAGE_RESP = 20;</code>
      */
     COMMAND_GET_MESSAGE_RESP(20),
+    /**
+     * <pre>
+     * 用户上下线状态消息
+     * </pre>
+     *
+     * <code>COMMAND_USER_STATUS_RESP = 21;</code>
+     */
+    COMMAND_USER_STATUS_RESP(21),
     ;
 
 

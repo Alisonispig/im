@@ -6,6 +6,7 @@ import org.example.commond.AbstractCmdHandler;
 import org.example.commond.CommandManager;
 import org.example.commond.handler.LoginReqHandler;
 import org.example.config.Im;
+import org.example.config.ImConfig;
 import org.example.enums.CommandEnum;
 import org.example.packets.Message;
 import org.slf4j.Logger;
@@ -24,33 +25,36 @@ public class WsMsgHandler implements IWsMsgHandler {
 
 
     @Override
-    public HttpResponse handshake(HttpRequest httpRequest, HttpResponse httpResponse, ChannelContext channelContext) throws Exception {
-        String clientip = httpRequest.getClientIp();
+    public HttpResponse handshake(HttpRequest httpRequest, HttpResponse httpResponse, ChannelContext channelContext) {
+        String clientIp = httpRequest.getClientIp();
         String username = httpRequest.getParam("username");
-        log.info("收到来自{}的ws握手包\r\n{}", clientip, httpRequest);
+        log.info("收到来自{}的ws握手包{}", clientIp, username);
         return httpResponse;
     }
 
     @Override
-    public void onAfterHandshaked(HttpRequest httpRequest, HttpResponse httpResponse, ChannelContext channelContext) throws Exception {
+    public void onAfterHandshaked(HttpRequest httpRequest, HttpResponse httpResponse, ChannelContext channelContext) {
         LoginReqHandler loginHandler = (LoginReqHandler) CommandManager.getCommand(CommandEnum.COMMAND_LOGIN_REQ);
         loginHandler.handler(httpRequest, channelContext);
         log.info("握手完毕{},{}", "66", "666");
     }
 
     @Override
-    public Object onBytes(WsRequest wsRequest, byte[] bytes, ChannelContext channelContext) throws Exception {
-
+    public Object onBytes(WsRequest wsRequest, byte[] bytes, ChannelContext channelContext) {
         return null;
     }
 
     @Override
-    public Object onClose(WsRequest wsRequest, byte[] bytes, ChannelContext channelContext) throws Exception {
+    public Object onClose(WsRequest wsRequest, byte[] bytes, ChannelContext channelContext) {
+        Im.remove(channelContext, "用户下线");
+        System.out.println("关闭连接");
+        // 更新用户状态
+        ImConfig.get().messageHelper.userOffline(channelContext);
         return null;
     }
 
     @Override
-    public Object onText(WsRequest wsRequest, String text, ChannelContext channelContext) throws Exception {
+    public Object onText(WsRequest wsRequest, String text, ChannelContext channelContext) {
         log.info("socket消息:{}", text);
         Message message = JSON.parseObject(text, Message.class);
         CommandEnum commandEnum = CommandEnum.forNumber(message.getCmd());
@@ -59,8 +63,6 @@ public class WsMsgHandler implements IWsMsgHandler {
         if (ObjectUtil.isNotNull(wsResponse)) {
             Im.send(channelContext, wsResponse);
         }
-//        ChatBody chatBody = ChatKit.toChatBody(wsRequest.getBody(), channelContext);
-
         return null;
     }
 }

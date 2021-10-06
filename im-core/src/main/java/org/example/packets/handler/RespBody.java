@@ -1,11 +1,9 @@
 /**
  *
  */
-package org.example.packets;
+package org.example.packets.handler;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.serializer.SerializerFeature;
 import lombok.Data;
 import org.example.enums.CommandEnum;
 

@@ -1,9 +1,15 @@
-package org.example.packets;
+package org.example.packets.handler;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@Builder
 @Data
-public class ChatRepBody {
+@NoArgsConstructor
+@AllArgsConstructor
+public class ChatRespBody {
 
     /**
      * 消息ID
@@ -60,7 +66,14 @@ public class ChatRepBody {
      */
     private Boolean deleted;
 
+    /**
+     * 发送消息
+     */
     private Boolean disableActions;
 
+    /**
+     * 发送消息
+     */
     private Boolean disableReactions;
+
 }
