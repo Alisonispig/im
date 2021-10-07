@@ -32,7 +32,7 @@ public class ChatReqHandler extends AbstractCmdHandler {
         response.set_id(IdUtil.getSnowflake().nextId());
 
 
-        Im.sendToGroup(response, channelContext);
+        Im.sendToGroup(response);
 
         return null;
     }

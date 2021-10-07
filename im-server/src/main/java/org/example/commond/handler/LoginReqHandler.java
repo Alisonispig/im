@@ -1,23 +1,19 @@
 package org.example.commond.handler;
 
-import cn.hutool.core.collection.CollUtil;
-import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
 import org.example.commond.AbstractCmdHandler;
-import org.example.commond.CommandManager;
 import org.example.config.Im;
 import org.example.config.ImConfig;
 import org.example.enums.CommandEnum;
 import org.example.packets.Group;
-import org.example.packets.handler.RespBody;
 import org.example.packets.Status;
 import org.example.packets.User;
+import org.example.packets.handler.RespBody;
 import org.example.packets.handler.UserStatusBody;
 import org.example.util.TestUtil;
 import org.tio.core.ChannelContext;
 import org.tio.core.intf.Packet;
 import org.tio.http.common.HttpRequest;
-import org.tio.websocket.common.WsRequest;
 import org.tio.websocket.common.WsResponse;
 
 import java.util.List;
@@ -48,29 +44,13 @@ public class LoginReqHandler extends AbstractCmdHandler {
 
         // 获取持久化用户群组信息
         List<Group> groups = ImConfig.get().messageHelper.getUserGroups(username);
-        Group groupNew = null;
-        if (CollUtil.isEmpty(groups)) {
-            log.info("未查询到群组信息，模拟创建群组");
-            groupNew = Group.builder().roomId("100").roomName("朋友圈").build();
-            groups.add(groupNew);
-        }
-
         user.setStatus(Status.online());
         user.setGroups(groups);
 
         log.info("登录{},{}", username, password);
         Im.bindUser(channelContext, user);
 
-        if (groupNew != null) {
-            // 发送加入群组消息
-            WsRequest hr = new WsRequest();
-            hr.setWsBodyText(JSON.toJSONString(groupNew));
-            // 绑定群组 用于接收即时消息
-            AbstractCmdHandler command = CommandManager.getCommand(CommandEnum.COMMAND_JOIN_GROUP_REQ);
-            command.handler(hr, channelContext);
-        }
-
-        UserStatusBody build = UserStatusBody.builder().user(Im.getUser(channelContext,false)).build();
+        UserStatusBody build = UserStatusBody.builder().user(Im.getUser(channelContext, false)).build();
 
         for (Group group : groups) {
             // 绑定群组

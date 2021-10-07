@@ -14,7 +14,7 @@ public class ImServerGroupListener extends AbstractImGroupListener {
 
     @Override
     public void doAfterUnbind(ChannelContext channelContext, Group group) {
-        log.info("群组解磅监听监听");
+        log.info("群组绑监听");
     }
 
 }

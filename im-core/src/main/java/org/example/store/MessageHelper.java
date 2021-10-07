@@ -53,4 +53,11 @@ public interface MessageHelper {
      * @param channelContext 上下文信息
      */
     void userOffline(ChannelContext channelContext);
+
+    /**
+     * 初始化用户群组持久化信息
+     * @param userId 用户ID
+     * @param roomId 组ID
+     */
+    void initUserGroups(String userId, String roomId);
 }

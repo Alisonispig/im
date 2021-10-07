@@ -26,11 +26,13 @@ public class ImServerWebSocketStart {
 
     public static void start() throws Exception {
 
+        ImServerWebSocketStart appStarter = new ImServerWebSocketStart(ImConfig.SERVER_PORT, WsMsgHandler.me);
+
         ImConfig imServerConfig = new ImConfig();
         imServerConfig.setMessageHelper(new RedisMessageHelper());
         imServerConfig.setImUserListener(new ImUserListenerAdapter(new ImServerUserListener()));
+        imServerConfig.setTioConfig(appStarter.serverTioConfig);
 
-        ImServerWebSocketStart appStarter = new ImServerWebSocketStart(ImConfig.SERVER_PORT, WsMsgHandler.me);
         appStarter.wsServerStarter.start();
     }
 }

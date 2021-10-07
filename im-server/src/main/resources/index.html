@@ -1,191 +1,285 @@
 <!DOCTYPE html>
 <html lang="zh">
-	<head>
-		<meta charset="UTF-8">
-		<title>IM:支持百万在线用户</title>
-	</head>
-	<body>
-		<div id="wrap" style="height:600px;">
-			<div class="unit">
-				<label>用户名:</label>
-				<input id="username" value="a" />
-				<label style="width: 60px;">密码:</label>
-				<input id="password" value="123" />
-				<input onclick="connect();" type="button" value="登录" />
-				<input onclick="disConnect();" type="button" value="退出" />
-				<div id="login_user" style="line-height: 25px;margin: 5px 5px 0 5px;padding-left:15px;cursor:pointer;display: none;">
-					
-				</div>
-			</div>
-			<div class="unit">
-				<label>聊天记录:</label>
-				<input type="button" value="清空记录" onclick="clearLogs();" />
-				<input type="button" value="鉴权命令" onclick="authCmd();" />
-				<input type="button" value="心跳命令" onclick="heartbeatCmd();" />
-				<input type="button" value="获取指定好友历史消息" onclick="friendHistoryCmd();" style="width: 150px;" />
-				<input id="history_friend_id" style="width:100px;" placeholder="输入好友ID" />
-				<input type="button" value="获取指定群组历史消息" onclick="groupHistoryCmd();" style="width: 150px;" />
-				<input id="history_group_id" style="width:100px;" placeholder="输入群组ID" />
-			</div>
-			<div class="unit">
-				<label>群组:</label>
-				<input id="room_id" style="width: 100px;" placeholder="群组名称" />
-				<input type="button" value="创建群组" onclick="clearLogs();" />
-			</div>
-			<div class="content">
-				<div id="logs" class="unit log">
-				</div>
-				<div id="onlinePanel" class="online">
-				</div>
-			</div>
-			<div class="unit">
-				<label>输入内容:</label>
-				<input id="content" style="width:500px;" onkeydown="keyDown(event)" />
-				<input onclick="sendGroup()" id="sendGroupBtn" type="button" value="群聊" />&nbsp;<input onclick="send()"
-					id="sendBtn" type="button" value="私聊" />
-			</div>
-		</div>
-	</body>
-	<script>
-		let socket;
-		let username;
-		let logDiv;
-		let curUser;
+<head>
+    <meta charset="UTF-8">
+    <title>IM:支持百万在线用户</title>
+</head>
+<body>
+<div id="wrap" style="height:600px;">
+    <div class="unit">
+        <label>用户名:</label>
+        <input id="username" value="a"/>
+        <label style="width: 60px;">密码:</label>
+        <input id="password" value="123"/>
+        <input onclick="connect();" type="button" value="登录"/>
+        <input onclick="disConnect();" type="button" value="退出"/>
+        <div id="login_user"
+             style="line-height: 25px;margin: 5px 5px 0 5px;padding-left:15px;cursor:pointer;display: none;">
 
-		function connect() {
-			username = document.getElementById("username").value;
-			const password = document.getElementById("password").value;
-			logDiv = document.getElementById('logs');
-			socket = new WebSocket("ws://localhost:9326?username=" + username + "&password=" + password);
-			socket.onopen = function(e) {
+        </div>
+    </div>
+    <div class="unit">
+        <label>聊天记录:</label>
+        <input type="button" value="清空记录" onclick="clearLogs();"/>
+        <input type="button" value="鉴权命令" onclick="authCmd();"/>
+        <input type="button" value="心跳命令" onclick="heartbeatCmd();"/>
+        <input type="button" value="获取指定好友历史消息" onclick="friendHistoryCmd();" style="width: 150px;"/>
+        <input id="history_friend_id" style="width:100px;" placeholder="输入好友ID"/>
+        <input type="button" value="获取指定群组历史消息" onclick="groupHistoryCmd();" style="width: 150px;"/>
+        <input id="history_group_id" style="width:100px;" placeholder="输入群组ID"/>
+    </div>
+    <div class="unit">
+        <label>群组:</label>
+        <input id="room_name" style="width: 100px;" placeholder="群组名称"/>
+        <input type="button" value="创建群组" onclick="createGroup();"/>
+        <label>群组用户:</label>
+        <input id="room_user_id" style="width: 100px;" placeholder="群组名称"/>
+        <input type="button" value="邀请加入群组" onclick="invitationAddGroup();"/>
+        <label>用户群组：</label>
+        <div id="groups" style="display: inline"></div>
+    </div>
+    <div class="content">
+        <div id="logs" class="unit log">
+        </div>
+        <div id="onlinePanel" class="online">
+        </div>
+    </div>
+    <div class="unit">
+        <label>输入内容:</label>
+        <input id="content" style="width:500px;" onkeydown="keyDown(event)"/>
+        <input onclick="sendGroup()" id="sendGroupBtn" type="button" value="群聊"/>&nbsp;<input onclick="send()"
+                                                                                              id="sendBtn" type="button"
+                                                                                              value="私聊"/>
+    </div>
+</div>
+</body>
+<script>
+    let socket;
+    let username;
+    let logDiv;
+    let curUser;
+    let nowGroupId;
 
-			};
-			socket.onerror = function(e) {
+    function connect() {
+        if (curUser) {
+            alert("当前已登录 退出后重试！")
+            return;
+        }
+        username = document.getElementById("username").value;
+        const password = document.getElementById("password").value;
+        logDiv = document.getElementById('logs');
+        socket = new WebSocket("ws://localhost:9326?username=" + username + "&password=" + password);
+        socket.onopen = function (e) {
 
-			};
-			socket.onmessage = function(e) {
-				let data = eval("(" + e.data + ")");
-				switch (data.command) {
-					// 登录返回信息
-					case 6:
-						COMMAND_LOGIN_RESP(data);
-						break;
-					// 获取用户信息相应
-					case 18:
-						COMMAND_GET_USER_RESP(data);
-						break;
-					default:
-						break;
-				}
-			};
-			socket.onclose = function(e) {
+        };
+        socket.onerror = function (e) {
 
-			};
-		}
-		
-		function disConnect(){
-			socket.close()
-			log('green','退出连接...')
-		}
+        };
+        socket.onmessage = function (e) {
+            let data = eval("(" + e.data + ")");
+            switch (data.command) {
+                // 登录返回信息
+                case 6:
+                    COMMAND_LOGIN_RESP(data);
+                    break;
+                // 获取用户信息相应
+                case 18:
+                    COMMAND_GET_USER_RESP(data);
+                    break;
+                // 群组创建成功
+                case 23:
+                    COMMAND_CREATE_GROUP_RESP(data);
+                    break
+                default:
+                    break;
+            }
+        };
+        socket.onclose = function (e) {
 
-		function log(color, data, hasEnter) {
-			logDiv.innerHTML += "<p style='font-size: 12px; color: " + color + ";'>" + data + "</p>"
-			if(hasEnter){
-				logDiv.innerHTML += "<br />"
-			}
-		}
+        };
+    }
 
-		function send(data) {
-			const param = JSON.stringify(data)
-			socket.send(param)
-		}
+    function disConnect() {
+        socket.close()
+        curUser = null
+        const loginUser = document.getElementById('login_user')
+        loginUser.style.display = 'none'
+        const groups = document.getElementById('groups')
+        groups.style.display = 'none'
+        log('green', '退出连接...')
+    }
 
-		// 登录成功返回
-		function COMMAND_LOGIN_RESP(data) {
-			if (data.success) {
-				log('green', '连接成功...')
-				let param = {
-					cmd: 17,
-					userId: username,
-				}
-				send(param)
-			}
-		}
-		
-		// 获取用户信息响应
-		function COMMAND_GET_USER_RESP(data) {
-			console.log(data)
-			curUser = data.data
-			const user = curUser
-			const loginUser = document.getElementById('login_user')
-			loginUser.style.display = 'inline'
-			loginUser.innerHTML = "<img alt=\"" + user._id + "\" src=\"" + user.avatar + "\" height=\"15px\" width=\"15px;\" >&nbsp;<font size='2'>" + user.username + "(" + user._id + ")" + "-" + user.status.state+"</font>"
-		}
-		
-	</script>
-	<style media="screen">
-		* {
-			margin: 0;
-			padding: 0;
-		}
+    function log(color, data, hasEnter) {
+        logDiv.innerHTML += "<p style='font-size: 12px; color: " + color + ";'>" + data + "</p>"
+        if (hasEnter) {
+            logDiv.innerHTML += "<br />"
+        }
+    }
 
-		#wrap {
-			margin: 10px auto;
-			width: 80%;
-			height: 99%;
-		}
+    function send(data) {
+        const param = JSON.stringify(data)
+        socket.send(param)
+    }
 
-		.unit {
-			margin-bottom: 5px;
-			padding: 5px;
-			border: solid 1px #000;
-			height: auto;
-			clear: both;
-			box-sizing: border-box;
-		}
+    function changeGroup(id) {
+        nowGroupId = id;
+        for (let groupKey in curUser.groups) {
+            let group = curUser.groups[groupKey]
+            console.log(group)
+            if(group.roomId === id){
+                let users = group.users;
+                let onlineUserStr = "&nbsp;" + group.roomName + "在线成员(" + users.length + "/" + users.length + ")";
+                for (var u = 0; u < users.length; u++) {
+                    var user = users[u];
+                    onlineUserStr += "<div id=\"" + user._id + "\" style=\"line-height: 25px;margin: 5px 5px 0 5px;padding-left:15px;cursor:pointer;\" onclick=\"onlineDb(this);\" onmouseover=\"onlineMove(this);\"  onmouseleave=\"onlineLeave(this);\"><img alt=\"" + user._id + "\" src=\"" + user.avatar + "\" height=\"25px\" width=\"25px;\" style=\"float:left\">&nbsp;<font size='2'>" + user.username + "(" + user._id + ")" + "-" + user.status.state + "</font></div>";
+                }
+                document.getElementById("onlinePanel").innerHTML = onlineUserStr;
+            }
+        }
+        console.log(id)
+    }
 
-		.unit label {
-			text-align: right;
-			width: 100px;
-			line-height: 30px;
-			display: inline-block;
-		}
+    function createGroup() {
+        let roomName = document.getElementById('room_name').value;
+        let param = {
+            cmd: 22,
+            roomName: roomName,
+        }
+        send(param)
+    }
 
-		.unit input {
-			line-height: 30px;
-			width: 100px;
-			height: 30px;
-		}
+    function invitationAddGroup() {
 
-		.log {
-			font-size: 11px;
-			font-family: Courier;
-			overflow: auto;
-			height: 100%;
-			background: black;
-			width: 85%;
-			float: left
-		}
+    }
 
-		.log p {
-			padding: 2px;
-			margin: 0;
-		}
+    // 登录成功返回
+    function COMMAND_LOGIN_RESP(data) {
+        if (data.success) {
+            log('green', '连接成功...')
+            let param = {
+                cmd: 17,
+                userId: username,
+            }
+            send(param)
+        }
+    }
 
-		.content {
-			width: 100%;
-			overflow: hidden;
-			height: 80%;
-			margin: 0 0 5px 0;
-		}
+    // 获取用户信息响应
+    function COMMAND_GET_USER_RESP(data) {
+        console.log(data)
+        curUser = data.data
+        const loginUser = document.getElementById('login_user')
+        loginUser.style.display = 'inline'
+        // 展示用户信息
+        loginUser.innerHTML = "<img alt=\"" + curUser._id + "\" src=\"" + curUser.avatar + "\" height=\"15px\" width=\"15px;\" >&nbsp;<font size='2'>" + curUser.username + "(" + curUser._id + ")" + "-" + curUser.status.state + "</font>"
+        // 更新群组BUTTON
+        if (curUser.groups.length > 0) {
+            let group = curUser.groups[0];
+            nowGroupId = group.roomId;
+            let users = group.users;
+            let onlineUserStr = "&nbsp;" + group.roomName + "在线成员(" + users.length + "/" + users.length + ")";
+            for (var u = 0; u < users.length; u++) {
+                var user = users[u];
+                onlineUserStr += "<div id=\"" + user._id + "\" style=\"line-height: 25px;margin: 5px 5px 0 5px;padding-left:15px;cursor:pointer;\" onclick=\"onlineDb(this);\" onmouseover=\"onlineMove(this);\"  onmouseleave=\"onlineLeave(this);\"><img alt=\"" + user._id + "\" src=\"" + user.avatar + "\" height=\"25px\" width=\"25px;\" style=\"float:left\">&nbsp;<font size='2'>" + user.username + "(" + user._id + ")" + "-" + user.status.state + "</font></div>";
+            }
+            document.getElementById("onlinePanel").innerHTML = onlineUserStr;
 
-		.online {
-			width: 15%;
-			height: 100%;
-			float: right;
-			background: #FCFCFC;
-			border: solid 1px #000;
-			box-sizing: border-box;
-		}
-	</style>
+            for (let i = 0; i < curUser.groups.length; i++) {
+                const groups = document.getElementById('groups');
+                groups.innerHTML += "<input type='button' style='margin-right: 5px;' id='" + curUser.groups[i].roomId + "' value='" + curUser.groups[i].roomName + "' onclick=\"changeGroup('" + curUser.groups[i].roomId + "')\" />"
+            }
+
+        }
+    }
+
+    // 群组创建成功
+    function COMMAND_CREATE_GROUP_RESP(data) {
+
+        let group = data.data
+        curUser.groups.push(group)
+        const groups = document.getElementById('groups');
+        groups.innerHTML += "<input type='button' style='margin-right: 5px;' id='" + group.roomId + "' value='" + group.roomName + "' onclick='changeGroup(" + group.roomId + ")' />"
+
+        changeGroup(group.roomId)
+        // let onlinePanel = document.getElementById("onlinePanel").innerHTML;
+
+
+        // if (onlinePanel === "") {
+        //     let users = group.users;
+        //     let onlineUserStr = "&nbsp;" + group.roomName + "在线成员(" + users.length + "/" + users.length + ")";
+        //     for (var u = 0; u < users.length; u++) {
+        //         var user = users[u];
+        //         onlineUserStr += "<div id=\"" + user._id + "\" style=\"line-height: 25px;margin: 5px 5px 0 5px;padding-left:15px;cursor:pointer;\" onclick=\"onlineDb(this);\" onmouseover=\"onlineMove(this);\"  onmouseleave=\"onlineLeave(this);\"><img alt=\"" + user._id + "\" src=\"" + user.avatar + "\" height=\"25px\" width=\"25px;\" style=\"float:left\">&nbsp;<font size='2'>" + user.username + "(" + user._id + ")" + "-" + user.status.state + "</font></div>";
+        //     }
+        //     document.getElementById("onlinePanel").innerHTML = onlineUserStr;
+        // }
+
+    }
+
+</script>
+<style media="screen">
+    * {
+        margin: 0;
+        padding: 0;
+    }
+
+    #wrap {
+        margin: 10px auto;
+        width: 80%;
+        height: 99%;
+    }
+
+    .unit {
+        margin-bottom: 5px;
+        padding: 5px;
+        border: solid 1px #000;
+        height: auto;
+        clear: both;
+        box-sizing: border-box;
+    }
+
+    .unit label {
+        text-align: right;
+        width: 100px;
+        line-height: 30px;
+        display: inline-block;
+    }
+
+    .unit input {
+        line-height: 30px;
+        width: 100px;
+        height: 30px;
+    }
+
+    .log {
+        font-size: 11px;
+        font-family: Courier;
+        overflow: auto;
+        height: 100%;
+        background: black;
+        width: 85%;
+        float: left
+    }
+
+    .log p {
+        padding: 2px;
+        margin: 0;
+    }
+
+    .content {
+        width: 100%;
+        overflow: hidden;
+        height: 80%;
+        margin: 0 0 5px 0;
+    }
+
+    .online {
+        width: 15%;
+        height: 100%;
+        float: right;
+        background: #FCFCFC;
+        border: solid 1px #000;
+        box-sizing: border-box;
+    }
+</style>
 </html>

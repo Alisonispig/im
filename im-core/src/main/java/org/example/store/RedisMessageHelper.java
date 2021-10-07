@@ -2,7 +2,6 @@ package org.example.store;
 
 import cn.hutool.core.util.StrUtil;
 import org.example.config.Im;
-import org.example.config.ImSessionContext;
 import org.example.enums.KeyEnum;
 import org.example.packets.Group;
 import org.example.packets.Status;
@@ -74,7 +73,7 @@ public class RedisMessageHelper implements MessageHelper {
         return RedisStore.list(roomId + StrUtil.C_COLON + KeyEnum.IM_GROUP_USERS_KEY.getKey());
     }
 
-    private void initGroupUsers(ChannelContext channelContext, Group group) {
+    public void initGroupUsers(ChannelContext channelContext, Group group) {
         String roomId = group.getRoomId();
         User user = Im.getUser(channelContext);
 
@@ -96,7 +95,8 @@ public class RedisMessageHelper implements MessageHelper {
 
     }
 
-    private void initUserGroups(String userId, String roomId) {
+    @Override
+    public void initUserGroups(String userId, String roomId) {
         String key = userId + StrUtil.C_COLON + KeyEnum.IM_USER_GROUPS_KEY.getKey();
         List<String> list = RedisStore.list(key);
         if (list.contains(roomId)) {

@@ -2,19 +2,19 @@ package org.example.config;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.example.listener.ImGroupListener;
 import org.example.listener.ImUserListener;
 import org.example.store.MessageHelper;
+import org.tio.core.TioConfig;
 import org.tio.utils.prop.MapWithLockPropSupport;
 import org.tio.utils.time.Time;
-
-import java.util.Objects;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
 public class ImConfig extends MapWithLockPropSupport {
 
     public static final String CHARSET = "utf-8";
+
+    public TioConfig tioConfig;
 
     /**
      * 消息处理器，Redis持久化， 处理在线离线消息
@@ -66,6 +66,8 @@ public class ImConfig extends MapWithLockPropSupport {
 
     public static class Global {
         private static ImConfig imConfig;
+
+
 
         public static ImConfig get() {
             return imConfig;

@@ -21,9 +21,11 @@ public class CommandManager {
             registerCommand(new MessageReqHandler());
             registerCommand(new JoinGroupReqHandler());
             registerCommand(new ChatReqHandler());
+            registerCommand(new CreatGroupReqHandler());
         } catch (Exception e) {
             log.info("注册处理器失败");
         }
+
     }
 
     public static void registerCommand(AbstractCmdHandler imCommandHandler) {

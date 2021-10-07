@@ -175,6 +175,21 @@ public enum CommandEnum {
      * <code>COMMAND_USER_STATUS_RESP = 21;</code>
      */
     COMMAND_USER_STATUS_RESP(21),
+    /**
+     * <pre>
+     * 创建群组请求;
+     * </pre>
+     *
+     * <code>COMMAND_CREATE_GROUP_REQ = 22;</code>
+     */
+    COMMAND_CREATE_GROUP_REQ(22),
+    /**
+     * <pre>
+     * 创建群组响应;
+     * </pre>
+     * <code>COMMAND_CREATE_GROUP_RESP = 23;</code>
+     */
+    COMMAND_CREATE_GROUP_RESP(23),
     ;
 
 

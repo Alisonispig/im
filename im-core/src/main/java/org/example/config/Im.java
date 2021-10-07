@@ -19,6 +19,7 @@ import org.tio.websocket.common.WsResponse;
 
 import java.util.*;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
+import java.util.stream.Collectors;
 
 @Slf4j
 public class Im extends ImConfig {
@@ -74,7 +75,7 @@ public class Im extends ImConfig {
         String userId = user.get_id();
         ImSessionContext imSessionContext = (ImSessionContext) channelContext.get(KeyEnum.IM_CHANNEL_SESSION_CONTEXT_KEY.getKey());
         Tio.bindUser(channelContext, userId);
-        SetWithLock<ChannelContext> channelContextSetWithLock = Tio.getByUserid(channelContext.tioConfig, userId);
+        SetWithLock<ChannelContext> channelContextSetWithLock = Tio.getByUserid(Im.get().getTioConfig(), userId);
         ReentrantReadWriteLock.ReadLock lock = channelContextSetWithLock.getLock().readLock();
         try {
             lock.lock();
@@ -91,13 +92,25 @@ public class Im extends ImConfig {
     }
 
     public static void sendToGroup(JoinGroupNotifyBody joinGroupNotifyBody, ChannelContext channelContext) {
-        WsResponse wsResponse = WsResponse.fromText(RespBody.success(CommandEnum.COMMAND_JOIN_GROUP_NOTIFY_RESP, joinGroupNotifyBody), CHARSET);
-        SetWithLock<ChannelContext> users = Tio.getByGroup(channelContext.tioConfig, joinGroupNotifyBody.getRoomId());
+
+        User user = getUser(channelContext);
+
+
+        SetWithLock<ChannelContext> users = Tio.getByGroup(Im.get().tioConfig, joinGroupNotifyBody.getGroup().getRoomId());
         if (users == null) {
             return;
         }
         List<ChannelContext> channelContexts = convertChannel(users);
         for (ChannelContext context : channelContexts) {
+            User sendUser = getUser(channelContext);
+            if (user.get_id().equals(sendUser.get_id())) {
+                joinGroupNotifyBody.setMessage("您已成功创建群聊!");
+            } else {
+                String collect = joinGroupNotifyBody.getUsers().stream().filter(x -> !x.get_id().equals(user.get_id())).map(User::getUsername)
+                        .collect(Collectors.joining(StrUtil.COMMA));
+                joinGroupNotifyBody.setMessage(collect + ",已加入群聊!");
+            }
+            WsResponse wsResponse = WsResponse.fromText(RespBody.success(CommandEnum.COMMAND_JOIN_GROUP_NOTIFY_RESP, joinGroupNotifyBody), CHARSET);
             send(context, wsResponse);
         }
     }
@@ -105,10 +118,9 @@ public class Im extends ImConfig {
     /**
      * 聊天消息
      *
-     * @param chatRespBody   聊天消息体
-     * @param channelContext 用户上下文
+     * @param chatRespBody 聊天消息体
      */
-    public static void sendToGroup(ChatRespBody chatRespBody, ChannelContext channelContext) {
+    public static void sendToGroup(ChatRespBody chatRespBody) {
         // 构建消息体
         User userInfo = get().messageHelper.getUserInfo(chatRespBody.getSenderId());
 
@@ -122,7 +134,7 @@ public class Im extends ImConfig {
         log.info("目标数据：" + RespBody.success(CommandEnum.COMMAND_CHAT_REQ, chatRespBody));
 
         WsResponse wsResponse = WsResponse.fromText(RespBody.success(CommandEnum.COMMAND_CHAT_REQ, chatRespBody), CHARSET);
-        SetWithLock<ChannelContext> users = Tio.getByGroup(channelContext.tioConfig, chatRespBody.getRoomId());
+        SetWithLock<ChannelContext> users = Tio.getByGroup(Im.get().getTioConfig(), chatRespBody.getRoomId());
         List<ChannelContext> channelContexts = convertChannel(users);
         for (ChannelContext context : channelContexts) {
             send(context, wsResponse);
@@ -137,9 +149,14 @@ public class Im extends ImConfig {
      */
     public static void sendToGroup(UserStatusBody userStatusBody, ChannelContext channelContext) {
         WsResponse wsResponse = WsResponse.fromText(RespBody.success(CommandEnum.COMMAND_USER_STATUS_RESP, userStatusBody), CHARSET);
-        SetWithLock<ChannelContext> users = Tio.getByGroup(channelContext.tioConfig, userStatusBody.getGroup().getRoomId());
+        SetWithLock<ChannelContext> users = Tio.getByGroup(Im.get().getTioConfig(), userStatusBody.getGroup().getRoomId());
         List<ChannelContext> channelContexts = convertChannel(users);
+        User nowUser = getUser(channelContext, false);
         for (ChannelContext context : channelContexts) {
+            User user = getUser(context);
+            if (user.get_id().equals(nowUser.get_id())) {
+                continue;
+            }
             send(context, wsResponse);
         }
     }
@@ -192,6 +209,37 @@ public class Im extends ImConfig {
             return user;
         }
         return user.clone();
+    }
+
+    public static void addGroup(ChannelContext channelContext, Group group) {
+        ImSessionContext imSessionContext = (ImSessionContext) channelContext.get(KeyEnum.IM_CHANNEL_SESSION_CONTEXT_KEY.getKey());
+        imSessionContext.getImClientNode().getUser().addGroup(group);
+    }
+
+    public static void close(ChannelContext channelContext, String remark) {
+        Tio.close(channelContext, remark);
+    }
+
+    /**
+     * 判断用户是否在线
+     *
+     * @param id 用户ID
+     * @return 是否在线
+     */
+    public static boolean isOnline(String id) {
+        List<ChannelContext> channelByUserId = getChannelByUserId(id);
+        return CollUtil.isNotEmpty(channelByUserId);
+    }
+
+    /**
+     * 获取用户下所有通道
+     *
+     * @param id 用户主键
+     * @return 所有连接
+     */
+    public static List<ChannelContext> getChannelByUserId(String id) {
+        SetWithLock<ChannelContext> userChannelContext = Tio.getByUserid(Im.get().getTioConfig(), id);
+        return convertChannel(userChannelContext);
     }
 
 
