@@ -13,6 +13,9 @@
 				<input id="password" value="123" />
 				<input onclick="connect();" type="button" value="登录" />
 				<input onclick="disConnect();" type="button" value="退出" />
+				<div id="login_user" style="line-height: 25px;margin: 5px 5px 0 5px;padding-left:15px;cursor:pointer;display: none;">
+					
+				</div>
 			</div>
 			<div class="unit">
 				<label>聊天记录:</label>
@@ -47,6 +50,7 @@
 		let socket;
 		let username;
 		let logDiv;
+		let curUser;
 
 		function connect() {
 			username = document.getElementById("username").value;
@@ -78,9 +82,17 @@
 
 			};
 		}
+		
+		function disConnect(){
+			socket.close()
+			log('green','退出连接...')
+		}
 
-		function log(color, data) {
-			logDiv.innerHTML += "<p style='font-size: 12px; color: " + color + ";'>" + data + "</p><br />"
+		function log(color, data, hasEnter) {
+			logDiv.innerHTML += "<p style='font-size: 12px; color: " + color + ";'>" + data + "</p>"
+			if(hasEnter){
+				logDiv.innerHTML += "<br />"
+			}
 		}
 
 		function send(data) {
@@ -102,8 +114,14 @@
 		
 		// 获取用户信息响应
 		function COMMAND_GET_USER_RESP(data) {
-			
+			console.log(data)
+			curUser = data.data
+			const user = curUser
+			const loginUser = document.getElementById('login_user')
+			loginUser.style.display = 'inline'
+			loginUser.innerHTML = "<img alt=\"" + user._id + "\" src=\"" + user.avatar + "\" height=\"15px\" width=\"15px;\" >&nbsp;<font size='2'>" + user.username + "(" + user._id + ")" + "-" + user.status.state+"</font>"
 		}
+		
 	</script>
 	<style media="screen">
 		* {
