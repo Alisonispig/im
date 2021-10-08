@@ -1,5 +1,6 @@
 package org.example.listener;
 
+import org.example.config.ImConfig;
 import org.example.config.ImSessionContext;
 import org.example.enums.KeyEnum;
 import org.example.packets.ImClientNode;
@@ -51,5 +52,7 @@ public class ImServerAioListener extends WsServerAioListener {
     @Override
     public void onBeforeClose(ChannelContext channelContext, Throwable throwable, String remark, boolean isRemove) throws Exception {
         super.onBeforeClose(channelContext, throwable, remark, isRemove);
+        // 更新用户状态
+        ImConfig.get().messageHelper.userOffline(channelContext);
     }
 }

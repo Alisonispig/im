@@ -45,6 +45,12 @@
             <artifactId>jedis</artifactId>
             <version>3.7.0</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.t-io</groupId>
+            <artifactId>tio-http-server</artifactId>
+            <version>3.7.2.v20210316-RELEASE</version>
+        </dependency>
     </dependencies>
 
     <properties>

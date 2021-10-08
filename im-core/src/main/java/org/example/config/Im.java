@@ -6,7 +6,8 @@ import cn.hutool.core.util.StrUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.example.enums.CommandEnum;
 import org.example.enums.KeyEnum;
-import org.example.packets.*;
+import org.example.packets.Group;
+import org.example.packets.User;
 import org.example.packets.handler.ChatRespBody;
 import org.example.packets.handler.JoinGroupNotifyBody;
 import org.example.packets.handler.RespBody;
@@ -173,6 +174,29 @@ public class Im extends ImConfig {
             lock.unlock();
         }
         return new ArrayList<>();
+    }
+
+    /**
+     * 移除用户, 和close方法一样，只不过不再进行重连等维护性的操作
+     *
+     * @param userId 用户ID
+     * @param remark 移除原因描述
+     */
+    public static void remove(String userId, String remark) {
+        SetWithLock<ChannelContext> userChannelContexts = Tio.getByUserid(ImConfig.get().getTioConfig(), userId);
+        Set<ChannelContext> channels = userChannelContexts.getObj();
+        if (channels.isEmpty()) {
+            return;
+        }
+        ReentrantReadWriteLock.ReadLock readLock = userChannelContexts.getLock().readLock();
+        try {
+            readLock.lock();
+            for (ChannelContext channelContext : channels) {
+                remove(channelContext, remark);
+            }
+        } finally {
+            readLock.unlock();
+        }
     }
 
     /**

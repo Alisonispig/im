@@ -59,6 +59,7 @@
     let logDiv;
     let curUser;
     let nowGroupId;
+    let t;
 
     function connect() {
         if (curUser) {
@@ -82,6 +83,9 @@
                 case 6:
                     COMMAND_LOGIN_RESP(data);
                     break;
+                case 13:
+                    COMMAND_HEARTBEAT_RESP();
+                    break;
                 // 获取用户信息相应
                 case 18:
                     COMMAND_GET_USER_RESP(data);
@@ -95,18 +99,17 @@
             }
         };
         socket.onclose = function (e) {
-
+            curUser = null
+            document.getElementById('login_user').style.display = 'none'
+            document.getElementById('groups').innerHTML = ""
+            document.getElementById("onlinePanel").innerHTML = ""
+            clearInterval(t)
+            log('green', '退出连接...')
         };
     }
 
     function disConnect() {
         socket.close()
-        curUser = null
-        const loginUser = document.getElementById('login_user')
-        loginUser.style.display = 'none'
-        const groups = document.getElementById('groups')
-        groups.style.display = 'none'
-        log('green', '退出连接...')
     }
 
     function log(color, data, hasEnter) {
@@ -125,8 +128,7 @@
         nowGroupId = id;
         for (let groupKey in curUser.groups) {
             let group = curUser.groups[groupKey]
-            console.log(group)
-            if(group.roomId === id){
+            if (group.roomId === id) {
                 let users = group.users;
                 let onlineUserStr = "&nbsp;" + group.roomName + "在线成员(" + users.length + "/" + users.length + ")";
                 for (var u = 0; u < users.length; u++) {
@@ -136,7 +138,6 @@
                 document.getElementById("onlinePanel").innerHTML = onlineUserStr;
             }
         }
-        console.log(id)
     }
 
     function createGroup() {
@@ -148,6 +149,12 @@
         send(param)
     }
 
+    function heartbeatCmd() {
+        if(curUser){
+            COMMAND_HEARTBEAT_REQ();
+        }
+    }
+
     function invitationAddGroup() {
 
     }
@@ -155,6 +162,13 @@
     // 登录成功返回
     function COMMAND_LOGIN_RESP(data) {
         if (data.success) {
+            t = setInterval(() => {
+                if(curUser){
+                    COMMAND_HEARTBEAT_REQ()
+                } else {
+                    clearInterval(t)
+                }
+            }, 6000)
             log('green', '连接成功...')
             let param = {
                 cmd: 17,
@@ -166,7 +180,6 @@
 
     // 获取用户信息响应
     function COMMAND_GET_USER_RESP(data) {
-        console.log(data)
         curUser = data.data
         const loginUser = document.getElementById('login_user')
         loginUser.style.display = 'inline'
@@ -201,19 +214,21 @@
         groups.innerHTML += "<input type='button' style='margin-right: 5px;' id='" + group.roomId + "' value='" + group.roomName + "' onclick='changeGroup(" + group.roomId + ")' />"
 
         changeGroup(group.roomId)
-        // let onlinePanel = document.getElementById("onlinePanel").innerHTML;
+    }
 
+    // 发送心跳
+    function COMMAND_HEARTBEAT_REQ() {
+        let heartbeatCmd = {
+            cmd:13,
+            hbbyte: "-127"
+        }
+        send(heartbeatCmd);
+        log('green',"心跳请求...")
+    }
 
-        // if (onlinePanel === "") {
-        //     let users = group.users;
-        //     let onlineUserStr = "&nbsp;" + group.roomName + "在线成员(" + users.length + "/" + users.length + ")";
-        //     for (var u = 0; u < users.length; u++) {
-        //         var user = users[u];
-        //         onlineUserStr += "<div id=\"" + user._id + "\" style=\"line-height: 25px;margin: 5px 5px 0 5px;padding-left:15px;cursor:pointer;\" onclick=\"onlineDb(this);\" onmouseover=\"onlineMove(this);\"  onmouseleave=\"onlineLeave(this);\"><img alt=\"" + user._id + "\" src=\"" + user.avatar + "\" height=\"25px\" width=\"25px;\" style=\"float:left\">&nbsp;<font size='2'>" + user.username + "(" + user._id + ")" + "-" + user.status.state + "</font></div>";
-        //     }
-        //     document.getElementById("onlinePanel").innerHTML = onlineUserStr;
-        // }
-
+    // 心跳响应
+    function COMMAND_HEARTBEAT_RESP() {
+        log('green',"心跳响应...")
     }
 
 </script>
