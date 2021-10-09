@@ -64,7 +64,8 @@ public class RedisMessageHelper implements MessageHelper {
         RedisStore.set(user.get_id() + StrUtil.C_COLON + KeyEnum.IM_USER_INFO_KEY.getKey(), user);
     }
 
-    private Group getGroupInfo(String roomId) {
+    @Override
+    public Group getGroupInfo(String roomId) {
         return RedisStore.get(roomId + StrUtil.C_COLON + KeyEnum.IM_GROUP_INFO_KEY.getKey(), Group.class);
     }
 

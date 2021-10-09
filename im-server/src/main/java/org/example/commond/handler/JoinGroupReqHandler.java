@@ -8,8 +8,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.example.commond.AbstractCmdHandler;
 import org.example.config.Im;
 import org.example.enums.CommandEnum;
+import org.example.packets.Group;
 import org.example.packets.User;
 import org.example.packets.handler.JoinGroupNotifyBody;
+import org.example.packets.handler.RespBody;
 import org.tio.core.ChannelContext;
 import org.tio.core.intf.Packet;
 import org.tio.websocket.common.WsRequest;
@@ -30,7 +32,18 @@ public class JoinGroupReqHandler extends AbstractCmdHandler {
 
         WsRequest request = (WsRequest) packet;
         String str = StrUtil.str(request.getBody(), Im.CHARSET);
+
+
         JoinGroupNotifyBody joinGroupNotifyBody = JSON.parseObject(str, JoinGroupNotifyBody.class);
+
+        if (CollUtil.isEmpty(joinGroupNotifyBody.getUsers())) {
+            return null;
+        }
+
+        Group group = Im.get().messageHelper.getGroupInfo(joinGroupNotifyBody.getGroup().getRoomId());
+        joinGroupNotifyBody.setGroup(group);
+
+
 
         // TODO 加入群组是否成功
         log.info("加入群组消息：" + JSON.toJSONString(joinGroupNotifyBody, SerializerFeature.DisableCircularReferenceDetect));
@@ -47,8 +60,11 @@ public class JoinGroupReqHandler extends AbstractCmdHandler {
             }
         }
 
+        WsResponse wsResponse = WsResponse.fromText(RespBody.success(CommandEnum.COMMAND_JOIN_GROUP_RESP, joinGroupNotifyBody), Im.CHARSET);
+        Im.send(channelContext,wsResponse);
+
         // 发送加入群组消息
-        Im.sendToGroup(joinGroupNotifyBody, channelContext);
+        Im.sendToGroup(joinGroupNotifyBody);
 
         return null;
     }

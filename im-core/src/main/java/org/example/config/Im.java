@@ -5,7 +5,6 @@ import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.example.enums.CommandEnum;
-import org.example.enums.JoinGroupEnum;
 import org.example.enums.KeyEnum;
 import org.example.packets.Group;
 import org.example.packets.User;
@@ -93,25 +92,29 @@ public class Im extends ImConfig {
         }
     }
 
-    public static void sendToGroup(JoinGroupNotifyBody joinGroupNotifyBody, ChannelContext channelContext) {
+    public static void  sendToGroup(JoinGroupNotifyBody joinGroupNotifyBody) {
 
-        User user = getUser(channelContext);
+        List<User> groupUsers = Im.get().messageHelper.getGroupUsers(joinGroupNotifyBody.getGroup().getRoomId());
+        joinGroupNotifyBody.getGroup().setUsers(groupUsers);
 
+        if (CollUtil.isEmpty(joinGroupNotifyBody.getUsers())) {
+            return;
+        }
         SetWithLock<ChannelContext> users = Tio.getByGroup(Im.get().tioConfig, joinGroupNotifyBody.getGroup().getRoomId());
         if (users == null) {
             return;
         }
+        List<User> userList = new ArrayList<>();
+        joinGroupNotifyBody.getUsers().forEach(x -> userList.add(get().messageHelper.getUserInfo(x.get_id())));
+
         List<ChannelContext> channelContexts = convertChannel(users);
+        String collect = userList.stream().map(User::getUsername).collect(Collectors.joining(StrUtil.COMMA));
+
+        joinGroupNotifyBody.setMessage(collect + ",已加入群聊!");
+
+
+        WsResponse wsResponse = WsResponse.fromText(RespBody.success(CommandEnum.COMMAND_JOIN_GROUP_NOTIFY_RESP, joinGroupNotifyBody), CHARSET);
         for (ChannelContext context : channelContexts) {
-            User sendUser = getUser(context);
-            if (user.get_id().equals(sendUser.get_id()) && joinGroupNotifyBody.getCode() == JoinGroupEnum.STATE_CREATE.getValue()) {
-                joinGroupNotifyBody.setMessage("您已成功创建群聊!");
-            } else {
-                String collect = joinGroupNotifyBody.getUsers().stream().filter(x -> !x.get_id().equals(user.get_id())).map(User::getUsername)
-                        .collect(Collectors.joining(StrUtil.COMMA));
-                joinGroupNotifyBody.setMessage(collect + ",已加入群聊!");
-            }
-            WsResponse wsResponse = WsResponse.fromText(RespBody.success(CommandEnum.COMMAND_JOIN_GROUP_NOTIFY_RESP, joinGroupNotifyBody), CHARSET);
             send(context, wsResponse);
         }
     }

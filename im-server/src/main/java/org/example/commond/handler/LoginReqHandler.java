@@ -56,7 +56,8 @@ public class LoginReqHandler extends AbstractCmdHandler {
             // 绑定群组
             Im.bindGroup(channelContext, group);
             // 给所在群组发送上线消息 用户状态更新
-
+            List<User> groupUsers = Im.get().messageHelper.getGroupUsers(group.getRoomId());
+            group.setUsers(groupUsers);
             build.setGroup(group);
             Im.sendToGroup(build, channelContext);
         }

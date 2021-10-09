@@ -20,9 +20,6 @@ import org.tio.core.intf.Packet;
 import org.tio.websocket.common.WsRequest;
 import org.tio.websocket.common.WsResponse;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Slf4j
 public class CreatGroupReqHandler extends AbstractCmdHandler {
 
@@ -44,10 +41,7 @@ public class CreatGroupReqHandler extends AbstractCmdHandler {
         // 创建群聊
         Group build = Group.builder().roomId(IdUtil.getSnowflake().nextIdStr()).roomName(roomName).addUser(user).build();
 
-        List<User> users = new ArrayList<>();
-        users.add(user);
-
-        JoinGroupNotifyBody joinGroupNotifyBody = JoinGroupNotifyBody.builder().group(build).users(users).code(JoinGroupEnum.STATE_CREATE.getValue()).build();
+        JoinGroupNotifyBody joinGroupNotifyBody = JoinGroupNotifyBody.builder().group(build).users(request.getUsers()).code(JoinGroupEnum.STATE_CREATE.getValue()).build();
 
         // 发送加入群聊消息
         WsRequest wsRequest = WsRequest.fromText(JSON.toJSONString(joinGroupNotifyBody, SerializerFeature.DisableCircularReferenceDetect), Im.CHARSET);
@@ -57,6 +51,9 @@ public class CreatGroupReqHandler extends AbstractCmdHandler {
         // 发送群组创建成功消息
         WsResponse response = WsResponse.fromText(RespBody.success(CommandEnum.COMMAND_CREATE_GROUP_RESP, build), Im.CHARSET);
         Im.send(channelContext, response);
+
+        Im.addGroup(channelContext, joinGroupNotifyBody.getGroup());
+        Im.bindGroup(channelContext, joinGroupNotifyBody.getGroup());
         return null;
     }
 }

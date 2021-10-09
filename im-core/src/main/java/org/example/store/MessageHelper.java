@@ -60,4 +60,11 @@ public interface MessageHelper {
      * @param roomId 组ID
      */
     void initUserGroups(String userId, String roomId);
+
+    /**
+     * 获取群组信息
+     * @param roomId 群组ID
+     * @return 群组信息
+     */
+    Group getGroupInfo(String roomId);
 }
