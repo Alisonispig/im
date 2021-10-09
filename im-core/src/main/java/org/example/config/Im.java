@@ -5,6 +5,7 @@ import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.example.enums.CommandEnum;
+import org.example.enums.JoinGroupEnum;
 import org.example.enums.KeyEnum;
 import org.example.packets.Group;
 import org.example.packets.User;
@@ -102,8 +103,8 @@ public class Im extends ImConfig {
         }
         List<ChannelContext> channelContexts = convertChannel(users);
         for (ChannelContext context : channelContexts) {
-            User sendUser = getUser(channelContext);
-            if (user.get_id().equals(sendUser.get_id())) {
+            User sendUser = getUser(context);
+            if (user.get_id().equals(sendUser.get_id()) && joinGroupNotifyBody.getCode() == JoinGroupEnum.STATE_CREATE.getValue()) {
                 joinGroupNotifyBody.setMessage("您已成功创建群聊!");
             } else {
                 String collect = joinGroupNotifyBody.getUsers().stream().filter(x -> !x.get_id().equals(user.get_id())).map(User::getUsername)
