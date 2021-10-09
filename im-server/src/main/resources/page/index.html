@@ -19,10 +19,16 @@
         </div>
     </div>
     <div class="unit">
+        <label>心跳:</label>
+        <input type="button" value="心跳命令" onclick="heartbeatCmd();"/>
+        <input id="heard_beat_time" style="width:100px;" placeholder="请输入心跳间隔" value="3000"/>
+        <input type="button" value="开启定时心跳" onclick="openHeartbeat();"/>
+        <input type="button" value="关闭定时心跳" onclick="closeHeartbeat();"/>
+    </div>
+    <div class="unit">
         <label>聊天记录:</label>
         <input type="button" value="清空记录" onclick="clearLogs();"/>
         <input type="button" value="鉴权命令" onclick="authCmd();"/>
-        <input type="button" value="心跳命令" onclick="heartbeatCmd();"/>
         <input type="button" value="获取指定好友历史消息" onclick="friendHistoryCmd();" style="width: 150px;"/>
         <input id="history_friend_id" style="width:100px;" placeholder="输入好友ID"/>
         <input type="button" value="获取指定群组历史消息" onclick="groupHistoryCmd();" style="width: 150px;"/>
@@ -86,6 +92,9 @@
                 case 13:
                     COMMAND_HEARTBEAT_RESP();
                     break;
+                case 9:
+                    COMMAND_JOIN_GROUP_NOTIFY_RESP(data);
+                    break;
                 // 获取用户信息相应
                 case 18:
                     COMMAND_GET_USER_RESP(data);
@@ -103,7 +112,7 @@
             document.getElementById('login_user').style.display = 'none'
             document.getElementById('groups').innerHTML = ""
             document.getElementById("onlinePanel").innerHTML = ""
-            clearInterval(t)
+            closeHeartbeat();
             log('green', '退出连接...')
         };
     }
@@ -117,6 +126,8 @@
         if (hasEnter) {
             logDiv.innerHTML += "<br />"
         }
+        document.getElementById('logs').scrollTop = logDiv.scrollHeight;
+        ;
     }
 
     function send(data) {
@@ -150,25 +161,60 @@
     }
 
     function heartbeatCmd() {
-        if(curUser){
+        if (curUser) {
             COMMAND_HEARTBEAT_REQ();
         }
     }
 
-    function invitationAddGroup() {
+    function openHeartbeat() {
+        if(t){
+            alert("定时心跳已开启,勿重复开启")
+        }
+        let time = document.getElementById('heard_beat_time').value
+        if (time) {
+            t = setInterval(() => {
+                if (curUser) {
+                    COMMAND_HEARTBEAT_REQ()
+                } else {
+                    clearInterval(t)
+                }
+            }, time)
+            log('green','定时心跳已开启...')
+        } else {
+            alert("请输入正确的间隔!")
+        }
+    }
 
+    function closeHeartbeat() {
+        if(t){
+            clearInterval(t)
+            log('green','定时心跳已关闭...')
+        }
+        t = null
+    }
+
+    function invitationAddGroup() {
+        let userId = document.getElementById('room_user_id').value;
+        if(!userId){
+            alert("请输入用户ID")
+        }
+        let param = {
+            cmd: 7,
+            group: {
+                roomId: nowGroupId,
+            },
+            users: [{
+                _id: userId
+            }],
+            code: 1
+        }
+        send(param);
     }
 
     // 登录成功返回
     function COMMAND_LOGIN_RESP(data) {
         if (data.success) {
-            t = setInterval(() => {
-                if(curUser){
-                    COMMAND_HEARTBEAT_REQ()
-                } else {
-                    clearInterval(t)
-                }
-            }, 6000)
+
             log('green', '连接成功...')
             let param = {
                 cmd: 17,
@@ -205,30 +251,35 @@
         }
     }
 
-    // 群组创建成功
-    function COMMAND_CREATE_GROUP_RESP(data) {
-
-        let group = data.data
+    // 加入群聊返回
+    function COMMAND_JOIN_GROUP_NOTIFY_RESP(data) {
+        let group = data.data.group
         curUser.groups.push(group)
         const groups = document.getElementById('groups');
         groups.innerHTML += "<input type='button' style='margin-right: 5px;' id='" + group.roomId + "' value='" + group.roomName + "' onclick='changeGroup(" + group.roomId + ")' />"
 
         changeGroup(group.roomId)
+        log('red', data.data.message)
+    }
+
+    // 群组创建成功
+    function COMMAND_CREATE_GROUP_RESP(data) {
+        log('green', "群组创建成功消息返回.....")
     }
 
     // 发送心跳
     function COMMAND_HEARTBEAT_REQ() {
         let heartbeatCmd = {
-            cmd:13,
+            cmd: 13,
             hbbyte: "-127"
         }
         send(heartbeatCmd);
-        log('green',"心跳请求...")
+        log('green', "心跳请求...")
     }
 
     // 心跳响应
     function COMMAND_HEARTBEAT_RESP() {
-        log('green',"心跳响应...")
+        log('green', "心跳响应...")
     }
 
 </script>

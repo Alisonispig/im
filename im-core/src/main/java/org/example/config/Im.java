@@ -96,7 +96,6 @@ public class Im extends ImConfig {
 
         User user = getUser(channelContext);
 
-
         SetWithLock<ChannelContext> users = Tio.getByGroup(Im.get().tioConfig, joinGroupNotifyBody.getGroup().getRoomId());
         if (users == null) {
             return;
