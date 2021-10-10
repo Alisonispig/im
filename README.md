@@ -22,3 +22,4 @@
 
 ### 基础功能展示截图
 ![基础功能](https://images.gitee.com/uploads/images/2021/1010/003129_ffffa712_1446263.png "屏幕截图.png")
+![群聊](https://images.gitee.com/uploads/images/2021/1010/235014_8203ff81_1446263.png "屏幕截图.png")
