@@ -33,10 +33,20 @@ public enum KeyEnum {
     IM_GROUP_USERS_KEY("GROUP_USERS"),
 
     /**
-     * 群组信息
+     * 群组基本信息
      */
-    IM_GROUP_INFO_KEY("GROUP_INFO");
+    IM_GROUP_INFO_KEY("GROUP_INFO"),
 
+    /**
+     * 群组消息
+     */
+    IM_GROUP_MESSAGE_KEY("GROUP_MESSAGE"),
+
+    /**
+     * 群组未读消息
+     */
+    IM_GROUP_UNREAD_MESSAGE_KEY("GROUP_UNREAD_MESSAGE");
+    ;
 
     private final String key;
 }

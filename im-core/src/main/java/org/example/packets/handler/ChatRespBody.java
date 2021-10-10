@@ -22,6 +22,11 @@ public class ChatRespBody {
     private String content;
 
     /**
+     * 未读消息数量
+     */
+    private Integer unreadCount;
+
+    /**
      * 发送者ID
      */
     private String senderId;

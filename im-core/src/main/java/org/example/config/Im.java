@@ -1,7 +1,6 @@
 package org.example.config;
 
 import cn.hutool.core.collection.CollUtil;
-import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.example.enums.CommandEnum;
@@ -18,7 +17,10 @@ import org.tio.core.intf.Packet;
 import org.tio.utils.lock.SetWithLock;
 import org.tio.websocket.common.WsResponse;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.stream.Collectors;
 
@@ -92,7 +94,7 @@ public class Im extends ImConfig {
         }
     }
 
-    public static void  sendToGroup(JoinGroupNotifyBody joinGroupNotifyBody) {
+    public static void sendToGroup(JoinGroupNotifyBody joinGroupNotifyBody) {
 
         List<User> groupUsers = Im.get().messageHelper.getGroupUsers(joinGroupNotifyBody.getGroup().getRoomId());
         joinGroupNotifyBody.getGroup().setUsers(groupUsers);
@@ -112,7 +114,6 @@ public class Im extends ImConfig {
 
         joinGroupNotifyBody.setMessage(collect + ",已加入群聊!");
 
-
         WsResponse wsResponse = WsResponse.fromText(RespBody.success(CommandEnum.COMMAND_JOIN_GROUP_NOTIFY_RESP, joinGroupNotifyBody), CHARSET);
         for (ChannelContext context : channelContexts) {
             send(context, wsResponse);
@@ -127,21 +128,31 @@ public class Im extends ImConfig {
     public static void sendToGroup(ChatRespBody chatRespBody) {
         // 构建消息体
         User userInfo = get().messageHelper.getUserInfo(chatRespBody.getSenderId());
-
         chatRespBody.setAvatar(userInfo.getAvatar());
         chatRespBody.setUsername(userInfo.getUsername());
-        Date date = new Date();
-        chatRespBody.setDate(DateUtil.formatDate(date));
-        chatRespBody.setTimestamp(DateUtil.formatTime(date));
         chatRespBody.setDeleted(false);
         chatRespBody.setSystem(false);
+
         log.info("目标数据：" + RespBody.success(CommandEnum.COMMAND_CHAT_REQ, chatRespBody));
 
-        WsResponse wsResponse = WsResponse.fromText(RespBody.success(CommandEnum.COMMAND_CHAT_REQ, chatRespBody), CHARSET);
-        SetWithLock<ChannelContext> users = Tio.getByGroup(Im.get().getTioConfig(), chatRespBody.getRoomId());
-        List<ChannelContext> channelContexts = convertChannel(users);
-        for (ChannelContext context : channelContexts) {
-            send(context, wsResponse);
+        // 获取到群组内的所有用户
+        List<User> groupUsers = Im.get().messageHelper.getGroupUsers(chatRespBody.getRoomId());
+        for (User groupUser : groupUsers) {
+            // 给这个用户设置未读消息
+            get().messageHelper.putUnReadMessage(groupUser.get_id(), chatRespBody.getRoomId(),chatRespBody.get_id());
+            // 取出未读消息, 并设置未读数量
+            List<String> unReadMessage = get().messageHelper.getUnReadMessage(groupUser.get_id(), chatRespBody.getRoomId());
+            chatRespBody.setUnreadCount(CollUtil.isEmpty(unReadMessage) ? 0 : unReadMessage.size());
+            WsResponse wsResponse = WsResponse.fromText(RespBody.success(CommandEnum.COMMAND_CHAT_REQ, chatRespBody), CHARSET);
+            // 发送给在线用户
+            List<ChannelContext> channelContexts = getChannelByUserId(groupUser.get_id());
+
+            // 如果当前
+            if (CollUtil.isNotEmpty(channelContexts)) {
+                for (ChannelContext channelContext : channelContexts) {
+                    send(channelContext, wsResponse);
+                }
+            }
         }
     }
 
@@ -266,6 +277,9 @@ public class Im extends ImConfig {
      */
     public static List<ChannelContext> getChannelByUserId(String id) {
         SetWithLock<ChannelContext> userChannelContext = Tio.getByUserid(Im.get().getTioConfig(), id);
+        if(userChannelContext == null){
+            return new ArrayList<>();
+        }
         return convertChannel(userChannelContext);
     }
 

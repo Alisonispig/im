@@ -55,9 +55,10 @@ public class JoinGroupReqHandler extends AbstractCmdHandler {
                 for (ChannelContext context : channelByUserId) {
                     Im.addGroup(context, joinGroupNotifyBody.getGroup());
                     Im.bindGroup(context, joinGroupNotifyBody.getGroup());
-                    Im.get().messageHelper.initUserGroups(addUser.get_id(), joinGroupNotifyBody.getGroup().getRoomId());
                 }
             }
+            Im.get().messageHelper.addGroupUser(addUser.get_id(),joinGroupNotifyBody.getGroup().getRoomId());
+            Im.get().messageHelper.initUserGroups(addUser.get_id(), joinGroupNotifyBody.getGroup().getRoomId());
         }
 
         WsResponse wsResponse = WsResponse.fromText(RespBody.success(CommandEnum.COMMAND_JOIN_GROUP_RESP, joinGroupNotifyBody), Im.CHARSET);

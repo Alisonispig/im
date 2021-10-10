@@ -2,6 +2,7 @@ package org.example.store;
 
 import org.example.packets.Group;
 import org.example.packets.User;
+import org.example.packets.handler.ChatReqBody;
 import org.tio.core.ChannelContext;
 
 import java.util.List;
@@ -55,6 +56,13 @@ public interface MessageHelper {
     void userOffline(ChannelContext channelContext);
 
     /**
+     * 将用户加入到群组中
+     * @param userId 用户Id
+     * @param roomId 群组Id
+     */
+    void addGroupUser(String userId, String roomId);
+
+    /**
      * 初始化用户群组持久化信息
      * @param userId 用户ID
      * @param roomId 组ID
@@ -67,4 +75,48 @@ public interface MessageHelper {
      * @return 群组信息
      */
     Group getGroupInfo(String roomId);
+
+    /**
+     * 缓存消息
+     * @param chatReqBody 消息体
+     */
+    void putGroupMessage(ChatReqBody chatReqBody);
+
+    /**
+     * 取出未读消息
+     * @param userId 用户编号
+     * @param roomId 群组ID
+     * @return 未读消息列表
+     */
+    List<String> getUnReadMessage(String userId, String roomId);
+
+    /**
+     * 设置未读消息
+     * @param userId 用户ID
+     * @param roomId 群组ID
+     * @param id 消息id
+     */
+    void putUnReadMessage(String userId, String roomId, long id);
+
+    /**
+     * 清理未读消息
+     * @param channelContext 上下文
+     * @param roomId 房间ID
+     */
+    void clearUnReadMessage(ChannelContext channelContext, String roomId);
+
+    /**
+     * 获取群组历史消息
+     * @param roomId 群组ID
+     * @return 历史消息集合
+     */
+    List<String> getHistoryMessage(String roomId);
+
+    /**
+     * 获取群组内消息
+     * @param roomId 房间ID
+     * @param messageId 群组ID
+     * @return 消息
+     */
+    ChatReqBody getGroupMessage(String roomId, String messageId);
 }

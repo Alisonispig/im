@@ -28,11 +28,10 @@
     <div class="unit">
         <label>聊天记录:</label>
         <input type="button" value="清空记录" onclick="clearLogs();"/>
-        <input type="button" value="鉴权命令" onclick="authCmd();"/>
-        <input type="button" value="获取指定好友历史消息" onclick="friendHistoryCmd();" style="width: 150px;"/>
-        <input id="history_friend_id" style="width:100px;" placeholder="输入好友ID"/>
-        <input type="button" value="获取指定群组历史消息" onclick="groupHistoryCmd();" style="width: 150px;"/>
-        <input id="history_group_id" style="width:100px;" placeholder="输入群组ID"/>
+<!--        <input type="button" value="获取指定好友历史消息" onclick="friendHistoryCmd();" style="width: 150px;"/>-->
+<!--        <input id="history_friend_id" style="width:100px;" placeholder="输入好友ID"/>-->
+<!--        <input type="button" value="获取指定群组历史消息" onclick="groupHistoryCmd();" style="width: 150px;"/>-->
+<!--        <input id="history_group_id" style="width:100px;" placeholder="输入群组ID"/>-->
     </div>
     <div class="unit">
         <label>群组:</label>
@@ -53,9 +52,10 @@
     <div class="unit">
         <label>输入内容:</label>
         <input id="content" style="width:500px;" onkeydown="keyDown(event)"/>
-        <input onclick="sendGroup()" id="sendGroupBtn" type="button" value="群聊"/>&nbsp;<input onclick="send()"
-                                                                                              id="sendBtn" type="button"
-                                                                                              value="私聊"/>
+        <input onclick="sendGroup()" id="sendGroupBtn" type="button" value="群聊"/>&nbsp;
+<!--        <input onclick="send()"-->
+<!--                                                                                              id="sendBtn" type="button"-->
+<!--                                                                                              value="私聊"/>-->
     </div>
 </div>
 </body>
@@ -89,15 +89,25 @@
                 case 6:
                     COMMAND_LOGIN_RESP(data);
                     break;
-                case 13:
-                    COMMAND_HEARTBEAT_RESP();
-                    break;
+                // 加入群组通知
                 case 9:
                     COMMAND_JOIN_GROUP_NOTIFY_RESP(data);
+                    break;
+                // 聊天请求
+                case 11:
+                    COMMAND_CHAT_RESP(data);
+                    break;
+                // 心跳响应
+                case 13:
+                    COMMAND_HEARTBEAT_RESP();
                     break;
                 // 获取用户信息相应
                 case 18:
                     COMMAND_GET_USER_RESP(data);
+                    break;
+                // 获取历史消息
+                case 20:
+                    COMMAND_GET_MESSAGE_RESP(data);
                     break;
                 // 用户上下线消息
                 case 21:
@@ -107,6 +117,10 @@
                 case 23:
                     COMMAND_CREATE_GROUP_RESP(data);
                     break
+                // 消息已读响应
+                case 25:
+                    COMMAND_MESSAGE_READ_RESP(data);
+                    break;
                 default:
                     break;
             }
@@ -138,8 +152,48 @@
         socket.send(param)
     }
 
+    function keyDown(e) {
+        let ev = window.event || e;
+        //13是键盘上面固定的回车键
+        if (ev.keyCode === 13) {
+            sendGroup();
+        }
+    }
+
+    function clearLogs () {
+        const logDiv = document.getElementById('logs');
+        logDiv.innerHTML = "";
+    }
+
+    function getId() {
+        return Math.random().toString(36).substr(2) + Date.now().toString(36);
+    }
+    
+    function sendGroup() {
+        let content = document.getElementById('content').value;
+        if (content === "")
+            return;
+        let param = {
+            senderId: username,
+            cmd: 11,
+            roomId: nowGroupId,
+            content: content,
+        }
+        send(param)
+        document.getElementById('content').value = ''
+    }
+
+    function clearUnReadMessage() {
+        let param = {
+            cmd: 24,
+            roomId: nowGroupId
+        }
+        send(param)
+    }
+
     function changeGroup(id) {
         nowGroupId = id;
+        clearUnReadMessage()
         for (let groupKey in curUser.groups) {
             let group = curUser.groups[groupKey]
             if (group.roomId === id) {
@@ -152,6 +206,16 @@
                 document.getElementById("onlinePanel").innerHTML = onlineUserStr;
             }
         }
+        clearLogs();
+        getHistoryMessage();
+    }
+
+    function getHistoryMessage() {
+        let param = {
+            cmd: 19,
+            roomId: nowGroupId
+        }
+        send(param)
     }
 
     function createGroup() {
@@ -161,6 +225,18 @@
             roomName: roomName,
         }
         send(param)
+    }
+
+    function flushGroup() {
+        const groups = document.getElementById('groups');
+        groups.innerHTML = ""
+        for (let i = 0; i < curUser.groups.length; i++) {
+            let str = ""
+            if(curUser.groups[i].unreadCount && curUser.groups[i].unreadCount !== 0){
+                str = "("+curUser.groups[i].unreadCount+")"
+            }
+            groups.innerHTML += "<input type='button' style='margin-right: 5px;' id='" + curUser.groups[i].roomId + "' value='" + curUser.groups[i].roomName + str + "' onclick=\"changeGroup('" + curUser.groups[i].roomId + "')\" />"
+        }
     }
 
     function heartbeatCmd() {
@@ -217,14 +293,36 @@
     // 登录成功返回
     function COMMAND_LOGIN_RESP(data) {
         if (data.success) {
-
             log('green', '连接成功...')
             let param = {
                 cmd: 17,
                 userId: username,
             }
             send(param)
+
         }
+    }
+
+    // 聊天消息响应
+    function COMMAND_CHAT_RESP(data) {
+        let chatObj = data.data;
+        let createTime = chatObj.date + ' ' + chatObj.timestamp;
+        let content = chatObj.content;
+        let inner = chatObj.username  + " " + createTime
+        if(chatObj.roomId === nowGroupId){
+            // 如果是当前组ID,
+            clearUnReadMessage()
+            log('#009ACD',inner)
+            log('#FFFFFF',content)
+            return ;
+        }
+        for (let i = 0; i < curUser.groups.length; i++) {
+            let group = curUser.groups[i];
+            if(group.roomId === chatObj.roomId){
+                group.unreadCount = chatObj.unreadCount
+            }
+        }
+        flushGroup()
     }
 
     // 获取用户信息响应
@@ -245,12 +343,21 @@
                 onlineUserStr += "<div id=\"" + user._id + "\" style=\"line-height: 25px;margin: 5px 5px 0 5px;padding-left:15px;cursor:pointer;\" onclick=\"onlineDb(this);\" onmouseover=\"onlineMove(this);\"  onmouseleave=\"onlineLeave(this);\"><img alt=\"" + user._id + "\" src=\"" + user.avatar + "\" height=\"25px\" width=\"25px;\" style=\"float:left\">&nbsp;<font size='2'>" + user.username + "(" + user._id + ")" + "-" + user.status.state + "</font></div>";
             }
             document.getElementById("onlinePanel").innerHTML = onlineUserStr;
+            flushGroup()
+            getHistoryMessage()
+            clearUnReadMessage()
+        }
+    }
 
-            for (let i = 0; i < curUser.groups.length; i++) {
-                const groups = document.getElementById('groups');
-                groups.innerHTML += "<input type='button' style='margin-right: 5px;' id='" + curUser.groups[i].roomId + "' value='" + curUser.groups[i].roomName + "' onclick=\"changeGroup('" + curUser.groups[i].roomId + "')\" />"
-            }
-
+    // 历史消息处理
+    function COMMAND_GET_MESSAGE_RESP(data) {
+        let messages = data.data
+        for (let message of messages) {
+            let createTime = message.date + ' ' + message.timestamp;
+            let content = message.content;
+            let inner = message.username  + " " + createTime
+            log('#009ACD',inner)
+            log('#FFFFFF',content)
         }
     }
 
@@ -280,7 +387,11 @@
     // 用户上下线消息
     function COMMAND_USER_STATUS_RESP(data) {
         let group = data.data.group
-        log('green',group.roomName + ' 的' + data.data.user.username+ '已上线...')
+        if(data.data.user.status.state === 'ONLINE'){
+            log('green',group.roomName + ' 的' + data.data.user.username + '已上线...')
+        }else{
+            log('red',group.roomName + ' 的' + data.data.user.username + '已下线...')
+        }
 
         for (let i = 0; i < curUser.groups.length; i++) {
             let g = curUser.groups[i]
@@ -298,27 +409,6 @@
             }
         }
 
-        // for (let groupsKey in curUser.groups) {
-        //     let groupTemp = curUser.groups[groupsKey]
-        //     if (groupTemp.roomId === group.roomId) {
-        //         for (let usersKey in groupTemp.users) {
-        //             let userTemp = groupTemp.users[usersKey]
-        //             if(userTemp._id === users[0]._id){
-        //
-        //             }
-        //         }
-        //         groupTemp.users = [...groupTemp.users]
-        //
-        //         if(groupTemp.roomId === nowGroupId){
-        //             let onlineUserStr = "&nbsp;" + group.roomName + "在线成员(" + users.length + "/" + users.length + ")";
-        //             for (var u = 0; u < users.length; u++) {
-        //                 var user = users[u];
-        //                 onlineUserStr += "<div id=\"" + user._id + "\" style=\"line-height: 25px;margin: 5px 5px 0 5px;padding-left:15px;cursor:pointer;\" onclick=\"onlineDb(this);\" onmouseover=\"onlineMove(this);\"  onmouseleave=\"onlineLeave(this);\"><img alt=\"" + user._id + "\" src=\"" + user.avatar + "\" height=\"25px\" width=\"25px;\" style=\"float:left\">&nbsp;<font size='2'>" + user.username + "(" + user._id + ")" + "-" + user.status.state + "</font></div>";
-        //             }
-        //             document.getElementById("onlinePanel").innerHTML = onlineUserStr;
-        //         }
-        //     }
-        // }
     }
 
     // 群组创建成功
@@ -345,6 +435,18 @@
     // 心跳响应
     function COMMAND_HEARTBEAT_RESP() {
         log('green', "心跳响应...")
+    }
+
+    // 消息已读回执
+    function COMMAND_MESSAGE_READ_RESP(data) {
+        let groupId = data.data.roomId
+        for (let i = 0; i < curUser.groups.length; i++) {
+            let group = curUser.groups[i];
+            if(group.roomId === groupId){
+                group.unreadCount = 0
+            }
+        }
+        flushGroup()
     }
 
 </script>

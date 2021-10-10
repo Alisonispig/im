@@ -23,6 +23,7 @@ public class CommandManager {
             registerCommand(new ChatReqHandler());
             registerCommand(new CreatGroupReqHandler());
             registerCommand(new CloseReqHandler());
+            registerCommand(new MessageReadReqHandler());
         } catch (Exception e) {
             log.info("注册处理器失败");
         }

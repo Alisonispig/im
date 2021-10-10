@@ -190,6 +190,20 @@ public enum CommandEnum {
      * <code>COMMAND_CREATE_GROUP_RESP = 23;</code>
      */
     COMMAND_CREATE_GROUP_RESP(23),
+    /**
+     * <pre>
+     * 消息已读请求;
+     * </pre>
+     * <code>COMMAND_MESSAGE_READ_REQ = 24;</code>
+     */
+    COMMAND_MESSAGE_READ_REQ(24),
+    /**
+     * <pre>
+     * 消息已读响应;
+     * </pre>
+     * <code>COMMAND_MESSAGE_READ_RESP = 25;</code>
+     */
+    COMMAND_MESSAGE_READ_RESP(25),
     ;
 
 

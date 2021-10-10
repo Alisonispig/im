@@ -20,6 +20,8 @@ public class CloseReqHandler extends AbstractCmdHandler {
     public WsResponse handler(Packet packet, ChannelContext channelContext) {
         WsRequest request = (WsRequest) packet;
         String userId = request.getWsBodyText();
+
+
         if(StrUtil.isBlank(userId)){
             Im.remove(channelContext, "收到关闭请求");
         }else{

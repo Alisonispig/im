@@ -210,7 +210,7 @@
         var chatObj = data.data;
         var createTime = chatObj.date + ' ' + chatObj.timestamp;
         var from = chatObj.senderId;
-        if (from == username)
+        if (from === username)
             return;
         var content = chatObj.content;
         var user = getOnlineUserById(from);

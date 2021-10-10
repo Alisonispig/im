@@ -1,13 +1,20 @@
 package org.example.listener;
 
+import org.example.config.Im;
 import org.example.config.ImConfig;
 import org.example.config.ImSessionContext;
 import org.example.enums.KeyEnum;
+import org.example.packets.Group;
 import org.example.packets.ImClientNode;
+import org.example.packets.User;
+import org.example.packets.handler.UserStatusBody;
+import org.example.store.MessageHelper;
 import org.tio.core.ChannelContext;
 import org.tio.core.Node;
 import org.tio.core.intf.Packet;
 import org.tio.websocket.server.WsServerAioListener;
+
+import java.util.List;
 
 public class ImServerAioListener extends WsServerAioListener {
 
@@ -51,8 +58,22 @@ public class ImServerAioListener extends WsServerAioListener {
 
     @Override
     public void onBeforeClose(ChannelContext channelContext, Throwable throwable, String remark, boolean isRemove) throws Exception {
-        super.onBeforeClose(channelContext, throwable, remark, isRemove);
-        // 更新用户状态
+        MessageHelper messageHelper = Im.get().messageHelper;
+        // 更新用户为离线状态
         ImConfig.get().messageHelper.userOffline(channelContext);
+
+        User user = Im.getUser(channelContext);
+
+        UserStatusBody build = UserStatusBody.builder().user(messageHelper.getUserInfo(user.get_id())).build();
+
+        for (Group group : user.getGroups()) {
+            // 给所在群组发送离线消息 用户状态更新
+            List<User> groupUsers = messageHelper.getGroupUsers(group.getRoomId());
+            group.setUsers(groupUsers);
+            build.setGroup(group);
+            Im.sendToGroup(build, channelContext);
+        }
+
+        super.onBeforeClose(channelContext, throwable, remark, isRemove);
     }
 }
