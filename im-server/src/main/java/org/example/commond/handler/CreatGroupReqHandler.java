@@ -39,7 +39,7 @@ public class CreatGroupReqHandler extends AbstractCmdHandler {
         // 当前用户
         User user = Im.getUser(channelContext, false);
         // 创建群聊
-        Group build = Group.builder().roomId(IdUtil.getSnowflake().nextIdStr()).roomName(roomName).addUser(user).build();
+        Group build = Group.builder().roomId(IdUtil.getSnowflake().nextIdStr()).roomName(roomName).avatar("https://pic2.zhimg.com/v2-7e7cf5bcd064fbae2f0f4a23118eddb5_r.jpg?source=1940ef5c").addUser(user).build();
 
         JoinGroupNotifyBody joinGroupNotifyBody = JoinGroupNotifyBody.builder().group(build).users(request.getUsers()).code(JoinGroupEnum.STATE_CREATE.getValue()).build();
 
