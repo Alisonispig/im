@@ -51,12 +51,14 @@ public interface MessageHelper {
 
     /**
      * 用户下线
+     *
      * @param channelContext 上下文信息
      */
     void userOffline(ChannelContext channelContext);
 
     /**
      * 将用户加入到群组中
+     *
      * @param userId 用户Id
      * @param roomId 群组Id
      */
@@ -64,6 +66,7 @@ public interface MessageHelper {
 
     /**
      * 初始化用户群组持久化信息
+     *
      * @param userId 用户ID
      * @param roomId 组ID
      */
@@ -71,6 +74,7 @@ public interface MessageHelper {
 
     /**
      * 获取群组信息
+     *
      * @param roomId 群组ID
      * @return 群组信息
      */
@@ -78,12 +82,14 @@ public interface MessageHelper {
 
     /**
      * 缓存消息
+     *
      * @param chatReqBody 消息体
      */
     void putGroupMessage(ChatReqBody chatReqBody);
 
     /**
      * 取出未读消息
+     *
      * @param userId 用户编号
      * @param roomId 群组ID
      * @return 未读消息列表
@@ -92,21 +98,24 @@ public interface MessageHelper {
 
     /**
      * 设置未读消息
+     *
      * @param userId 用户ID
      * @param roomId 群组ID
-     * @param id 消息id
+     * @param id     消息id
      */
     void putUnReadMessage(String userId, String roomId, long id);
 
     /**
      * 清理未读消息
+     *
      * @param channelContext 上下文
-     * @param roomId 房间ID
+     * @param roomId         房间ID
      */
     void clearUnReadMessage(ChannelContext channelContext, String roomId);
 
     /**
      * 获取群组历史消息
+     *
      * @param roomId 群组ID
      * @return 历史消息集合
      */
@@ -114,9 +123,17 @@ public interface MessageHelper {
 
     /**
      * 获取群组内消息
-     * @param roomId 房间ID
+     *
+     * @param roomId    房间ID
      * @param messageId 群组ID
      * @return 消息
      */
     ChatReqBody getGroupMessage(String roomId, String messageId);
+
+    /**
+     * 更新最后一条消息
+     *
+     * @param chatReqBody 最后一条消息
+     */
+    void updateLastMessage(ChatReqBody chatReqBody);
 }

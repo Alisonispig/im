@@ -7,6 +7,7 @@ import com.alibaba.fastjson.JSONObject;
 import org.example.config.Im;
 import org.example.enums.KeyEnum;
 import org.example.packets.Group;
+import org.example.packets.LastMessage;
 import org.example.packets.Status;
 import org.example.packets.User;
 import org.example.packets.handler.ChatReqBody;
@@ -110,10 +111,18 @@ public class RedisMessageHelper implements MessageHelper {
         List<String> messages = getHistoryMessage(roomId);
         final long id = Long.parseLong(messageId);
         List<ChatReqBody> collect = messages.stream().map(x -> JSONObject.parseObject(x, ChatReqBody.class)).filter(x -> x.get_id() == id).collect(Collectors.toList());
-        if(CollUtil.isEmpty(collect)){
+        if (CollUtil.isEmpty(collect)) {
             return null;
         }
         return collect.get(0);
+    }
+
+    @Override
+    public void updateLastMessage(ChatReqBody chatReqBody) {
+        Group groupInfo = getGroupInfo(chatReqBody.getRoomId());
+        groupInfo.setLastMessage(LastMessage.builder().content(chatReqBody.getContent()).senderId(chatReqBody.getSenderId())
+                .username(chatReqBody.getSenderId()).timestamp(chatReqBody.getTimestamp()).saved(true).distributed(true).seen(true).isNew(true).build());
+        setGroupInfo(groupInfo);
     }
 
     private List<String> getGroupUserIds(String roomId) {
@@ -133,9 +142,13 @@ public class RedisMessageHelper implements MessageHelper {
             if (!userGroup.getRoomId().equals(roomId)) {
                 continue;
             }
-            RedisStore.set(roomId + StrUtil.C_COLON + KeyEnum.IM_GROUP_INFO_KEY.getKey(), userGroup);
+            setGroupInfo(userGroup);
         }
 
+    }
+
+    public void setGroupInfo(Group userGroup) {
+        RedisStore.set(userGroup.getRoomId() + StrUtil.C_COLON + KeyEnum.IM_GROUP_INFO_KEY.getKey(), userGroup);
     }
 
     @Override

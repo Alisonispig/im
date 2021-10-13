@@ -43,6 +43,9 @@ public class ChatReqHandler extends AbstractCmdHandler {
         // 发送给群组用户
         Im.sendToGroup(response);
 
+        // 更新群组最后一条信息
+        Im.get().messageHelper.updateLastMessage(request);
+
         return null;
     }
 }

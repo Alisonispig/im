@@ -1,11 +1,17 @@
 package org.example.packets;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * 最后一条消息
  */
+@Builder
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class LastMessage {
 
     /**
