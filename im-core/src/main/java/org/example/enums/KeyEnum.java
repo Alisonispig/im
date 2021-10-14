@@ -45,7 +45,17 @@ public enum KeyEnum {
     /**
      * 群组未读消息
      */
-    IM_GROUP_UNREAD_MESSAGE_KEY("GROUP_UNREAD_MESSAGE");
+    IM_GROUP_UNREAD_MESSAGE_KEY("GROUP_UNREAD_MESSAGE"),
+
+    /**
+     * 所有用户Key
+     */
+    IM_USER_LIST_KEY("USER_LIST"),
+
+    /**
+     * 用户信息列表
+     */
+    IM_ACCOUNT_MAP_KEY("ACCOUNT_MAP_KEY"),
     ;
 
     private final String key;

@@ -125,6 +125,44 @@ public class RedisMessageHelper implements MessageHelper {
         setGroupInfo(groupInfo);
     }
 
+    @Override
+    public List<User> getUserList() {
+        List<String> list = RedisStore.list(KeyEnum.IM_USER_LIST_KEY.getKey());
+        if (CollUtil.isEmpty(list)) {
+            return new ArrayList<>();
+        }
+        return list.stream().map(this::getUserInfo).collect(Collectors.toList());
+    }
+
+    @Override
+    public void initAccount(String account, String id) {
+        userListAdd(id);
+        putAccount(account, id);
+    }
+
+    @Override
+    public void userListAdd(String userId) {
+        List<String> list = RedisStore.list(KeyEnum.IM_USER_LIST_KEY.getKey());
+        if (list != null && !list.contains(userId)) {
+            RedisStore.push(KeyEnum.IM_USER_LIST_KEY.getKey(), userId);
+        }
+    }
+
+    @Override
+    public void putAccount(String account, String userId) {
+        RedisStore.hSet(KeyEnum.IM_ACCOUNT_MAP_KEY.getKey(), account, userId);
+    }
+
+    @Override
+    public User getByAccount(String account){
+        String userId = RedisStore.hGet(KeyEnum.IM_ACCOUNT_MAP_KEY.getKey(), account);
+
+        if(StrUtil.isBlank(userId)){
+            return null;
+        }
+        return getUserInfo(userId);
+    }
+
     private List<String> getGroupUserIds(String roomId) {
         return RedisStore.list(roomId + StrUtil.C_COLON + KeyEnum.IM_GROUP_USERS_KEY.getKey());
     }

@@ -24,6 +24,7 @@ public class CommandManager {
             registerCommand(new CreatGroupReqHandler());
             registerCommand(new CloseReqHandler());
             registerCommand(new MessageReadReqHandler());
+            registerCommand(new UserListHandler());
         } catch (Exception e) {
             log.info("注册处理器失败");
         }

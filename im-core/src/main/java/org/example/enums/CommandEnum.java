@@ -9,7 +9,7 @@ public enum CommandEnum {
     COMMAND_UN_KNOW(0),
     /**
      * <pre>
-     *握手请求，含http的websocket握手请求
+     * 握手请求，含http的websocket握手请求
      * </pre>
      *
      * <code>COMMAND_HANDSHAKE_REQ = 1;</code>
@@ -17,7 +17,7 @@ public enum CommandEnum {
     COMMAND_HANDSHAKE_REQ(1),
     /**
      * <pre>
-     *握手响应，含http的websocket握手响应
+     * 握手响应，含http的websocket握手响应
      * </pre>
      *
      * <code>COMMAND_HANDSHAKE_RESP = 2;</code>
@@ -25,7 +25,7 @@ public enum CommandEnum {
     COMMAND_HANDSHAKE_RESP(2),
     /**
      * <pre>
-     *鉴权请求
+     * 鉴权请求
      * </pre>
      *
      * <code>COMMAND_AUTH_REQ = 3;</code>
@@ -41,7 +41,7 @@ public enum CommandEnum {
     COMMAND_AUTH_RESP(4),
     /**
      * <pre>
-     *登录请求
+     * 登录请求
      * </pre>
      *
      * <code>COMMAND_LOGIN_REQ = 5;</code>
@@ -49,7 +49,7 @@ public enum CommandEnum {
     COMMAND_LOGIN_REQ(5),
     /**
      * <pre>
-     *登录响应
+     * 登录响应
      * </pre>
      *
      * <code>COMMAND_LOGIN_RESP = 6;</code>
@@ -57,7 +57,7 @@ public enum CommandEnum {
     COMMAND_LOGIN_RESP(6),
     /**
      * <pre>
-     *申请进入群组
+     * 申请进入群组
      * </pre>
      *
      * <code>COMMAND_JOIN_GROUP_REQ = 7;</code>
@@ -65,7 +65,7 @@ public enum CommandEnum {
     COMMAND_JOIN_GROUP_REQ(7),
     /**
      * <pre>
-     *申请进入群组响应
+     * 申请进入群组响应
      * </pre>
      *
      * <code>COMMAND_JOIN_GROUP_RESP = 8;</code>
@@ -73,7 +73,7 @@ public enum CommandEnum {
     COMMAND_JOIN_GROUP_RESP(8),
     /**
      * <pre>
-     *进入群组通知
+     * 进入群组通知
      * </pre>
      *
      * <code>COMMAND_JOIN_GROUP_NOTIFY_RESP = 9;</code>
@@ -81,7 +81,7 @@ public enum CommandEnum {
     COMMAND_JOIN_GROUP_NOTIFY_RESP(9),
     /**
      * <pre>
-     *退出群组通知
+     * 退出群组通知
      * </pre>
      *
      * <code>COMMAND_EXIT_GROUP_NOTIFY_RESP = 10;</code>
@@ -89,7 +89,7 @@ public enum CommandEnum {
     COMMAND_EXIT_GROUP_NOTIFY_RESP(10),
     /**
      * <pre>
-     *聊天请求
+     * 聊天请求
      * </pre>
      *
      * <code>COMMAND_CHAT_REQ = 11;</code>
@@ -97,7 +97,7 @@ public enum CommandEnum {
     COMMAND_CHAT_REQ(11),
     /**
      * <pre>
-     *聊天响应
+     * 聊天响应
      * </pre>
      *
      * <code>COMMAND_CHAT_RESP = 12;</code>
@@ -105,7 +105,7 @@ public enum CommandEnum {
     COMMAND_CHAT_RESP(12),
     /**
      * <pre>
-     *心跳请求
+     * 心跳请求
      * </pre>
      *
      * <code>COMMAND_HEARTBEAT_REQ = 13;</code>
@@ -113,7 +113,7 @@ public enum CommandEnum {
     COMMAND_HEARTBEAT_REQ(13),
     /**
      * <pre>
-     *关闭请求
+     * 关闭请求
      * </pre>
      *
      * <code>COMMAND_CLOSE_REQ = 14;</code>
@@ -121,7 +121,7 @@ public enum CommandEnum {
     COMMAND_CLOSE_REQ(14),
     /**
      * <pre>
-     *发出撤消消息指令(管理员可以撤消所有人的消息，自己可以撤消自己的消息)
+     * 发出撤消消息指令(管理员可以撤消所有人的消息，自己可以撤消自己的消息)
      * </pre>
      *
      * <code>COMMAND_CANCEL_MSG_REQ = 15;</code>
@@ -129,7 +129,7 @@ public enum CommandEnum {
     COMMAND_CANCEL_MSG_REQ(15),
     /**
      * <pre>
-     *收到撤消消息指令
+     * 收到撤消消息指令
      * </pre>
      *
      * <code>COMMAND_CANCEL_MSG_RESP = 16;</code>
@@ -137,7 +137,7 @@ public enum CommandEnum {
     COMMAND_CANCEL_MSG_RESP(16),
     /**
      * <pre>
-     *获取用户信息;
+     * 获取用户信息;
      * </pre>
      *
      * <code>COMMAND_GET_USER_REQ = 17;</code>
@@ -145,7 +145,7 @@ public enum CommandEnum {
     COMMAND_GET_USER_REQ(17),
     /**
      * <pre>
-     *获取用户信息响应;
+     * 获取用户信息响应;
      * </pre>
      *
      * <code>COMMAND_GET_USER_RESP = 18;</code>
@@ -204,14 +204,30 @@ public enum CommandEnum {
      * <code>COMMAND_MESSAGE_READ_RESP = 25;</code>
      */
     COMMAND_MESSAGE_READ_RESP(25),
+
+    /**
+     * <pre>
+     * 获取当前所有用户请求;
+     * </pre>
+     * <code>COMMAND_USER_LIST_REQ = 26;</code>
+     */
+    COMMAND_USER_LIST_REQ(26),
+
+    /**
+     * <pre>
+     * 获取当前所有用户响应;
+     * </pre>
+     * <code>COMMAND_USER_LIST_RESP = 27;</code>
+     */
+    COMMAND_USER_LIST_RESP(27),
     ;
 
 
     private final int value;
 
     public static CommandEnum forNumber(int value) {
-        for(CommandEnum command : CommandEnum.values()){
-            if(command.getValue() == value){
+        for (CommandEnum command : CommandEnum.values()) {
+            if (command.getValue() == value) {
                 return command;
             }
         }

@@ -57,6 +57,29 @@ public interface MessageHelper {
     void userOffline(ChannelContext channelContext);
 
     /**
+     * 添加用户到用户列表
+     *
+     * @param userId 用户ID
+     */
+    void userListAdd(String userId);
+
+    /**
+     * 绑定账号和用户ID
+     *
+     * @param account 账号信息
+     * @param userId  用户ID
+     */
+    void putAccount(String account, String userId);
+
+    /**
+     * 通过账号获取用户信息
+     *
+     * @param account 账号
+     * @return 用户信息
+     */
+    User getByAccount(String account);
+
+    /**
      * 将用户加入到群组中
      *
      * @param userId 用户Id
@@ -136,4 +159,18 @@ public interface MessageHelper {
      * @param chatReqBody 最后一条消息
      */
     void updateLastMessage(ChatReqBody chatReqBody);
+
+    /**
+     * 获取当前所有用户
+     *
+     * @return 用户信息
+     */
+    List<User> getUserList();
+
+    /**
+     * 初始化账号信息
+     * @param account 账户信息
+     * @param id 用户ID
+     */
+    void initAccount(String account, String id);
 }

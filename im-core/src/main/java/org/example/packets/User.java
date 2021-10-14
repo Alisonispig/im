@@ -16,9 +16,20 @@ import java.util.List;
 @AllArgsConstructor
 public class User implements Serializable {
 
+    /**
+     * 主键
+     */
     private String _id;
 
+    /**
+     * 用户名/ 昵称
+     */
     private String username;
+
+    /**
+     * 账户
+     */
+    private String account;
 
     private String avatar;
 

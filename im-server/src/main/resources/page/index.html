@@ -75,7 +75,7 @@
         username = document.getElementById("username").value;
         const password = document.getElementById("password").value;
         logDiv = document.getElementById('logs');
-        socket = new WebSocket("ws://localhost:9326?username=" + username + "&password=" + password);
+        socket = new WebSocket("ws://localhost:9326?account=" + username + "&password=" + password);
         socket.onopen = function (e) {
 
         };
@@ -293,6 +293,7 @@
     // 登录成功返回
     function COMMAND_LOGIN_RESP(data) {
         if (data.success) {
+            username = data.data._id
             log('green', '连接成功...')
             let param = {
                 cmd: 17,
