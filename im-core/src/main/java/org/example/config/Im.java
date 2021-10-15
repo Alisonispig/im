@@ -2,9 +2,11 @@ package org.example.config;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
+import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
 import org.example.enums.CommandEnum;
 import org.example.enums.KeyEnum;
+import org.example.packets.FriendInfo;
 import org.example.packets.Group;
 import org.example.packets.User;
 import org.example.packets.handler.ChatRespBody;
@@ -17,10 +19,7 @@ import org.tio.core.intf.Packet;
 import org.tio.utils.lock.SetWithLock;
 import org.tio.websocket.common.WsResponse;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.stream.Collectors;
 
@@ -284,4 +283,23 @@ public class Im extends ImConfig {
     }
 
 
+    public static void resetGroup(Group group, String userId, Map<String, String> userFriends) {
+        if(userFriends == null){
+            userFriends = get().messageHelper.getUserFriends(userId);
+        }
+        // 获取好友信息
+        String friendInfoStr = userFriends.get(group.getRoomId());
+        if (StrUtil.isNotBlank(friendInfoStr)) {
+            FriendInfo friendInfo = JSON.parseObject(friendInfoStr, FriendInfo.class);
+            group.setFriendId(friendInfo.get_id());
+            group.setRoomName(friendInfo.getRemark());
+            if (StrUtil.isBlank(group.getRoomName())) {
+                group.getUsers().forEach(x -> {
+                    if (x.get_id().equals(friendInfo.get_id())) {
+                        group.setRoomName(x.getUsername());
+                    }
+                });
+            }
+        }
+    }
 }

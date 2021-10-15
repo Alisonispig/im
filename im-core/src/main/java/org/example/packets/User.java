@@ -31,11 +31,25 @@ public class User implements Serializable {
      */
     private String account;
 
+    /**
+     * 头像
+     */
     private String avatar;
 
+    /**
+     * 用户状态
+     */
     private Status status;
 
+    /**
+     * 用户群组列表
+     */
     private List<Group> groups;
+
+    /**
+     * 用户会话列表
+     */
+    private List<Group> chats;
 
     public void addGroup(Group group) {
         if (groups == null) {
@@ -45,7 +59,7 @@ public class User implements Serializable {
     }
 
     public User clone() {
-        return BeanUtil.copyProperties(this, User.class, "groups");
+        return BeanUtil.copyProperties(this, User.class, "groups", "chats");
     }
 
 }

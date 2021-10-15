@@ -20,6 +20,11 @@ public class Group implements Serializable {
     private String roomId;
 
     /**
+     * 排序
+     */
+    private long index;
+
+    /**
      * 群组名称
      */
     private String roomName;
@@ -28,6 +33,11 @@ public class Group implements Serializable {
      * 头像
      */
     private String avatar;
+
+    /**
+     * 好友ID
+     */
+    private String friendId;
 
     /**
      * 最后一条消息
@@ -60,6 +70,13 @@ public class Group implements Serializable {
          */
         private String avatar;
 
+        private long index;
+
+        /**
+         * 好友ID
+         */
+        private String friendId;
+
         /**
          * 最后一条消息
          */
@@ -75,6 +92,11 @@ public class Group implements Serializable {
 
         public Builder roomId(String roomId) {
             this.roomId = roomId;
+            return this;
+        }
+
+        public Builder index(long index) {
+            this.index = index;
             return this;
         }
 
@@ -98,16 +120,24 @@ public class Group implements Serializable {
             return this;
         }
 
-        public Builder addUser(User user){
-            if(CollUtil.isEmpty(this.users)){
+        public Builder addUser(User user) {
+            if (CollUtil.isEmpty(this.users)) {
                 this.users = new ArrayList<>();
             }
             this.users.add(user);
             return this;
         }
 
+        public Builder addUsers(List<User> users) {
+            if (CollUtil.isEmpty(this.users)) {
+                this.users = new ArrayList<>();
+            }
+            this.users.addAll(users);
+            return this;
+        }
+
         public Group build() {
-            return new Group(this.roomId, this.roomName, this.avatar, this.lastMessage, this.users);
+            return new Group(this.roomId,this.index, this.roomName, this.avatar, this.friendId, this.lastMessage, this.users);
         }
     }
 }

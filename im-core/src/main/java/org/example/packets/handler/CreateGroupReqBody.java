@@ -14,6 +14,11 @@ public class CreateGroupReqBody {
     private String roomName;
 
     /**
+     * 是否好友会话
+     */
+    private Boolean isFriend;
+
+    /**
      * 群组创建时携带的人
      */
     private List<User> users;

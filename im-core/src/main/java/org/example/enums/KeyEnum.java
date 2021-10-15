@@ -28,6 +28,16 @@ public enum KeyEnum {
     IM_USER_GROUPS_KEY("USER_GROUPS"),
 
     /**
+     * 用户 存储用户拥有的好友ID列表
+     */
+    IM_USER_FRIENDS_KEY("USER_FRIENDS"),
+
+    /**
+     * 用户 存储用户当前的会话列表
+     */
+    IM_USER_CHATS_KEY("USER_CHATS"),
+
+    /**
      * 组 该Key下存储群组下面的用户ID列表
      */
     IM_GROUP_USERS_KEY("GROUP_USERS"),
@@ -56,6 +66,8 @@ public enum KeyEnum {
      * 用户信息列表
      */
     IM_ACCOUNT_MAP_KEY("ACCOUNT_MAP_KEY"),
+
+
     ;
 
     private final String key;

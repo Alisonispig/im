@@ -1,4 +1,4 @@
-package org.example.store;
+package org.example.store.redis;
 
 import cn.hutool.core.collection.CollUtil;
 import com.alibaba.fastjson.JSON;

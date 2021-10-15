@@ -1,11 +1,13 @@
 package org.example.store;
 
+import org.example.packets.FriendInfo;
 import org.example.packets.Group;
 import org.example.packets.User;
 import org.example.packets.handler.ChatReqBody;
 import org.tio.core.ChannelContext;
 
 import java.util.List;
+import java.util.Map;
 
 public interface MessageHelper {
 
@@ -55,6 +57,8 @@ public interface MessageHelper {
      * @param channelContext 上下文信息
      */
     void userOffline(ChannelContext channelContext);
+
+    List<String> getUserChats(String userId);
 
     /**
      * 添加用户到用户列表
@@ -169,8 +173,46 @@ public interface MessageHelper {
 
     /**
      * 初始化账号信息
+     *
      * @param account 账户信息
-     * @param id 用户ID
+     * @param id      用户ID
      */
     void initAccount(String account, String id);
+
+    /**
+     * 获取用户好友列表
+     *
+     * @param userId 主键
+     * @return 好友列表
+     */
+    Map<String, String> getUserFriends(String userId);
+
+    /**
+     * 添加会话
+     *
+     * @param roomId 房间号
+     * @param users  用户列表
+     */
+    void addChat(String roomId, List<User> users);
+
+    /**
+     * 添加会话
+     * @param userId 用户ID
+     * @param roomId 群组ID
+     */
+    void addChat(String userId, String roomId);
+
+    /**
+     * 添加一个群组信息
+     * @param group 群组
+     */
+    void setGroupInfo(Group group);
+
+    /**
+     * 为用户添加一个好友信息
+     * @param userId 用户ID
+     * @param roomId 群组ID
+     * @param friendInfo 好友信息
+     */
+    void putFriendInfo(String userId, String roomId, FriendInfo friendInfo);
 }

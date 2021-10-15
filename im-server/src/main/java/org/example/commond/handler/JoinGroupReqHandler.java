@@ -33,34 +33,34 @@ public class JoinGroupReqHandler extends AbstractCmdHandler {
         WsRequest request = (WsRequest) packet;
         String str = StrUtil.str(request.getBody(), Im.CHARSET);
 
-
         JoinGroupNotifyBody joinGroupNotifyBody = JSON.parseObject(str, JoinGroupNotifyBody.class);
 
         if (CollUtil.isEmpty(joinGroupNotifyBody.getUsers())) {
             return null;
         }
 
-        Group group = Im.get().messageHelper.getGroupInfo(joinGroupNotifyBody.getGroup().getRoomId());
-        joinGroupNotifyBody.setGroup(group);
-
-
+        Group group = messageHelper.getGroupInfo(joinGroupNotifyBody.getGroup().getRoomId());
 
         // TODO 加入群组是否成功
         log.info("加入群组消息：" + JSON.toJSONString(joinGroupNotifyBody, SerializerFeature.DisableCircularReferenceDetect));
 
         // 绑定到群聊
         for (User addUser : joinGroupNotifyBody.getUsers()) {
+            // 重写群组名称
+            Im.resetGroup(group,addUser.get_id(), null);
             List<ChannelContext> channelByUserId = Im.getChannelByUserId(addUser.get_id());
             if (CollUtil.isNotEmpty(channelByUserId)) {
                 for (ChannelContext context : channelByUserId) {
-                    Im.addGroup(context, joinGroupNotifyBody.getGroup());
-                    Im.bindGroup(context, joinGroupNotifyBody.getGroup());
+                    Im.addGroup(context, group);
+                    Im.bindGroup(context, group);
                 }
             }
-            Im.get().messageHelper.addGroupUser(addUser.get_id(),joinGroupNotifyBody.getGroup().getRoomId());
-            Im.get().messageHelper.initUserGroups(addUser.get_id(), joinGroupNotifyBody.getGroup().getRoomId());
+            messageHelper.addGroupUser(addUser.get_id(),group.getRoomId());
+            messageHelper.initUserGroups(addUser.get_id(), group.getRoomId());
+            messageHelper.addChat(addUser.get_id(), group.getRoomId());
         }
 
+        joinGroupNotifyBody.setGroup(group);
         WsResponse wsResponse = WsResponse.fromText(RespBody.success(CommandEnum.COMMAND_JOIN_GROUP_RESP, joinGroupNotifyBody), Im.CHARSET);
         Im.send(channelContext,wsResponse);
 
