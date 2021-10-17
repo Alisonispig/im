@@ -1,6 +1,7 @@
 package org.example.commond.handler;
 
 import cn.hutool.core.util.IdUtil;
+import cn.hutool.core.util.StrUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.example.commond.AbstractCmdHandler;
 import org.example.config.Im;
@@ -35,6 +36,10 @@ public class LoginReqHandler extends AbstractCmdHandler {
         HttpRequest httpRequest = (HttpRequest) packet;
         String account = httpRequest.getParam("account");
         String password = httpRequest.getParam("password");
+
+        if(StrUtil.isBlank(account)){
+            return null;
+        }
 
 
         // 持久化获取用户信息

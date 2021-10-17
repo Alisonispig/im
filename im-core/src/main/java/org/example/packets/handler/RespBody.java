@@ -4,6 +4,7 @@
 package org.example.packets.handler;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 import lombok.Data;
 import org.example.enums.CommandEnum;
 
@@ -50,7 +51,7 @@ public class RespBody implements Serializable {
         respBody.setSuccess(true);
         respBody.setMsg("操作成功");
 
-        return JSON.toJSONString(respBody);
+        return JSON.toJSONString(respBody, SerializerFeature.DisableCircularReferenceDetect);
     }
 
     public RespBody setData(Object data) {
