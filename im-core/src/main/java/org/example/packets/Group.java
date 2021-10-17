@@ -1,5 +1,6 @@
 package org.example.packets;
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -48,6 +49,10 @@ public class Group implements Serializable {
      * 组用户
      */
     private List<User> users;
+
+    public Group clone(){
+        return BeanUtil.copyProperties(this,Group.class,"users");
+    }
 
     public static Group.Builder builder() {
         return new Builder();

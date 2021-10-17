@@ -40,6 +40,8 @@ public class JoinGroupReqHandler extends AbstractCmdHandler {
         }
 
         Group group = messageHelper.getGroupInfo(joinGroupNotifyBody.getGroup().getRoomId());
+        List<User> groupUsers = messageHelper.getGroupUsers(group.getRoomId());
+        group.setUsers(groupUsers);
 
         // TODO 加入群组是否成功
         log.info("加入群组消息：" + JSON.toJSONString(joinGroupNotifyBody, SerializerFeature.DisableCircularReferenceDetect));
@@ -47,7 +49,7 @@ public class JoinGroupReqHandler extends AbstractCmdHandler {
         // 绑定到群聊
         for (User addUser : joinGroupNotifyBody.getUsers()) {
             // 重写群组名称
-            Im.resetGroup(group,addUser.get_id(), null);
+            Im.resetGroup(group, addUser.get_id(), null);
             List<ChannelContext> channelByUserId = Im.getChannelByUserId(addUser.get_id());
             if (CollUtil.isNotEmpty(channelByUserId)) {
                 for (ChannelContext context : channelByUserId) {
@@ -55,14 +57,14 @@ public class JoinGroupReqHandler extends AbstractCmdHandler {
                     Im.bindGroup(context, group);
                 }
             }
-            messageHelper.addGroupUser(addUser.get_id(),group.getRoomId());
+            messageHelper.addGroupUser(addUser.get_id(), group.getRoomId());
             messageHelper.initUserGroups(addUser.get_id(), group.getRoomId());
             messageHelper.addChat(addUser.get_id(), group.getRoomId());
         }
 
         joinGroupNotifyBody.setGroup(group);
         WsResponse wsResponse = WsResponse.fromText(RespBody.success(CommandEnum.COMMAND_JOIN_GROUP_RESP, joinGroupNotifyBody), Im.CHARSET);
-        Im.send(channelContext,wsResponse);
+        Im.send(channelContext, wsResponse);
 
         // 发送加入群组消息
         Im.sendToGroup(joinGroupNotifyBody);

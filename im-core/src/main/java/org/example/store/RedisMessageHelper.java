@@ -219,7 +219,7 @@ public class RedisMessageHelper implements MessageHelper {
 
     @Override
     public void setGroupInfo(Group userGroup) {
-        RedisStore.set(KeyEnum.IM_GROUP_INFO_KEY.getKey() + StrUtil.C_COLON + userGroup.getRoomId(), userGroup);
+        RedisStore.set(KeyEnum.IM_GROUP_INFO_KEY.getKey() + StrUtil.C_COLON + userGroup.getRoomId(), userGroup.clone());
     }
 
     @Override

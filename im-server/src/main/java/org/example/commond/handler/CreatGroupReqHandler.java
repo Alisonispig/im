@@ -44,9 +44,13 @@ public class CreatGroupReqHandler extends AbstractCmdHandler {
         // 创建群聊
         Group build = Group.builder().roomId(IdUtil.getSnowflake().nextIdStr()).index(System.currentTimeMillis()).roomName(roomName)
                 .avatar("https://pic2.zhimg.com/v2-7e7cf5bcd064fbae2f0f4a23118eddb5_r.jpg?source=1940ef5c")
-                .addUser(user).addUsers(request.getUsers()).build();
+                .addUser(user).build();
+        for (User addUser : request.getUsers()) {
+            User userInfo = messageHelper.getUserInfo(addUser.get_id());
+            build.getUsers().add(userInfo);
+        }
 
-        // 如果是群聊 1. 将群组的好友ID和备注字段放进各自的信息中
+        // 如果是好友会话 1. 将群组的好友ID和备注字段放进各自的信息中
         if (request.getIsFriend()) {
             messageHelper.putFriendInfo(user.get_id(), build.getRoomId(), new FriendInfo(request.getUsers().get(0).get_id(), ""));
             messageHelper.putFriendInfo(request.getUsers().get(0).get_id(), build.getRoomId(), new FriendInfo(user.get_id(), ""));
@@ -54,6 +58,7 @@ public class CreatGroupReqHandler extends AbstractCmdHandler {
 
         // 更新群组信息
         messageHelper.setGroupInfo(build);
+        messageHelper.addGroupUser(user.get_id(),build.getRoomId());
 
         JoinGroupNotifyBody joinGroupNotifyBody = JoinGroupNotifyBody.builder().group(build).users(request.getUsers()).code(JoinGroupEnum.STATE_CREATE.getValue()).build();
 
