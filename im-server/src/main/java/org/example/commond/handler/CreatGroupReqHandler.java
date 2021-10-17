@@ -12,6 +12,7 @@ import org.example.enums.CommandEnum;
 import org.example.enums.JoinGroupEnum;
 import org.example.packets.FriendInfo;
 import org.example.packets.Group;
+import org.example.packets.LastMessage;
 import org.example.packets.User;
 import org.example.packets.handler.CreateGroupReqBody;
 import org.example.packets.handler.JoinGroupNotifyBody;
@@ -20,8 +21,6 @@ import org.tio.core.ChannelContext;
 import org.tio.core.intf.Packet;
 import org.tio.websocket.common.WsRequest;
 import org.tio.websocket.common.WsResponse;
-
-import java.util.List;
 
 @Slf4j
 public class CreatGroupReqHandler extends AbstractCmdHandler {
