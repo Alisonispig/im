@@ -220,6 +220,14 @@ public enum CommandEnum {
      * <code>COMMAND_USER_LIST_RESP = 27;</code>
      */
     COMMAND_USER_LIST_RESP(27),
+
+    /**
+     * <pre>
+     * 发送表情回复;
+     * </pre>
+     * <code>COMMAND_SEND_MESSAGE_REACTION_REQ = 28;</code>
+     */
+    COMMAND_SEND_MESSAGE_REACTION_REQ(28),
     ;
 
 

@@ -1,6 +1,7 @@
 package org.example.packets.handler;
 
 import lombok.Data;
+import org.example.packets.ReplyMessage;
 
 @Data
 public class ChatReqBody {
@@ -34,5 +35,10 @@ public class ChatReqBody {
      * 发送时间
      */
     private String timestamp;
+
+    /**
+     * 回复消息
+     */
+    private ReplyMessage replyMessage;
 
 }

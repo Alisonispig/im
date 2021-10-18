@@ -12,6 +12,7 @@ import org.tio.websocket.common.WsRequest;
 import org.tio.websocket.common.WsResponse;
 
 public class MessageReadReqHandler extends AbstractCmdHandler {
+
     @Override
     public CommandEnum command() {
         return CommandEnum.COMMAND_MESSAGE_READ_REQ;

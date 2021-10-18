@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.example.packets.ReplyMessage;
 
 @Builder
 @Data
@@ -80,5 +81,10 @@ public class ChatRespBody {
      * 发送消息
      */
     private Boolean disableReactions;
+
+    /**
+     * 回复消息
+     */
+    private ReplyMessage replyMessage;
 
 }
