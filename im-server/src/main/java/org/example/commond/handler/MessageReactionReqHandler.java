@@ -27,6 +27,7 @@ public class MessageReactionReqHandler extends AbstractCmdHandler {
 
         log.info("{}", messageReactionReqBody);
 
+        messageHelper.getGroupMessage(messageReactionReqBody.getRoomId(),String.valueOf(messageReactionReqBody.getMessageId()));
 
         return null;
     }
