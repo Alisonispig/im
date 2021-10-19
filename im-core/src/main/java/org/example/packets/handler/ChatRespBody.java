@@ -6,6 +6,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.example.packets.ReplyMessage;
 
+import java.util.List;
+import java.util.Map;
+
 @Builder
 @Data
 @NoArgsConstructor
@@ -15,7 +18,7 @@ public class ChatRespBody {
     /**
      * 消息ID
      */
-    private long _id;
+    private String _id;
 
     /**
      * 消息内容
@@ -31,6 +34,11 @@ public class ChatRespBody {
      * 发送者ID
      */
     private String senderId;
+
+    /**
+     * 当前用户ID
+     */
+    private String currentUserId;
 
     /**
      * 房间ID
@@ -86,5 +94,10 @@ public class ChatRespBody {
      * 回复消息
      */
     private ReplyMessage replyMessage;
+
+    /**
+     * 表情回复消息
+     */
+    private Map<String, List<String>> reactions;
 
 }

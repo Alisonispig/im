@@ -83,6 +83,8 @@ public interface MessageHelper {
      */
     User getByAccount(String account);
 
+    Map<String, List<String>> getReaction(String roomId, String messageId);
+
     /**
      * 将用户加入到群组中
      *
@@ -130,7 +132,7 @@ public interface MessageHelper {
      * @param roomId 群组ID
      * @param id     消息id
      */
-    void putUnReadMessage(String userId, String roomId, long id);
+    void putUnReadMessage(String userId, String roomId, String id);
 
     /**
      * 清理未读消息
@@ -197,6 +199,7 @@ public interface MessageHelper {
 
     /**
      * 添加会话
+     *
      * @param userId 用户ID
      * @param roomId 群组ID
      */
@@ -204,15 +207,27 @@ public interface MessageHelper {
 
     /**
      * 添加一个群组信息
+     *
      * @param group 群组
      */
     void setGroupInfo(Group group);
 
     /**
      * 为用户添加一个好友信息
-     * @param userId 用户ID
-     * @param roomId 群组ID
+     *
+     * @param userId     用户ID
+     * @param roomId     群组ID
      * @param friendInfo 好友信息
      */
     void putFriendInfo(String userId, String roomId, FriendInfo friendInfo);
+
+    /**
+     * 添加一个表情回复
+     *
+     * @param roomId    房间号
+     * @param messageId 消息ID
+     * @param reaction  表情
+     * @param remove    是否删除
+     */
+    void addReaction(String roomId, String messageId, String reaction, Boolean remove,String userId);
 }

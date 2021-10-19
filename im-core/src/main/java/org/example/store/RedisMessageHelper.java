@@ -4,6 +4,7 @@ import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.TypeReference;
 import org.example.config.Im;
 import org.example.enums.KeyEnum;
 import org.example.packets.*;
@@ -12,6 +13,7 @@ import org.example.store.redis.RedisStore;
 import org.tio.core.ChannelContext;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -93,7 +95,7 @@ public class RedisMessageHelper implements MessageHelper {
     }
 
     @Override
-    public void putUnReadMessage(String userId, String roomId, long id) {
+    public void putUnReadMessage(String userId, String roomId, String id) {
         String key = KeyEnum.IM_GROUP_UNREAD_MESSAGE_KEY.getKey() + StrUtil.C_COLON + userId + StrUtil.C_COLON + roomId;
         RedisStore.push(key, String.valueOf(id));
     }
@@ -114,8 +116,7 @@ public class RedisMessageHelper implements MessageHelper {
     @Override
     public ChatReqBody getGroupMessage(String roomId, String messageId) {
         List<String> messages = getHistoryMessage(roomId);
-        final long id = Long.parseLong(messageId);
-        List<ChatReqBody> collect = messages.stream().map(x -> JSONObject.parseObject(x, ChatReqBody.class)).filter(x -> x.get_id() == id).collect(Collectors.toList());
+        List<ChatReqBody> collect = messages.stream().map(x -> JSONObject.parseObject(x, ChatReqBody.class)).filter(x -> x.get_id().equals(messageId)).collect(Collectors.toList());
         if (CollUtil.isEmpty(collect)) {
             return null;
         }
@@ -226,6 +227,36 @@ public class RedisMessageHelper implements MessageHelper {
     public void putFriendInfo(String userId, String roomId, FriendInfo friendInfo) {
         String key = KeyEnum.IM_USER_FRIENDS_KEY.getKey() + StrUtil.COLON + userId;
         RedisStore.hSet(key, roomId, JSON.toJSONString(friendInfo));
+    }
+
+    @Override
+    public void addReaction(String roomId, String messageId, String reaction, Boolean remove, String userId) {
+        String key = KeyEnum.IM_MESSAGE_REACTION_MAP_KEY.getKey() + StrUtil.COLON + roomId;
+
+        Map<String, List<String>> reactionMap = getReaction(roomId, messageId);
+        List<String> userIds = reactionMap.get(reaction);
+        if(Boolean.TRUE.equals(remove)){
+            userIds.remove(userId);
+        }else{
+            if (CollUtil.isEmpty(userIds)) {
+                reactionMap.put(reaction, CollUtil.newArrayList(userId));
+            }else{
+                userIds.add(userId);
+            }
+        }
+
+        RedisStore.hSet(key, String.valueOf(messageId), JSON.toJSONString(reactionMap));
+    }
+
+    @Override
+    public Map<String, List<String>> getReaction(String roomId, String messageId) {
+        String key = KeyEnum.IM_MESSAGE_REACTION_MAP_KEY.getKey() + StrUtil.COLON + roomId;
+        String release = RedisStore.hGet(key, String.valueOf(messageId));
+        if (StrUtil.isBlank(release)) {
+            return new HashMap<>();
+        }
+        return JSON.parseObject(release, new TypeReference<HashMap<String, List<String>>>() {
+        });
     }
 
     @Override

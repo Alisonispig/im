@@ -9,10 +9,7 @@ import org.example.enums.KeyEnum;
 import org.example.packets.FriendInfo;
 import org.example.packets.Group;
 import org.example.packets.User;
-import org.example.packets.handler.ChatRespBody;
-import org.example.packets.handler.JoinGroupNotifyBody;
-import org.example.packets.handler.RespBody;
-import org.example.packets.handler.UserStatusBody;
+import org.example.packets.handler.*;
 import org.tio.core.ChannelContext;
 import org.tio.core.Tio;
 import org.tio.core.intf.Packet;
@@ -138,7 +135,7 @@ public class Im extends ImConfig {
         List<User> groupUsers = Im.get().messageHelper.getGroupUsers(chatRespBody.getRoomId());
         for (User groupUser : groupUsers) {
             // 给这个用户设置未读消息
-            get().messageHelper.putUnReadMessage(groupUser.get_id(), chatRespBody.getRoomId(),chatRespBody.get_id());
+            get().messageHelper.putUnReadMessage(groupUser.get_id(), chatRespBody.getRoomId(), chatRespBody.get_id());
             // 取出未读消息, 并设置未读数量
             List<String> unReadMessage = get().messageHelper.getUnReadMessage(groupUser.get_id(), chatRespBody.getRoomId());
             chatRespBody.setUnreadCount(CollUtil.isEmpty(unReadMessage) ? 0 : unReadMessage.size());
@@ -171,6 +168,20 @@ public class Im extends ImConfig {
             if (user.get_id().equals(nowUser.get_id())) {
                 continue;
             }
+            send(context, wsResponse);
+        }
+    }
+
+    /**
+     * 群组表情回复
+     *
+     * @param messageReactionRespBody 表情回复
+     */
+    public static void sendToGroup(MessageReactionRespBody messageReactionRespBody) {
+        WsResponse wsResponse = WsResponse.fromText(RespBody.success(CommandEnum.COMMAND_SEND_MESSAGE_REACTION_RESP, messageReactionRespBody), CHARSET);
+        SetWithLock<ChannelContext> users = Tio.getByGroup(Im.get().getTioConfig(), messageReactionRespBody.getRoomId());
+        List<ChannelContext> channelContexts = convertChannel(users);
+        for (ChannelContext context : channelContexts) {
             send(context, wsResponse);
         }
     }
@@ -276,7 +287,7 @@ public class Im extends ImConfig {
      */
     public static List<ChannelContext> getChannelByUserId(String id) {
         SetWithLock<ChannelContext> userChannelContext = Tio.getByUserid(Im.get().getTioConfig(), id);
-        if(userChannelContext == null){
+        if (userChannelContext == null) {
             return new ArrayList<>();
         }
         return convertChannel(userChannelContext);
@@ -284,7 +295,7 @@ public class Im extends ImConfig {
 
 
     public static void resetGroup(Group group, String userId, Map<String, String> userFriends) {
-        if(userFriends == null){
+        if (userFriends == null) {
             userFriends = get().messageHelper.getUserFriends(userId);
         }
         // 获取好友信息
@@ -302,4 +313,6 @@ public class Im extends ImConfig {
             }
         }
     }
+
+
 }

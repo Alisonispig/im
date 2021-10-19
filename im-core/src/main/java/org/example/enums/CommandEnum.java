@@ -228,6 +228,14 @@ public enum CommandEnum {
      * <code>COMMAND_SEND_MESSAGE_REACTION_REQ = 28;</code>
      */
     COMMAND_SEND_MESSAGE_REACTION_REQ(28),
+
+    /**
+     * <pre>
+     * 发送表情回复响应;
+     * </pre>
+     * <code>COMMAND_SEND_MESSAGE_REACTION_RESP = 29;</code>
+     */
+    COMMAND_SEND_MESSAGE_REACTION_RESP(29),
     ;
 
 

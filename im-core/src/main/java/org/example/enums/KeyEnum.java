@@ -67,6 +67,11 @@ public enum KeyEnum {
      */
     IM_ACCOUNT_MAP_KEY("ACCOUNT_MAP_KEY"),
 
+    /**
+     * 表情回复消息
+     */
+    IM_MESSAGE_REACTION_MAP_KEY("MESSAGE_REACTION_MAP_KEY"),
+
 
     ;
 

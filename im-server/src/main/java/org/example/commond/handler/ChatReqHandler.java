@@ -33,7 +33,7 @@ public class ChatReqHandler extends AbstractCmdHandler {
         Date date = new Date();
         request.setDate(DateUtil.formatDate(date));
         request.setTimestamp(DateUtil.formatTime(date));
-        request.set_id(IdUtil.getSnowflake().nextId());
+        request.set_id(IdUtil.getSnowflake().nextIdStr());
 
         // 消息缓存至redis
         Im.get().messageHelper.putGroupMessage(request);

@@ -21,7 +21,7 @@ public class MessageReactionReqBody {
     /**
      * 消息ID
      */
-    private long messageId;
+    private String messageId;
 
     /**
      * 房间号

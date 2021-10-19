@@ -9,7 +9,7 @@ public class ChatReqBody {
     /**
      * 消息ID
      */
-    private long _id;
+    private String _id;
 
     /**
      * 发送者编号

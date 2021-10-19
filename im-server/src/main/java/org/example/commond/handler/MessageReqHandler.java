@@ -16,6 +16,7 @@ import org.tio.websocket.common.WsRequest;
 import org.tio.websocket.common.WsResponse;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class MessageReqHandler extends AbstractCmdHandler {
@@ -29,20 +30,25 @@ public class MessageReqHandler extends AbstractCmdHandler {
 
         WsRequest request = (WsRequest) packet;
         MessageReqBody messageReqBody = JSON.parseObject(request.getWsBodyText(), MessageReqBody.class);
-        List<String> messages = Im.get().messageHelper.getHistoryMessage(messageReqBody.getRoomId());
+        List<String> messages = messageHelper.getHistoryMessage(messageReqBody.getRoomId());
+
+        User user = Im.getUser(channelContext);
 
         List<ChatRespBody> collect = messages.stream().map(x -> {
             ChatReqBody chatReqBody = JSON.parseObject(x, ChatReqBody.class);
             ChatRespBody chatRespBody = BeanUtil.copyProperties(chatReqBody, ChatRespBody.class);
-            User userInfo = Im.get().messageHelper.getUserInfo(chatRespBody.getSenderId());
+            User userInfo = messageHelper.getUserInfo(chatRespBody.getSenderId());
             chatRespBody.setAvatar(userInfo.getAvatar());
             chatRespBody.setUsername(userInfo.getUsername());
+            chatRespBody.setCurrentUserId(user.get_id());
             chatRespBody.setDeleted(false);
             chatRespBody.setSystem(false);
+            Map<String, List<String>> reaction = messageHelper.getReaction(messageReqBody.getRoomId(), chatRespBody.get_id());
+            chatRespBody.setReactions(reaction);
             return chatRespBody;
         }).collect(Collectors.toList());
-
-        WsResponse response = WsResponse.fromText(RespBody.success(CommandEnum.COMMAND_GET_MESSAGE_RESP, collect), Im.CHARSET);
+        String success = RespBody.success(CommandEnum.COMMAND_GET_MESSAGE_RESP, collect);
+        WsResponse response = WsResponse.fromText(success, Im.CHARSET);
         Im.send(channelContext, response);
 
         return null;
