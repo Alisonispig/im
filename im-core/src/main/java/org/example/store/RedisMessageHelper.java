@@ -8,6 +8,7 @@ import com.alibaba.fastjson.TypeReference;
 import org.example.config.Im;
 import org.example.enums.KeyEnum;
 import org.example.packets.*;
+import org.example.packets.file.Chunk;
 import org.example.packets.handler.ChatReqBody;
 import org.example.store.redis.RedisStore;
 import org.tio.core.ChannelContext;
@@ -246,6 +247,11 @@ public class RedisMessageHelper implements MessageHelper {
         }
 
         RedisStore.hSet(key, String.valueOf(messageId), JSON.toJSONString(reactionMap));
+    }
+
+    @Override
+    public void saveChunk(Chunk chunk) {
+
     }
 
     @Override

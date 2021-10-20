@@ -3,6 +3,7 @@ package org.example.store;
 import org.example.packets.FriendInfo;
 import org.example.packets.Group;
 import org.example.packets.User;
+import org.example.packets.file.Chunk;
 import org.example.packets.handler.ChatReqBody;
 import org.tio.core.ChannelContext;
 
@@ -230,4 +231,10 @@ public interface MessageHelper {
      * @param remove    是否删除
      */
     void addReaction(String roomId, String messageId, String reaction, Boolean remove,String userId);
+
+    /**
+     * 保存分块信息
+     * @param chunk 分块信息
+     */
+    void saveChunk(Chunk chunk);
 }
