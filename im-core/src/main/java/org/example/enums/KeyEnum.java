@@ -72,7 +72,10 @@ public enum KeyEnum {
      */
     IM_MESSAGE_REACTION_MAP_KEY("MESSAGE_REACTION_MAP_KEY"),
 
-
+    /**
+     * 文件上传信息
+     */
+    IM_FILE_UPLOAD_KEY("FILE_UPLOAD_KEY"),
     ;
 
     private final String key;
