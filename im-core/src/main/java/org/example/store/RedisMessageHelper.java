@@ -8,7 +8,6 @@ import com.alibaba.fastjson.TypeReference;
 import org.example.config.Im;
 import org.example.enums.KeyEnum;
 import org.example.packets.*;
-import org.example.packets.file.Chunk;
 import org.example.packets.handler.ChatReqBody;
 import org.example.store.redis.RedisStore;
 import org.tio.core.ChannelContext;
@@ -247,20 +246,6 @@ public class RedisMessageHelper implements MessageHelper {
         }
 
         RedisStore.hSet(key, String.valueOf(messageId), JSON.toJSONString(reactionMap));
-    }
-
-    @Override
-    public void saveChunk(Chunk chunk) {
-        String key = KeyEnum.IM_FILE_UPLOAD_KEY.getKey() + StrUtil.COLON + chunk.getIdentifier();
-        RedisStore.hSet(key, String.valueOf(chunk.getChunkNumber()), "上传成功!");
-    }
-
-
-    @Override
-    public boolean getChunk(Chunk chunk) {
-        String key = KeyEnum.IM_FILE_UPLOAD_KEY.getKey() + StrUtil.COLON + chunk.getIdentifier();
-        String s = RedisStore.hGet(key, String.valueOf(chunk.getChunkNumber()));
-        return StrUtil.isNotBlank(s);
     }
 
     @Override

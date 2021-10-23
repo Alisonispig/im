@@ -95,6 +95,8 @@ public class ChatRespBody {
      */
     private ReplyMessage replyMessage;
 
+    private List<FileMessageBody> files;
+
     /**
      * 表情回复消息
      */

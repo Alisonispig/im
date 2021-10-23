@@ -51,6 +51,12 @@
             <artifactId>tio-http-server</artifactId>
             <version>3.7.2.v20210316-RELEASE</version>
         </dependency>
+
+        <dependency>
+            <groupId>io.minio</groupId>
+            <artifactId>minio</artifactId>
+            <version>8.3.1</version>
+        </dependency>
     </dependencies>
 
     <properties>

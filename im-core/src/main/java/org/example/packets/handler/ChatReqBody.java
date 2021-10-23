@@ -3,6 +3,8 @@ package org.example.packets.handler;
 import lombok.Data;
 import org.example.packets.ReplyMessage;
 
+import java.util.List;
+
 @Data
 public class ChatReqBody {
 
@@ -35,6 +37,11 @@ public class ChatReqBody {
      * 发送时间
      */
     private String timestamp;
+
+    /**
+     * 文件信息
+     */
+    private List<FileMessageBody> files;
 
     /**
      * 回复消息
