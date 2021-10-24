@@ -57,8 +57,8 @@ public class MinIoUtils {
 
     public void init() {
         MinioClient minioClient = MinioClient.builder()
-                .endpoint("https://play.minio.io:9000")
-                .credentials("Q3AM3UQ867SPQQA43P2F", "zuf+tfteSlswRu7BJ86wekitnifILbZam1KYY3TG")
+                .endpoint("http://106.12.118.54:9000")
+                .credentials("AKIAIOSFODNN7EXAMPLE", "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY")
                 .build();
         customMinioClient = new CustomMinioClient(minioClient);
     }

@@ -23,6 +23,12 @@
             <version>3.7.2.v20210316-RELEASE</version>
         </dependency>
         <dependency>
+            <groupId>org.t-io</groupId>
+            <artifactId>tio-http-server</artifactId>
+            <version>3.7.2.v20210316-RELEASE</version>
+        </dependency>
+
+        <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>1.18.20</version>
@@ -31,25 +37,31 @@
         <dependency>
             <groupId>cn.hutool</groupId>
             <artifactId>hutool-core</artifactId>
-            <version>5.7.12</version>
+            <version>5.7.15</version>
         </dependency>
 
         <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-simple</artifactId>
-            <version>1.7.26</version>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-setting</artifactId>
+            <version>5.7.15</version>
+        </dependency>
+
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-core</artifactId>
+            <version>1.2.6</version>
+        </dependency>
+
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>1.2.6</version>
         </dependency>
 
         <dependency>
             <groupId>redis.clients</groupId>
             <artifactId>jedis</artifactId>
             <version>3.7.0</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.t-io</groupId>
-            <artifactId>tio-http-server</artifactId>
-            <version>3.7.2.v20210316-RELEASE</version>
         </dependency>
 
         <dependency>

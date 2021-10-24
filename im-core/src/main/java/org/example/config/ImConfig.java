@@ -1,5 +1,7 @@
 package org.example.config;
 
+import cn.hutool.core.util.StrUtil;
+import cn.hutool.setting.Setting;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.example.listener.ImUserListener;
@@ -26,6 +28,7 @@ public class ImConfig extends MapWithLockPropSupport {
      */
     public ImUserListener imUserListener;
 
+
     ImConfig() {
         ImConfig.Global.set(this);
     }
@@ -40,19 +43,57 @@ public class ImConfig extends MapWithLockPropSupport {
     public static final String PROTOCOL_NAME = "IM";
 
     /**
+     * Redis 地址 密码
+     */
+    public static String redisHost, redisAuth;
+
+    /**
+     * Redis 端口, 超时时间
+     */
+    public static int redisPort, redisTimeOut;
+
+    /**
+     * Http 端口 最大活跃时间
+     */
+    public static int httpPort, httpMaxLiveTime;
+
+    public static boolean httpUseSession, httpCheckHost;
+
+    public static int socketPort, socketHeartbeat;
+
+    public static String fileUrl;
+
+    private static final String GLOBAL_CONFIG_PATH = "global.config.path";
+
+    static {
+        Setting setting;
+        String property = System.getProperty(GLOBAL_CONFIG_PATH);
+
+        if (StrUtil.isNotBlank(property)) {
+            setting = new Setting(property + "/application.setting");
+            fileUrl = setting.getByGroup("file.url","prod");
+        } else {
+            setting = new Setting("application.setting");
+            fileUrl = setting.getByGroup("file.url","dev");
+            System.out.println(fileUrl);
+        }
+        redisHost = setting.getStr("redis.host");
+        redisPort = setting.getInt("redis.port");
+        redisTimeOut = setting.getInt("redis.timeout");
+        redisAuth = setting.getStr("redis.auth");
+        httpPort = setting.getInt("http.port");
+        httpMaxLiveTime = setting.getInt("http.max.live.time");
+        httpUseSession = setting.getBool("http.use.session");
+        httpCheckHost = setting.getBool("http.check.host");
+        socketPort = setting.getInt("socket.port");
+        socketHeartbeat = setting.getInt("socket.heartbeat");
+
+    }
+
+    /**
      * 监听的ip
      */
     public static final String SERVER_IP = null;//null表示监听所有，并不指定ip
-
-    /**
-     * 监听端口
-     */
-    public static final int SERVER_PORT = 9326;
-
-    /**
-     * 心跳超时时间，单位：毫秒
-     */
-    public static final int HEARTBEAT_TIMEOUT = 1000 * 60;
 
     /**
      * ip数据监控统计，时间段
@@ -66,8 +107,6 @@ public class ImConfig extends MapWithLockPropSupport {
 
     public static class Global {
         private static ImConfig imConfig;
-
-
 
         public static ImConfig get() {
             return imConfig;

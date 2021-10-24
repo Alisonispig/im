@@ -3,7 +3,6 @@ package org.example.protocol.http;
 import cn.hutool.core.lang.Assert;
 import cn.hutool.core.util.ObjectUtil;
 import com.alibaba.fastjson.JSONObject;
-import com.google.common.collect.ImmutableMap;
 import lombok.extern.slf4j.Slf4j;
 import org.example.config.Im;
 import org.example.packets.file.FileInit;
@@ -13,8 +12,6 @@ import org.tio.http.common.HttpRequest;
 import org.tio.http.common.HttpResponse;
 import org.tio.http.server.annotation.RequestPath;
 import org.tio.http.server.util.Resps;
-import org.tio.utils.jfinal.P;
-import redis.clients.jedis.Response;
 
 import java.io.IOException;
 import java.io.InputStream;

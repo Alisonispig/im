@@ -1,9 +1,11 @@
 package org.example.store.redis;
 
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
+import org.example.config.Im;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
@@ -53,9 +55,7 @@ public class RedisStore {
         final JedisPoolConfig config = new JedisPoolConfig();
         config.setMaxTotal(30);
         config.setMaxIdle(10);
-
-//        pool = new JedisPool(config, "106.12.118.54", 6379, 2000, "mima");
-        pool = new JedisPool(config, "127.0.0.1", 6379, 2000);
+        pool = new JedisPool(config, Im.redisHost, Im.redisPort, Im.redisTimeOut, StrUtil.blankToDefault(Im.redisAuth, null));
     }
 
     public static List<String> list(String key) {
@@ -64,7 +64,7 @@ public class RedisStore {
     }
 
     public static void hSet(String key, String field, String value) {
-       getJedis().hset(key, field, value);
+        getJedis().hset(key, field, value);
     }
 
     public static String hGet(String key, String field) {

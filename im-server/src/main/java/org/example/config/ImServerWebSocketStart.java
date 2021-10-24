@@ -13,6 +13,7 @@ public class ImServerWebSocketStart {
     private final WsServerStarter wsServerStarter;
     private final ServerTioConfig serverTioConfig;
 
+
     public ImServerWebSocketStart(int port, WsMsgHandler wsMsgHandler) throws IOException {
         wsServerStarter = new WsServerStarter(port, wsMsgHandler);
 
@@ -21,12 +22,11 @@ public class ImServerWebSocketStart {
         serverTioConfig.setName(ImConfig.PROTOCOL_NAME);
         serverTioConfig.setServerAioListener(ImServerAioListener.me);
         serverTioConfig.ipStats.addDurations(ImConfig.IpStatDuration.IPSTAT_DURATIONS);
-        serverTioConfig.setHeartbeatTimeout(ImConfig.HEARTBEAT_TIMEOUT);
+        serverTioConfig.setHeartbeatTimeout(ImConfig.socketHeartbeat);
     }
 
     public static void start() throws Exception {
-
-        ImServerWebSocketStart appStarter = new ImServerWebSocketStart(ImConfig.SERVER_PORT, WsMsgHandler.me);
+        ImServerWebSocketStart appStarter = new ImServerWebSocketStart(ImConfig.socketPort, WsMsgHandler.me);
 
         ImConfig imServerConfig = new ImConfig();
         imServerConfig.setMessageHelper(new RedisMessageHelper());

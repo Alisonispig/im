@@ -17,14 +17,15 @@ public class ImServerHttpStart {
 
     public static ServerTioConfig serverTioConfig;
 
-    public static void start() throws Exception{
-        httpConfig = new HttpConfig(80, null, null, null);
+    public static void start() throws Exception {
+
+        httpConfig = new HttpConfig(Im.httpPort, null, null, null);
         httpConfig.setPageRoot("classpath:page");
-        httpConfig.setMaxLiveTimeOfStaticRes(2000);
+        httpConfig.setMaxLiveTimeOfStaticRes(Im.httpMaxLiveTime);
         httpConfig.setPage404("404.html");
         httpConfig.setPage500("500.html");
-        httpConfig.setUseSession(false);
-        httpConfig.setCheckHost(false);
+        httpConfig.setUseSession(Im.httpUseSession);
+        httpConfig.setCheckHost(Im.httpCheckHost);
 
         requestHandler = new DefaultHttpRequestHandler(httpConfig, ImServer.class);//第二个参数也可以是数组
 

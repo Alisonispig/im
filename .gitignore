@@ -22,4 +22,7 @@
 hs_err_pid*
 /target/
 
+im-core/target/
+im-server/target/
+
 /im-server/target/classes/index.html

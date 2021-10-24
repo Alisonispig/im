@@ -7,6 +7,7 @@ import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
 import org.example.commond.AbstractCmdHandler;
 import org.example.config.Im;
+import org.example.config.ImConfig;
 import org.example.enums.CommandEnum;
 import org.example.packets.handler.ChatReqBody;
 import org.example.packets.handler.ChatRespBody;
@@ -34,6 +35,9 @@ public class ChatReqHandler extends AbstractCmdHandler {
         request.setDate(DateUtil.formatDate(date));
         request.setTimestamp(DateUtil.formatTime(date));
         request.set_id(IdUtil.getSnowflake().nextIdStr());
+        request.getFiles().forEach(x -> {
+            x.setUrl(ImConfig.fileUrl + x.getUrl());
+        });
 
         // 消息缓存至redis
         Im.get().messageHelper.putGroupMessage(request);
