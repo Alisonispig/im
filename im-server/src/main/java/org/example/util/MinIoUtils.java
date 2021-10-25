@@ -57,7 +57,7 @@ public class MinIoUtils {
 
     public void init() {
         MinioClient minioClient = MinioClient.builder()
-                .endpoint("http://106.12.118.54:9000")
+                .endpoint("http://127.0.0.1:9000")
                 .credentials("AKIAIOSFODNN7EXAMPLE", "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY")
                 .build();
         customMinioClient = new CustomMinioClient(minioClient);

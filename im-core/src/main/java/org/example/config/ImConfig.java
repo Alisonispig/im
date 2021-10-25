@@ -72,15 +72,15 @@ public class ImConfig extends MapWithLockPropSupport {
         if (StrUtil.isNotBlank(property)) {
             setting = new Setting(property + "/application.setting");
             fileUrl = setting.getByGroup("file.url","prod");
+            redisAuth = setting.getByGroup("redis.auth","prod");
         } else {
             setting = new Setting("application.setting");
             fileUrl = setting.getByGroup("file.url","dev");
-            System.out.println(fileUrl);
+            redisAuth = setting.getByGroup("redis.auth","dev");
         }
         redisHost = setting.getStr("redis.host");
         redisPort = setting.getInt("redis.port");
         redisTimeOut = setting.getInt("redis.timeout");
-        redisAuth = setting.getStr("redis.auth");
         httpPort = setting.getInt("http.port");
         httpMaxLiveTime = setting.getInt("http.max.live.time");
         httpUseSession = setting.getBool("http.use.session");

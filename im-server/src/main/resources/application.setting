@@ -1,7 +1,6 @@
 application.name=IM
 
 redis.host=127.0.0.1
-redis.auth=lowback88.
 redis.port=6379
 redis.timeout=2000
 
@@ -18,3 +17,4 @@ file.url=http://localhost:8088/download/
 
 [prod]
 file.url=http://106.12.118.54:8888/api/download/
+redis.auth=lowback88.
