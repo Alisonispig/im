@@ -15,6 +15,16 @@
 
 用户名密码随意输入即可,可自动创建账号.仅演示目的.服务器的内容不定期清理
 
+### 使用
+
+运行ImServer下Main方法
+
+### 打包
+
+运行 mvn clean package
+拷贝Target下 Im-Server目录
+Windows下执行startup.bat方法,Linux执行startup.sh
+
 ### 🤣蓝图 
 更新不及时访问 [在线文档](https://www.yuque.com/docs/share/8d1a4d1d-954d-478c-b23d-511d4558eed9)
 ![屏幕](https://images.gitee.com/uploads/images/2021/1023/200545_15db0dc8_1446263.png "屏幕截图.png")
