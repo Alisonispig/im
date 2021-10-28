@@ -21,6 +21,11 @@
         </fileSet>
 
         <fileSet>
+            <directory>${project.basedir}/src/main/resources/img</directory>
+            <outputDirectory>img</outputDirectory>
+        </fileSet>
+
+        <fileSet>
             <directory>${project.basedir}/script</directory>
             <outputDirectory></outputDirectory>
             <includes>

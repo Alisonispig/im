@@ -7,12 +7,14 @@ import org.example.commond.AbstractCmdHandler;
 import org.example.config.Im;
 import org.example.config.ImConfig;
 import org.example.enums.CommandEnum;
+import org.example.enums.DefaultEnum;
 import org.example.packets.Group;
 import org.example.packets.Status;
 import org.example.packets.User;
 import org.example.packets.handler.LoginRespBody;
 import org.example.packets.handler.RespBody;
 import org.example.packets.handler.UserStatusBody;
+import org.example.protocol.http.service.UploadService;
 import org.example.store.MessageHelper;
 import org.example.util.TestUtil;
 import org.tio.core.ChannelContext;
@@ -37,17 +39,18 @@ public class LoginReqHandler extends AbstractCmdHandler {
         String account = httpRequest.getParam("account");
         String password = httpRequest.getParam("password");
 
-        if(StrUtil.isBlank(account)){
+        if (StrUtil.isBlank(account)) {
             return null;
         }
-
 
         // 持久化获取用户信息
         User user = messageHelper.getByAccount(account);
         if (user == null) {
+            String url = UploadService.uploadDefault(DefaultEnum.ACCOUNT);
             log.info("未查询到用户信息，模拟创建用户");
-            user = User.builder()._id(IdUtil.getSnowflake().nextIdStr()).username(TestUtil.chineseName()).status(Status.online()).avatar("https://t1.huishahe.com/uploads/tu/202107/9999/7690765ea7.jpg").build();
-            Im.get().messageHelper.initAccount(account,user.get_id());
+            user = User.builder()._id(IdUtil.getSnowflake().nextIdStr()).username(TestUtil.chineseName()).status(Status.online())
+                    .avatar(url).build();
+            Im.get().messageHelper.initAccount(account, user.get_id());
         }
 
         // 获取持久化用户群组信息

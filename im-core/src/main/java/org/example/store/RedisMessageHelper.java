@@ -249,6 +249,18 @@ public class RedisMessageHelper implements MessageHelper {
     }
 
     @Override
+    public String getFileUrl(String md5) {
+        String key = KeyEnum.IM_FILE_UPLOAD_KEY.getKey() ;
+        return RedisStore.hGet(key,md5);
+    }
+
+    @Override
+    public void setFileUrl(String md5,String url) {
+        String key = KeyEnum.IM_FILE_UPLOAD_KEY.getKey() ;
+        RedisStore.hSet(key,md5,url);
+    }
+
+    @Override
     public Map<String, List<String>> getReaction(String roomId, String messageId) {
         String key = KeyEnum.IM_MESSAGE_REACTION_MAP_KEY.getKey() + StrUtil.COLON + roomId;
         String release = RedisStore.hGet(key, String.valueOf(messageId));

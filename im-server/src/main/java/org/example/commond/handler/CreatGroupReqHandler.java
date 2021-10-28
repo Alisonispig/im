@@ -9,14 +9,15 @@ import org.example.commond.AbstractCmdHandler;
 import org.example.commond.CommandManager;
 import org.example.config.Im;
 import org.example.enums.CommandEnum;
+import org.example.enums.DefaultEnum;
 import org.example.enums.JoinGroupEnum;
 import org.example.packets.FriendInfo;
 import org.example.packets.Group;
-import org.example.packets.LastMessage;
 import org.example.packets.User;
 import org.example.packets.handler.CreateGroupReqBody;
 import org.example.packets.handler.JoinGroupNotifyBody;
 import org.example.packets.handler.RespBody;
+import org.example.protocol.http.service.UploadService;
 import org.tio.core.ChannelContext;
 import org.tio.core.intf.Packet;
 import org.tio.websocket.common.WsRequest;
@@ -40,10 +41,14 @@ public class CreatGroupReqHandler extends AbstractCmdHandler {
         String roomName = request.getRoomName();
         // 当前用户
         User user = Im.getUser(channelContext, false);
+
+        String url = UploadService.uploadDefault(DefaultEnum.ACCOUNT_GROUP);
         // 创建群聊
         Group build = Group.builder().roomId(IdUtil.getSnowflake().nextIdStr()).index(System.currentTimeMillis()).roomName(roomName)
-                .avatar("https://pic2.zhimg.com/v2-7e7cf5bcd064fbae2f0f4a23118eddb5_r.jpg?source=1940ef5c")
                 .addUser(user).build();
+        if(!request.getIsFriend()){
+            build.setAvatar(url);
+        }
         for (User addUser : request.getUsers()) {
             User userInfo = messageHelper.getUserInfo(addUser.get_id());
             build.getUsers().add(userInfo);

@@ -83,6 +83,12 @@ public interface MessageHelper {
      */
     User getByAccount(String account);
 
+    /**
+     * @param md5 Md5
+     * @param url 文件Url
+     */
+    void setFileUrl(String md5, String url);
+
     Map<String, List<String>> getReaction(String roomId, String messageId);
 
     /**
@@ -231,4 +237,11 @@ public interface MessageHelper {
      */
     void addReaction(String roomId, String messageId, String reaction, Boolean remove, String userId);
 
+    /**
+     * 获取缓存的文件
+     *
+     * @param md5
+     * @return
+     */
+    String getFileUrl(String md5);
 }

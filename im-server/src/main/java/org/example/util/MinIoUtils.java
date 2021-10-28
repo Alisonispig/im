@@ -8,6 +8,7 @@ import io.minio.http.Method;
 import io.minio.messages.Part;
 import lombok.extern.slf4j.Slf4j;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.security.InvalidKeyException;
@@ -93,10 +94,10 @@ public class MinIoUtils {
     }
 
     /**
-     *  初始化分片上传
+     * 初始化分片上传
      *
-     * @param objectName 文件全路径名称
-     * @param partCount 分片数量
+     * @param objectName  文件全路径名称
+     * @param partCount   分片数量
      * @param contentType 类型，如果类型使用默认流会导致无法预览
      * @return /
      */
@@ -141,7 +142,7 @@ public class MinIoUtils {
      * 分片上传完后合并
      *
      * @param objectName 文件全路径名称
-     * @param uploadId 返回的uploadId
+     * @param uploadId   返回的uploadId
      * @return /
      */
     public static boolean mergeMultipartUpload(String objectName, String uploadId) {
@@ -161,5 +162,16 @@ public class MinIoUtils {
         }
 
         return true;
+    }
+
+    public static boolean uploadByte(byte[] bytes,String name) {
+        try {
+            InputStream inputStream = new ByteArrayInputStream(bytes);
+            customMinioClient.putObject(PutObjectArgs.builder().bucket(MINIO_BUCKET).contentType("application/octet-stream").stream(inputStream, bytes.length, 5368709119L).object(name).build());
+            return true;
+        } catch (ErrorResponseException | InsufficientDataException | InvalidKeyException | InternalException | InvalidResponseException | NoSuchAlgorithmException | IOException | XmlParserException | ServerException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 }

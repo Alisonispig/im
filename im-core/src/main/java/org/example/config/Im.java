@@ -308,6 +308,7 @@ public class Im extends ImConfig {
                 group.getUsers().forEach(x -> {
                     if (x.get_id().equals(friendInfo.get_id())) {
                         group.setRoomName(x.getUsername());
+                        group.setAvatar(x.getAvatar());
                     }
                 });
             }

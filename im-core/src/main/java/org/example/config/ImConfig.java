@@ -63,14 +63,17 @@ public class ImConfig extends MapWithLockPropSupport {
 
     public static String fileUrl;
 
+    public static String GLOBAL_PATH;
+
     private static final String GLOBAL_CONFIG_PATH = "global.config.path";
 
     static {
         Setting setting;
         String property = System.getProperty(GLOBAL_CONFIG_PATH);
+        GLOBAL_PATH = StrUtil.isNotBlank(property) ? property : "";
 
         if (StrUtil.isNotBlank(property)) {
-            setting = new Setting(property + "/application.setting");
+            setting = new Setting(GLOBAL_PATH + "config/application.setting");
             fileUrl = setting.getByGroup("file.url","prod");
             redisAuth = setting.getByGroup("redis.auth","prod");
         } else {

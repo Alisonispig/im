@@ -1,18 +1,18 @@
 package org.example.protocol.http.service;
 
 import cn.hutool.core.io.file.FileNameUtil;
+import cn.hutool.core.io.resource.ResourceUtil;
 import cn.hutool.core.util.IdUtil;
+import cn.hutool.core.util.StrUtil;
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
-import io.minio.GetObjectArgs;
-import io.minio.errors.*;
-import lombok.RequiredArgsConstructor;
+import org.example.config.Im;
+import org.example.config.ImConfig;
+import org.example.enums.DefaultEnum;
+import org.example.enums.KeyEnum;
+import org.example.store.redis.RedisStore;
 import org.example.util.MinIoUtils;
 
-import java.io.IOException;
 import java.io.InputStream;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,12 +22,9 @@ import java.util.Map;
  */
 public class UploadService {
 
-    public static Map<String, Object> initMultiPartUpload(String path, String filename, Integer partCount, String contentType) {
-        path = path.replaceAll("/+", "/");
-        if (path.indexOf("/") == 0) {
-            path = path.substring(1);
-        }
-        String filePath = path + "/" + IdUtil.getSnowflake().nextIdStr() + '.' + FileNameUtil.extName(filename);
+    public static Map<String, Object> initMultiPartUpload(String filename, Integer partCount, String contentType) {
+
+        String filePath = IdUtil.getSnowflake().nextIdStr() + '.' + FileNameUtil.extName(filename);
 
         Map<String, Object> result = new HashMap<>();
         // TODO::单文件上传可拆分，这里只做演示，可直接上传完成
@@ -47,6 +44,21 @@ public class UploadService {
 
     public static InputStream downloadGetStream(String filePath) {
         return MinIoUtils.download(filePath);
+    }
 
+    public static boolean uploadFile(byte[] bytes, String name) {
+        return MinIoUtils.uploadByte(bytes, name);
+    }
+
+    public static String uploadDefault(DefaultEnum defaultEnum) {
+        String url = RedisStore.hGet(KeyEnum.IM_FILE_UPLOAD_KEY.getKey(), defaultEnum.getKey());
+        if (StrUtil.isBlank(url)) {
+            byte[] bytes = ResourceUtil.readBytes(ImConfig.GLOBAL_PATH + "img/" + defaultEnum.getValue());
+            boolean b = uploadFile(bytes, defaultEnum.getValue());
+            if (b) {
+                RedisStore.hSet(KeyEnum.IM_FILE_UPLOAD_KEY.getKey(), defaultEnum.getKey(), defaultEnum.getValue());
+            }
+        }
+        return Im.fileUrl + defaultEnum.getValue();
     }
 }

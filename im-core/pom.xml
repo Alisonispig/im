@@ -15,17 +15,17 @@
         <dependency>
             <groupId>org.t-io</groupId>
             <artifactId>tio-core</artifactId>
-            <version>3.7.2.v20210316-RELEASE</version>
+            <version>3.7.4.v20210808-RELEASE</version>
         </dependency>
         <dependency>
             <groupId>org.t-io</groupId>
             <artifactId>tio-websocket-server</artifactId>
-            <version>3.7.2.v20210316-RELEASE</version>
+            <version>3.7.4.v20210808-RELEASE</version>
         </dependency>
         <dependency>
             <groupId>org.t-io</groupId>
             <artifactId>tio-http-server</artifactId>
-            <version>3.7.2.v20210316-RELEASE</version>
+            <version>3.7.4.v20210808-RELEASE</version>
         </dependency>
 
         <dependency>
