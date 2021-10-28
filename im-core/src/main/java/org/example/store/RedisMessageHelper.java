@@ -125,9 +125,10 @@ public class RedisMessageHelper implements MessageHelper {
 
     @Override
     public void updateLastMessage(ChatReqBody chatReqBody) {
+        User userInfo = Im.get().messageHelper.getUserInfo(chatReqBody.getSenderId());
         Group groupInfo = getGroupInfo(chatReqBody.getRoomId());
         groupInfo.setLastMessage(LastMessage.builder().content(chatReqBody.getContent()).senderId(chatReqBody.getSenderId())
-                .username(chatReqBody.getSenderId()).timestamp(chatReqBody.getTimestamp()).saved(true).distributed(true).seen(true).isNew(true).build());
+                .username(userInfo.getUsername()).timestamp(chatReqBody.getTimestamp()).saved(true).distributed(true).seen(true).isNew(true).build());
         setGroupInfo(groupInfo);
     }
 

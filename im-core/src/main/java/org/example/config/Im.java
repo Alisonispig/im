@@ -253,6 +253,9 @@ public class Im extends ImConfig {
     public static User getUser(ChannelContext channelContext, boolean isAllInfo) {
         ImSessionContext imSessionContext = (ImSessionContext) channelContext.get(KeyEnum.IM_CHANNEL_SESSION_CONTEXT_KEY.getKey());
         User user = imSessionContext.getImClientNode().getUser();
+        if(user == null){
+            Im.close(channelContext,"异常关闭");
+        }
         if (isAllInfo) {
             return user;
         }
