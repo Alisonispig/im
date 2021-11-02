@@ -19,6 +19,11 @@ public class CreateGroupReqBody {
     private Boolean isFriend;
 
     /**
+     * 头像 (群组设置)
+     */
+    private String avatar;
+
+    /**
      * 群组创建时携带的人
      */
     private List<User> users;

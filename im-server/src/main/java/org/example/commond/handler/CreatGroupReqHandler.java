@@ -1,6 +1,7 @@
 package org.example.commond.handler;
 
 import cn.hutool.core.util.IdUtil;
+import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.SerializerFeature;
@@ -47,6 +48,9 @@ public class CreatGroupReqHandler extends AbstractCmdHandler {
         Group build = Group.builder().roomId(IdUtil.getSnowflake().nextIdStr()).index(System.currentTimeMillis()).roomName(roomName)
                 .addUser(user).build();
         if(!request.getIsFriend()){
+            build.setAvatar(Im.fileUrl + request.getAvatar());
+        }
+        if(!request.getIsFriend() && StrUtil.isBlank(request.getAvatar())){
             build.setAvatar(url);
         }
         for (User addUser : request.getUsers()) {
