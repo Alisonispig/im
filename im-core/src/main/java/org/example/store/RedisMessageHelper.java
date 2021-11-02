@@ -83,7 +83,8 @@ public class RedisMessageHelper implements MessageHelper {
         updateUserInfo(userInfo);
     }
 
-    private void updateUserInfo(User user) {
+    @Override
+    public void updateUserInfo(User user) {
         RedisStore.set(KeyEnum.IM_USER_INFO_KEY.getKey() + StrUtil.C_COLON + user.get_id(), user);
     }
 

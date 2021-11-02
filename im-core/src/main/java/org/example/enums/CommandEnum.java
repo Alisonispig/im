@@ -236,7 +236,27 @@ public enum CommandEnum {
      * <code>COMMAND_SEND_MESSAGE_REACTION_RESP = 29;</code>
      */
     COMMAND_SEND_MESSAGE_REACTION_RESP(29),
+
+    /**
+     * <pre>
+     * 修改资料请求
+     * </pre>
+     * <code>COMMAND_EDIT_PROFILE_REQ = 30</code>
+     */
+    COMMAND_EDIT_PROFILE_REQ(30),
+
+    /**
+     * <pre>
+     * 修改资料响应
+     * </pre>
+     * <code>COMMAND_EDIT_PROFILE_REST = 31</code>
+     */
+    COMMAND_EDIT_PROFILE_REST(31)
+
+
     ;
+
+
 
 
     private final int value;

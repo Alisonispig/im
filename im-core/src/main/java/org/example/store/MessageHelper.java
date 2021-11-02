@@ -122,6 +122,8 @@ public interface MessageHelper {
      */
     void putGroupMessage(ChatReqBody chatReqBody);
 
+    void updateUserInfo(User user);
+
     /**
      * 取出未读消息
      *

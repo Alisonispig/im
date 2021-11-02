@@ -54,7 +54,7 @@ public class UserReqHandler extends AbstractCmdHandler {
             List<User> groupUsers = ImConfig.get().messageHelper.getGroupUsers(roomId);
             group.setUsers(groupUsers);
 
-            Im.resetGroup(group, user.get_id(),userFriends);
+            Im.resetGroup(group, user.get_id(), userFriends);
 
             // 解析会话信息
             if (chatKeys.contains(roomId)) {

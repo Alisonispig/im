@@ -159,13 +159,23 @@ public class Im extends ImConfig {
      * @param channelContext 群组
      */
     public static void sendToGroup(UserStatusBody userStatusBody, ChannelContext channelContext) {
+        sendToGroup(userStatusBody,channelContext,false);
+    }
+
+    /**
+     * 用户状态变更消息
+     *
+     * @param userStatusBody 用户状态消息
+     * @param channelContext 群组
+     */
+    public static void sendToGroup(UserStatusBody userStatusBody, ChannelContext channelContext,Boolean sendAll) {
         WsResponse wsResponse = WsResponse.fromText(RespBody.success(CommandEnum.COMMAND_USER_STATUS_RESP, userStatusBody), CHARSET);
         SetWithLock<ChannelContext> users = Tio.getByGroup(Im.get().getTioConfig(), userStatusBody.getGroup().getRoomId());
         List<ChannelContext> channelContexts = convertChannel(users);
         User nowUser = getUser(channelContext, false);
         for (ChannelContext context : channelContexts) {
             User user = getUser(context);
-            if (user.get_id().equals(nowUser.get_id())) {
+            if (user.get_id().equals(nowUser.get_id()) && !sendAll) {
                 continue;
             }
             send(context, wsResponse);
@@ -301,6 +311,7 @@ public class Im extends ImConfig {
         if (userFriends == null) {
             userFriends = get().messageHelper.getUserFriends(userId);
         }
+        log.info("{}",group);
         // 获取好友信息
         String friendInfoStr = userFriends.get(group.getRoomId());
         if (StrUtil.isNotBlank(friendInfoStr)) {
@@ -310,13 +321,15 @@ public class Im extends ImConfig {
             if (StrUtil.isBlank(group.getRoomName())) {
                 group.getUsers().forEach(x -> {
                     if (x.get_id().equals(friendInfo.get_id())) {
-                        group.setRoomName(x.getUsername());
+                        if(StrUtil.isBlank(friendInfo.getRemark())){
+                            group.setRoomName(x.getUsername());
+                        }
                         group.setAvatar(x.getAvatar());
                     }
                 });
             }
         }
+        log.info("{}",group);
     }
-
 
 }
