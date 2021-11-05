@@ -1,6 +1,7 @@
 package org.example.packets;
 
 import cn.hutool.core.bean.BeanUtil;
+import com.alibaba.fastjson.annotation.JSONField;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,7 +20,8 @@ public class User implements Serializable {
     /**
      * 主键
      */
-    private String _id;
+    @JSONField(name = "_id")
+    private String id;
 
     /**
      * 用户名/ 昵称

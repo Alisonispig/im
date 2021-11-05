@@ -53,7 +53,7 @@ public class EditProfileHandler extends AbstractCmdHandler {
         Im.send(channelContext, response);
 
         // 给用户所在的群组发送消息
-        List<Group> userGroups = messageHelper.getUserGroups(userInfo.get_id());
+        List<Group> userGroups = messageHelper.getUserGroups(userInfo.getId());
         for (Group userGroup : userGroups) {
 /*            List<User> groupUsers = messageHelper.getGroupUsers(userGroup.getRoomId());
             userGroup.setUsers(groupUsers);*/

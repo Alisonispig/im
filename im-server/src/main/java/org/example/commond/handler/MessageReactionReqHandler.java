@@ -41,7 +41,7 @@ public class MessageReactionReqHandler extends AbstractCmdHandler {
 
         // 添加一个表情回复
         messageHelper.addReaction(messageReactionReqBody.getRoomId(),messageReactionReqBody.getMessageId()
-                ,messageReactionReqBody.getReaction(),messageReactionReqBody.getRemove(),user.get_id());
+                ,messageReactionReqBody.getReaction(),messageReactionReqBody.getRemove(),user.getId());
 //        messageHelper.getGroupMessage(messageReactionReqBody.getRoomId(),String.valueOf());
 
         Map<String, List<String>> reaction = messageHelper.getReaction(messageReactionReqBody.getRoomId(), messageReactionReqBody.getMessageId());

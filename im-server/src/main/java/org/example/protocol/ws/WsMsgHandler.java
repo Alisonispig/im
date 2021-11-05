@@ -46,7 +46,7 @@ public class WsMsgHandler implements IWsMsgHandler {
     @Override
     public Object onClose(WsRequest wsRequest, byte[] bytes, ChannelContext channelContext) {
         AbstractCmdHandler command = CommandManager.getCommand(CommandEnum.COMMAND_CLOSE_REQ);
-        WsRequest request = WsRequest.fromText(Im.getUser(channelContext).get_id(), Im.CHARSET);
+        WsRequest request = WsRequest.fromText(Im.getUser(channelContext).getId(), Im.CHARSET);
         command.handler(request, channelContext);
         System.out.println("关闭连接");
         return null;

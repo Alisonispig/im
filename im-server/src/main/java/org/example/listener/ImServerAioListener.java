@@ -64,7 +64,7 @@ public class ImServerAioListener extends WsServerAioListener {
 
         User user = Im.getUser(channelContext);
 
-        UserStatusBody build = UserStatusBody.builder().user(messageHelper.getUserInfo(user.get_id())).build();
+        UserStatusBody build = UserStatusBody.builder().user(messageHelper.getUserInfo(user.getId())).build();
 
         for (Group group : user.getGroups()) {
             // 给所在群组发送离线消息 用户状态更新

@@ -25,7 +25,7 @@ public class UserListHandler extends AbstractCmdHandler {
         User user = Im.getUser(channelContext);
 
         List<User> userList = Im.get().messageHelper.getUserList();
-        List<User> collect = userList.stream().filter(x -> !x.get_id().equals(user.get_id())).collect(Collectors.toList());
+        List<User> collect = userList.stream().filter(x -> !x.getId().equals(user.getId())).collect(Collectors.toList());
 
         WsResponse response = WsResponse.fromText(RespBody.success(CommandEnum.COMMAND_USER_LIST_RESP, collect), Im.CHARSET);
 

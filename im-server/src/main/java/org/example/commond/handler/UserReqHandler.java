@@ -43,10 +43,10 @@ public class UserReqHandler extends AbstractCmdHandler {
 
 
         // 好友信息
-        Map<String, String> userFriends = messageHelper.getUserFriends(user.get_id());
+        Map<String, String> userFriends = messageHelper.getUserFriends(user.getId());
 
         List<Group> chats = new ArrayList<>();
-        List<String> chatKeys = messageHelper.getUserChats(user.get_id());
+        List<String> chatKeys = messageHelper.getUserChats(user.getId());
 
         for (Group group : user.getGroups()) {
             // 组织群组用户信息
@@ -54,7 +54,7 @@ public class UserReqHandler extends AbstractCmdHandler {
             List<User> groupUsers = ImConfig.get().messageHelper.getGroupUsers(roomId);
             group.setUsers(groupUsers);
 
-            Im.resetGroup(group, user.get_id(), userFriends);
+            Im.resetGroup(group, user.getId(), userFriends);
 
             // 解析会话信息
             if (chatKeys.contains(roomId)) {
@@ -68,7 +68,7 @@ public class UserReqHandler extends AbstractCmdHandler {
 
         for (Group group : user.getGroups()) {
             // 获取到最后一条消息未读消息,并且发重新发送
-            List<String> unReadMessage = messageHelper.getUnReadMessage(user.get_id(), group.getRoomId());
+            List<String> unReadMessage = messageHelper.getUnReadMessage(user.getId(), group.getRoomId());
             if (CollUtil.isNotEmpty(unReadMessage)) {
                 String messageId = unReadMessage.get(0);
                 ChatReqBody chatReqBody = messageHelper.getGroupMessage(group.getRoomId(), messageId);

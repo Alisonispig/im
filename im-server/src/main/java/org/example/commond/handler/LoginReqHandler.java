@@ -48,17 +48,17 @@ public class LoginReqHandler extends AbstractCmdHandler {
         if (user == null) {
             String url = UploadService.uploadDefault(DefaultEnum.ACCOUNT);
             log.info("未查询到用户信息，模拟创建用户");
-            user = User.builder()._id(IdUtil.getSnowflake().nextIdStr()).username(TestUtil.chineseName()).status(Status.online())
+            user = User.builder().id(IdUtil.getSnowflake().nextIdStr()).username(TestUtil.chineseName()).status(Status.online())
                     .avatar(url).build();
-            Im.get().messageHelper.initAccount(account, user.get_id());
+            Im.get().messageHelper.initAccount(account, user.getId());
         }
 
         // 获取持久化用户群组信息
-        List<Group> groups = messageHelper.getUserGroups(user.get_id());
+        List<Group> groups = messageHelper.getUserGroups(user.getId());
         user.setStatus(Status.online());
         user.setGroups(groups);
 
-        String success = RespBody.success(CommandEnum.COMMAND_LOGIN_RESP, new LoginRespBody(user.get_id()));
+        String success = RespBody.success(CommandEnum.COMMAND_LOGIN_RESP, new LoginRespBody(user.getId()));
         Im.bSend(channelContext, WsResponse.fromText(success, ImConfig.CHARSET));
 
 

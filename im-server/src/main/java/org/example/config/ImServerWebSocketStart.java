@@ -2,7 +2,7 @@ package org.example.config;
 
 import org.example.listener.*;
 import org.example.protocol.ws.WsMsgHandler;
-import org.example.store.RedisMessageHelper;
+import org.example.store.mango.MongoMessageHelper;
 import org.tio.server.ServerTioConfig;
 import org.tio.websocket.server.WsServerStarter;
 
@@ -29,7 +29,7 @@ public class ImServerWebSocketStart {
         ImServerWebSocketStart appStarter = new ImServerWebSocketStart(ImConfig.socketPort, WsMsgHandler.me);
 
         ImConfig imServerConfig = new ImConfig();
-        imServerConfig.setMessageHelper(new RedisMessageHelper());
+        imServerConfig.setMessageHelper(new MongoMessageHelper());
         imServerConfig.setImUserListener(new ImUserListenerAdapter(new ImServerUserListener()));
         imServerConfig.setTioConfig(appStarter.serverTioConfig);
 

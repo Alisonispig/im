@@ -40,7 +40,7 @@ public class MessageReqHandler extends AbstractCmdHandler {
             User userInfo = messageHelper.getUserInfo(chatRespBody.getSenderId());
             chatRespBody.setAvatar(userInfo.getAvatar());
             chatRespBody.setUsername(userInfo.getUsername());
-            chatRespBody.setCurrentUserId(user.get_id());
+            chatRespBody.setCurrentUserId(user.getId());
             chatRespBody.setDeleted(false);
             chatRespBody.setSystem(false);
             Map<String, List<String>> reaction = messageHelper.getReaction(messageReqBody.getRoomId(), chatRespBody.get_id());

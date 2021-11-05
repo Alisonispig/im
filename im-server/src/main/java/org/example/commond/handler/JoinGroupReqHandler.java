@@ -49,17 +49,17 @@ public class JoinGroupReqHandler extends AbstractCmdHandler {
         // 绑定到群聊
         for (User addUser : joinGroupNotifyBody.getUsers()) {
             // 重写群组名称
-            Im.resetGroup(group, addUser.get_id(), null);
-            List<ChannelContext> channelByUserId = Im.getChannelByUserId(addUser.get_id());
+            Im.resetGroup(group, addUser.getId(), null);
+            List<ChannelContext> channelByUserId = Im.getChannelByUserId(addUser.getId());
             if (CollUtil.isNotEmpty(channelByUserId)) {
                 for (ChannelContext context : channelByUserId) {
                     Im.addGroup(context, group);
                     Im.bindGroup(context, group);
                 }
             }
-            messageHelper.addGroupUser(addUser.get_id(), group.getRoomId());
-            messageHelper.initUserGroups(addUser.get_id(), group.getRoomId());
-            messageHelper.addChat(addUser.get_id(), group.getRoomId());
+            messageHelper.addGroupUser(addUser.getId(), group.getRoomId());
+            messageHelper.initUserGroups(addUser.getId(), group.getRoomId());
+            messageHelper.addChat(addUser.getId(), group.getRoomId());
         }
 
         joinGroupNotifyBody.setGroup(group);

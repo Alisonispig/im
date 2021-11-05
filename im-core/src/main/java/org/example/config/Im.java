@@ -67,11 +67,11 @@ public class Im extends ImConfig {
      * @param user           绑定用户信息
      */
     public static void bindUser(ChannelContext channelContext, User user) {
-        if (Objects.isNull(user) || StrUtil.isBlank(user.get_id())) {
+        if (Objects.isNull(user) || StrUtil.isBlank(user.getId())) {
             log.error("user or userId is null");
             return;
         }
-        String userId = user.get_id();
+        String userId = user.getId();
         ImSessionContext imSessionContext = (ImSessionContext) channelContext.get(KeyEnum.IM_CHANNEL_SESSION_CONTEXT_KEY.getKey());
         Tio.bindUser(channelContext, userId);
         SetWithLock<ChannelContext> channelContextSetWithLock = Tio.getByUserid(Im.get().getTioConfig(), userId);
@@ -103,7 +103,7 @@ public class Im extends ImConfig {
             return;
         }
         List<User> userList = new ArrayList<>();
-        joinGroupNotifyBody.getUsers().forEach(x -> userList.add(get().messageHelper.getUserInfo(x.get_id())));
+        joinGroupNotifyBody.getUsers().forEach(x -> userList.add(get().messageHelper.getUserInfo(x.getId())));
 
         List<ChannelContext> channelContexts = convertChannel(users);
         String collect = userList.stream().map(User::getUsername).collect(Collectors.joining(StrUtil.COMMA));
@@ -135,13 +135,13 @@ public class Im extends ImConfig {
         List<User> groupUsers = Im.get().messageHelper.getGroupUsers(chatRespBody.getRoomId());
         for (User groupUser : groupUsers) {
             // 给这个用户设置未读消息
-            get().messageHelper.putUnReadMessage(groupUser.get_id(), chatRespBody.getRoomId(), chatRespBody.get_id());
+            get().messageHelper.putUnReadMessage(groupUser.getId(), chatRespBody.getRoomId(), chatRespBody.get_id());
             // 取出未读消息, 并设置未读数量
-            List<String> unReadMessage = get().messageHelper.getUnReadMessage(groupUser.get_id(), chatRespBody.getRoomId());
+            List<String> unReadMessage = get().messageHelper.getUnReadMessage(groupUser.getId(), chatRespBody.getRoomId());
             chatRespBody.setUnreadCount(CollUtil.isEmpty(unReadMessage) ? 0 : unReadMessage.size());
             WsResponse wsResponse = WsResponse.fromText(RespBody.success(CommandEnum.COMMAND_CHAT_REQ, chatRespBody), CHARSET);
             // 发送给在线用户
-            List<ChannelContext> channelContexts = getChannelByUserId(groupUser.get_id());
+            List<ChannelContext> channelContexts = getChannelByUserId(groupUser.getId());
 
             // 如果当前
             if (CollUtil.isNotEmpty(channelContexts)) {
@@ -175,7 +175,7 @@ public class Im extends ImConfig {
         User nowUser = getUser(channelContext, false);
         for (ChannelContext context : channelContexts) {
             User user = getUser(context);
-            if (user.get_id().equals(nowUser.get_id()) && !sendAll) {
+            if (user.getId().equals(nowUser.getId()) && !sendAll) {
                 continue;
             }
             send(context, wsResponse);
@@ -320,7 +320,7 @@ public class Im extends ImConfig {
             group.setRoomName(friendInfo.getRemark());
             if (StrUtil.isBlank(group.getRoomName())) {
                 group.getUsers().forEach(x -> {
-                    if (x.get_id().equals(friendInfo.get_id())) {
+                    if (x.getId().equals(friendInfo.get_id())) {
                         if(StrUtil.isBlank(friendInfo.getRemark())){
                             group.setRoomName(x.getUsername());
                         }

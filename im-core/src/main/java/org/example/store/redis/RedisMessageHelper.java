@@ -1,4 +1,4 @@
-package org.example.store;
+package org.example.store.redis;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
@@ -9,7 +9,7 @@ import org.example.config.Im;
 import org.example.enums.KeyEnum;
 import org.example.packets.*;
 import org.example.packets.handler.ChatReqBody;
-import org.example.store.redis.RedisStore;
+import org.example.store.MessageHelper;
 import org.tio.core.ChannelContext;
 
 import java.util.ArrayList;
@@ -78,14 +78,14 @@ public class RedisMessageHelper implements MessageHelper {
     @Override
     public void userOffline(ChannelContext channelContext) {
         User user = Im.getUser(channelContext);
-        User userInfo = getUserInfo(user.get_id());
+        User userInfo = getUserInfo(user.getId());
         userInfo.setStatus(Status.offline());
         updateUserInfo(userInfo);
     }
 
     @Override
     public void updateUserInfo(User user) {
-        RedisStore.set(KeyEnum.IM_USER_INFO_KEY.getKey() + StrUtil.C_COLON + user.get_id(), user);
+        RedisStore.set(KeyEnum.IM_USER_INFO_KEY.getKey() + StrUtil.C_COLON + user.getId(), user);
     }
 
 
@@ -104,7 +104,7 @@ public class RedisMessageHelper implements MessageHelper {
     @Override
     public void clearUnReadMessage(ChannelContext channelContext, String roomId) {
         User user = Im.getUser(channelContext);
-        String key = KeyEnum.IM_GROUP_UNREAD_MESSAGE_KEY.getKey() + StrUtil.C_COLON + user.get_id() + StrUtil.C_COLON + roomId;
+        String key = KeyEnum.IM_GROUP_UNREAD_MESSAGE_KEY.getKey() + StrUtil.C_COLON + user.getId() + StrUtil.C_COLON + roomId;
         RedisStore.remove(key);
     }
 
@@ -162,7 +162,7 @@ public class RedisMessageHelper implements MessageHelper {
     @Override
     public void addChat(String roomId, List<User> users) {
         for (User user : users) {
-            addChat(user.get_id(), roomId);
+            addChat(user.getId(), roomId);
         }
     }
 
@@ -206,10 +206,10 @@ public class RedisMessageHelper implements MessageHelper {
         String roomId = group.getRoomId();
         User user = Im.getUser(channelContext);
         // 将当前用户加入到群组中
-        addGroupUser(user.get_id(), group.getRoomId());
+        addGroupUser(user.getId(), group.getRoomId());
 
         // 初始化用户的群组信息
-        initUserGroups(user.get_id(), roomId);
+        initUserGroups(user.getId(), roomId);
 
         for (Group userGroup : user.getGroups()) {
             if (!userGroup.getRoomId().equals(roomId)) {

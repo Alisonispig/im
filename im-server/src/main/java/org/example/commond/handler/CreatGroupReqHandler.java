@@ -54,19 +54,19 @@ public class CreatGroupReqHandler extends AbstractCmdHandler {
             build.setAvatar(url);
         }
         for (User addUser : request.getUsers()) {
-            User userInfo = messageHelper.getUserInfo(addUser.get_id());
+            User userInfo = messageHelper.getUserInfo(addUser.getId());
             build.getUsers().add(userInfo);
         }
 
         // 如果是好友会话 1. 将群组的好友ID和备注字段放进各自的信息中
         if (request.getIsFriend()) {
-            messageHelper.putFriendInfo(user.get_id(), build.getRoomId(), new FriendInfo(request.getUsers().get(0).get_id(), ""));
-            messageHelper.putFriendInfo(request.getUsers().get(0).get_id(), build.getRoomId(), new FriendInfo(user.get_id(), ""));
+            messageHelper.putFriendInfo(user.getId(), build.getRoomId(), new FriendInfo(request.getUsers().get(0).getId(), ""));
+            messageHelper.putFriendInfo(request.getUsers().get(0).getId(), build.getRoomId(), new FriendInfo(user.getId(), ""));
         }
 
         // 更新群组信息
         messageHelper.setGroupInfo(build);
-        messageHelper.addGroupUser(user.get_id(),build.getRoomId());
+        messageHelper.addGroupUser(user.getId(),build.getRoomId());
 
         JoinGroupNotifyBody joinGroupNotifyBody = JoinGroupNotifyBody.builder().group(build).users(request.getUsers()).code(JoinGroupEnum.STATE_CREATE.getValue()).build();
 
@@ -75,7 +75,7 @@ public class CreatGroupReqHandler extends AbstractCmdHandler {
         AbstractCmdHandler command = CommandManager.getCommand(CommandEnum.COMMAND_JOIN_GROUP_REQ);
         command.handler(wsRequest, channelContext);
 
-        Im.resetGroup(build, user.get_id(), null);
+        Im.resetGroup(build, user.getId(), null);
 
         // 发送群组创建成功消息
         WsResponse response = WsResponse.fromText(RespBody.success(CommandEnum.COMMAND_CREATE_GROUP_RESP, build), Im.CHARSET);
@@ -84,7 +84,7 @@ public class CreatGroupReqHandler extends AbstractCmdHandler {
         Im.addGroup(channelContext, joinGroupNotifyBody.getGroup());
         Im.bindGroup(channelContext, joinGroupNotifyBody.getGroup());
         // 添加会话
-        messageHelper.addChat(user.get_id(), build.getRoomId());
+        messageHelper.addChat(user.getId(), build.getRoomId());
         return null;
     }
 }
