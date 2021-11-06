@@ -20,13 +20,12 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 /**
- * @author tuine
- * @date 2021/3/23
+* minio 文件服务
  */
 @Slf4j
 public class MinIoUtils {
 
-    static String MINIO_BUCKET = "tuinetest";
+    static String MINIO_BUCKET = "im";
 
     private static CustomMinioClient customMinioClient;
 
@@ -72,11 +71,8 @@ public class MinIoUtils {
      */
     public static String getUploadObjectUrl(String objectName) {
         // 上传文件时携带content-type头即可
-        /*if (StrUtil.isBlank(contentType)) {
-            contentType = "application/octet-stream";
-        }
         HashMultimap<String, String> headers = HashMultimap.create();
-        headers.put("Content-Type", contentType);*/
+        headers.put("Content-Type", "application/octet-stream");
         try {
             return customMinioClient.getPresignedObjectUrl(
                     GetPresignedObjectUrlArgs.builder()
@@ -84,7 +80,7 @@ public class MinIoUtils {
                             .bucket(MINIO_BUCKET)
                             .object(objectName)
                             .expiry(1, TimeUnit.DAYS)
-                            //.extraHeaders(headers)
+                            .extraHeaders(headers)
                             .build()
             );
         } catch (Exception e) {
@@ -132,7 +128,7 @@ public class MinIoUtils {
             result.put("uploadUrls", partList);
         } catch (Exception e) {
             e.printStackTrace();
-            return null;
+            return new HashMap<>();
         }
 
         return result;
@@ -147,7 +143,6 @@ public class MinIoUtils {
      */
     public static boolean mergeMultipartUpload(String objectName, String uploadId) {
         try {
-            //TODO::目前仅做了最大1000分片
             Part[] parts = new Part[1000];
             ListPartsResponse partResult = customMinioClient.listMultipart(MINIO_BUCKET, null, objectName, 1000, 0, uploadId, null, null);
             int partNumber = 1;

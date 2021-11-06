@@ -16,8 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @author tuine
- * @date 2021/3/23
+ * 文件上传服务
  */
 public class UploadService {
     private static final FileService fileService = new FileService();
@@ -27,10 +26,11 @@ public class UploadService {
         String filePath = IdUtil.getSnowflake().nextIdStr() + '.' + FileNameUtil.extName(filename);
 
         Map<String, Object> result = new HashMap<>();
-        // TODO::单文件上传可拆分，这里只做演示，可直接上传完成
         if (partCount == 1) {
             String uploadObjectUrl = MinIoUtils.getUploadObjectUrl(filePath);
-            result.put("uploadUrls", ImmutableList.of(uploadObjectUrl));
+            if(uploadObjectUrl != null) {
+                result.put("uploadUrls", ImmutableList.of(uploadObjectUrl));
+            }
         } else {
             result = MinIoUtils.initMultiPartUpload(filePath, partCount, contentType);
         }
