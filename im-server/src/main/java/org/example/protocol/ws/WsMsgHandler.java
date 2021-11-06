@@ -7,7 +7,7 @@ import org.example.commond.CommandManager;
 import org.example.commond.handler.LoginReqHandler;
 import org.example.config.Im;
 import org.example.enums.CommandEnum;
-import org.example.packets.Message;
+import org.example.packets.bean.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.tio.core.ChannelContext;
@@ -46,17 +46,20 @@ public class WsMsgHandler implements IWsMsgHandler {
     @Override
     public Object onClose(WsRequest wsRequest, byte[] bytes, ChannelContext channelContext) {
         AbstractCmdHandler command = CommandManager.getCommand(CommandEnum.COMMAND_CLOSE_REQ);
-        WsRequest request = WsRequest.fromText(Im.getUser(channelContext).getId(), Im.CHARSET);
-        command.handler(request, channelContext);
-        System.out.println("关闭连接");
+        User user = Im.getUser(channelContext);
+        if(user != null){
+            WsRequest request = WsRequest.fromText(user.getId(), Im.CHARSET);
+            command.handler(request, channelContext);
+            System.out.println("关闭连接");
+        }
         return null;
     }
 
     @Override
     public Object onText(WsRequest wsRequest, String text, ChannelContext channelContext) {
         log.info("socket消息:{}", text);
-        Message message = JSON.parseObject(text, Message.class);
-        CommandEnum commandEnum = CommandEnum.forNumber(message.getCmd());
+        Integer cmd = JSON.parseObject(text).getInteger("cmd");
+        CommandEnum commandEnum = CommandEnum.forNumber(cmd);
         AbstractCmdHandler command = CommandManager.getCommand(commandEnum);
         WsResponse wsResponse = command.handler(wsRequest, channelContext);
         if (ObjectUtil.isNotNull(wsResponse)) {

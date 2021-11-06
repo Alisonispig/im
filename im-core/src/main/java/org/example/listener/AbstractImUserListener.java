@@ -1,7 +1,6 @@
 package org.example.listener;
 
-import org.example.config.ImConfig;
-import org.example.packets.User;
+import org.example.packets.bean.User;
 import org.tio.core.ChannelContext;
 
 public abstract class AbstractImUserListener implements ImUserListener {
@@ -12,7 +11,6 @@ public abstract class AbstractImUserListener implements ImUserListener {
 
     @Override
     public void onAfterBind(ChannelContext channelContext, User user) {
-        ImConfig.get().messageHelper.onAfterUserBind(channelContext, user);
         doAfterBind(channelContext, user);
     }
 

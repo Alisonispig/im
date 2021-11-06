@@ -2,23 +2,17 @@ package org.example.config;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
-import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
-import org.example.enums.CommandEnum;
 import org.example.enums.KeyEnum;
-import org.example.packets.FriendInfo;
-import org.example.packets.Group;
-import org.example.packets.User;
-import org.example.packets.handler.*;
+import org.example.packets.bean.Group;
+import org.example.packets.bean.User;
 import org.tio.core.ChannelContext;
 import org.tio.core.Tio;
 import org.tio.core.intf.Packet;
 import org.tio.utils.lock.SetWithLock;
-import org.tio.websocket.common.WsResponse;
 
 import java.util.*;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
-import java.util.stream.Collectors;
 
 @Slf4j
 public class Im extends ImConfig {
@@ -90,113 +84,7 @@ public class Im extends ImConfig {
         }
     }
 
-    public static void sendToGroup(JoinGroupNotifyBody joinGroupNotifyBody) {
-
-        List<User> groupUsers = Im.get().messageHelper.getGroupUsers(joinGroupNotifyBody.getGroup().getRoomId());
-        joinGroupNotifyBody.getGroup().setUsers(groupUsers);
-
-        if (CollUtil.isEmpty(joinGroupNotifyBody.getUsers())) {
-            return;
-        }
-        SetWithLock<ChannelContext> users = Tio.getByGroup(Im.get().tioConfig, joinGroupNotifyBody.getGroup().getRoomId());
-        if (users == null) {
-            return;
-        }
-        List<User> userList = new ArrayList<>();
-        joinGroupNotifyBody.getUsers().forEach(x -> userList.add(get().messageHelper.getUserInfo(x.getId())));
-
-        List<ChannelContext> channelContexts = convertChannel(users);
-        String collect = userList.stream().map(User::getUsername).collect(Collectors.joining(StrUtil.COMMA));
-
-        joinGroupNotifyBody.setMessage(collect + ",已加入群聊!");
-
-        WsResponse wsResponse = WsResponse.fromText(RespBody.success(CommandEnum.COMMAND_JOIN_GROUP_NOTIFY_RESP, joinGroupNotifyBody), CHARSET);
-        for (ChannelContext context : channelContexts) {
-            send(context, wsResponse);
-        }
-    }
-
-    /**
-     * 聊天消息
-     *
-     * @param chatRespBody 聊天消息体
-     */
-    public static void sendToGroup(ChatRespBody chatRespBody) {
-        // 构建消息体
-        User userInfo = get().messageHelper.getUserInfo(chatRespBody.getSenderId());
-        chatRespBody.setAvatar(userInfo.getAvatar());
-        chatRespBody.setUsername(userInfo.getUsername());
-        chatRespBody.setDeleted(false);
-        chatRespBody.setSystem(false);
-
-        log.info("目标数据：" + RespBody.success(CommandEnum.COMMAND_CHAT_REQ, chatRespBody));
-
-        // 获取到群组内的所有用户
-        List<User> groupUsers = Im.get().messageHelper.getGroupUsers(chatRespBody.getRoomId());
-        for (User groupUser : groupUsers) {
-            // 给这个用户设置未读消息
-            get().messageHelper.putUnReadMessage(groupUser.getId(), chatRespBody.getRoomId(), chatRespBody.get_id());
-            // 取出未读消息, 并设置未读数量
-            List<String> unReadMessage = get().messageHelper.getUnReadMessage(groupUser.getId(), chatRespBody.getRoomId());
-            chatRespBody.setUnreadCount(CollUtil.isEmpty(unReadMessage) ? 0 : unReadMessage.size());
-            WsResponse wsResponse = WsResponse.fromText(RespBody.success(CommandEnum.COMMAND_CHAT_REQ, chatRespBody), CHARSET);
-            // 发送给在线用户
-            List<ChannelContext> channelContexts = getChannelByUserId(groupUser.getId());
-
-            // 如果当前
-            if (CollUtil.isNotEmpty(channelContexts)) {
-                for (ChannelContext channelContext : channelContexts) {
-                    send(channelContext, wsResponse);
-                }
-            }
-        }
-    }
-
-    /**
-     * 用户状态变更消息
-     *
-     * @param userStatusBody 用户状态消息
-     * @param channelContext 群组
-     */
-    public static void sendToGroup(UserStatusBody userStatusBody, ChannelContext channelContext) {
-        sendToGroup(userStatusBody,channelContext,false);
-    }
-
-    /**
-     * 用户状态变更消息
-     *
-     * @param userStatusBody 用户状态消息
-     * @param channelContext 群组
-     */
-    public static void sendToGroup(UserStatusBody userStatusBody, ChannelContext channelContext,Boolean sendAll) {
-        WsResponse wsResponse = WsResponse.fromText(RespBody.success(CommandEnum.COMMAND_USER_STATUS_RESP, userStatusBody), CHARSET);
-        SetWithLock<ChannelContext> users = Tio.getByGroup(Im.get().getTioConfig(), userStatusBody.getGroup().getRoomId());
-        List<ChannelContext> channelContexts = convertChannel(users);
-        User nowUser = getUser(channelContext, false);
-        for (ChannelContext context : channelContexts) {
-            User user = getUser(context);
-            if (user.getId().equals(nowUser.getId()) && !sendAll) {
-                continue;
-            }
-            send(context, wsResponse);
-        }
-    }
-
-    /**
-     * 群组表情回复
-     *
-     * @param messageReactionRespBody 表情回复
-     */
-    public static void sendToGroup(MessageReactionRespBody messageReactionRespBody) {
-        WsResponse wsResponse = WsResponse.fromText(RespBody.success(CommandEnum.COMMAND_SEND_MESSAGE_REACTION_RESP, messageReactionRespBody), CHARSET);
-        SetWithLock<ChannelContext> users = Tio.getByGroup(Im.get().getTioConfig(), messageReactionRespBody.getRoomId());
-        List<ChannelContext> channelContexts = convertChannel(users);
-        for (ChannelContext context : channelContexts) {
-            send(context, wsResponse);
-        }
-    }
-
-    private static List<ChannelContext> convertChannel(SetWithLock<ChannelContext> channelContextSetWithLock) {
+    public static List<ChannelContext> convertChannel(SetWithLock<ChannelContext> channelContextSetWithLock) {
         ReentrantReadWriteLock.ReadLock lock = channelContextSetWithLock.getLock().readLock();
         try {
             lock.lock();
@@ -263,8 +151,8 @@ public class Im extends ImConfig {
     public static User getUser(ChannelContext channelContext, boolean isAllInfo) {
         ImSessionContext imSessionContext = (ImSessionContext) channelContext.get(KeyEnum.IM_CHANNEL_SESSION_CONTEXT_KEY.getKey());
         User user = imSessionContext.getImClientNode().getUser();
-        if(user == null){
-            Im.close(channelContext,"异常关闭");
+        if (user == null) {
+            Im.close(channelContext, "异常关闭");
         }
         if (isAllInfo) {
             return user;
@@ -307,29 +195,5 @@ public class Im extends ImConfig {
     }
 
 
-    public static void resetGroup(Group group, String userId, Map<String, String> userFriends) {
-        if (userFriends == null) {
-            userFriends = get().messageHelper.getUserFriends(userId);
-        }
-        log.info("{}",group);
-        // 获取好友信息
-        String friendInfoStr = userFriends.get(group.getRoomId());
-        if (StrUtil.isNotBlank(friendInfoStr)) {
-            FriendInfo friendInfo = JSON.parseObject(friendInfoStr, FriendInfo.class);
-            group.setFriendId(friendInfo.get_id());
-            group.setRoomName(friendInfo.getRemark());
-            if (StrUtil.isBlank(group.getRoomName())) {
-                group.getUsers().forEach(x -> {
-                    if (x.getId().equals(friendInfo.get_id())) {
-                        if(StrUtil.isBlank(friendInfo.getRemark())){
-                            group.setRoomName(x.getUsername());
-                        }
-                        group.setAvatar(x.getAvatar());
-                    }
-                });
-            }
-        }
-        log.info("{}",group);
-    }
 
 }

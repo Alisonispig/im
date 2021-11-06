@@ -6,10 +6,11 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import lombok.extern.slf4j.Slf4j;
 import org.example.commond.AbstractCmdHandler;
+import org.example.config.Chat;
 import org.example.config.Im;
 import org.example.enums.CommandEnum;
-import org.example.packets.Group;
-import org.example.packets.User;
+import org.example.packets.bean.Group;
+import org.example.packets.bean.User;
 import org.example.packets.handler.JoinGroupNotifyBody;
 import org.example.packets.handler.RespBody;
 import org.tio.core.ChannelContext;
@@ -39,8 +40,8 @@ public class JoinGroupReqHandler extends AbstractCmdHandler {
             return null;
         }
 
-        Group group = messageHelper.getGroupInfo(joinGroupNotifyBody.getGroup().getRoomId());
-        List<User> groupUsers = messageHelper.getGroupUsers(group.getRoomId());
+        Group group = groupService.getGroupInfo(joinGroupNotifyBody.getGroup().getRoomId());
+        List<User> groupUsers = userGroupService.getGroupUsers(group.getRoomId());
         group.setUsers(groupUsers);
 
         // TODO 加入群组是否成功
@@ -49,7 +50,7 @@ public class JoinGroupReqHandler extends AbstractCmdHandler {
         // 绑定到群聊
         for (User addUser : joinGroupNotifyBody.getUsers()) {
             // 重写群组名称
-            Im.resetGroup(group, addUser.getId(), null);
+            Chat.resetGroup(group, addUser.getId());
             List<ChannelContext> channelByUserId = Im.getChannelByUserId(addUser.getId());
             if (CollUtil.isNotEmpty(channelByUserId)) {
                 for (ChannelContext context : channelByUserId) {
@@ -57,9 +58,9 @@ public class JoinGroupReqHandler extends AbstractCmdHandler {
                     Im.bindGroup(context, group);
                 }
             }
-            messageHelper.addGroupUser(addUser.getId(), group.getRoomId());
-            messageHelper.initUserGroups(addUser.getId(), group.getRoomId());
-            messageHelper.addChat(addUser.getId(), group.getRoomId());
+            userGroupService.addGroupUser(group.getRoomId(),addUser.getId());
+            // TODO CHAT
+//            messageHelper.addChat(addUser.getId(), group.getRoomId());
         }
 
         joinGroupNotifyBody.setGroup(group);
@@ -67,7 +68,7 @@ public class JoinGroupReqHandler extends AbstractCmdHandler {
         Im.send(channelContext, wsResponse);
 
         // 发送加入群组消息
-        Im.sendToGroup(joinGroupNotifyBody);
+        Chat.sendToGroup(joinGroupNotifyBody);
 
         return null;
     }

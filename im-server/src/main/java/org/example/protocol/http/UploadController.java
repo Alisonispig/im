@@ -9,6 +9,7 @@ import org.example.config.Im;
 import org.example.packets.file.FileInit;
 import org.example.packets.file.FileMerge;
 import org.example.protocol.http.service.UploadService;
+import org.example.service.FileService;
 import org.example.util.ThreadPoolUtil;
 import org.tio.http.common.HttpRequest;
 import org.tio.http.common.HttpResponse;
@@ -25,6 +26,11 @@ import java.util.concurrent.CompletableFuture;
 @RequestPath
 public class UploadController {
 
+    private final FileService fileService;
+
+    public UploadController() {
+        fileService = new FileService();
+    }
 
     @RequestPath("/multipart/init")
     public HttpResponse initMultiPartUpload(HttpRequest httpRequest) {
@@ -35,7 +41,7 @@ public class UploadController {
         String contentType = ObjectUtil.defaultIfNull(fileInit.getContentType(), "application/octet-stream");
         // md5-可进行秒传判断
         String md5 = ObjectUtil.defaultIfNull(fileInit.getMd5(), "");
-        String url = Im.get().messageHelper.getFileUrl(md5);
+        String url = fileService.getFileUrl(md5);
 
         if (StrUtil.isNotBlank(url)) {
             Map<String, Object> su = new HashMap<>();
@@ -73,11 +79,11 @@ public class UploadController {
             future.thenAccept((item) -> {
                 if (item) {
                     System.out.println(item);
-                    Im.get().messageHelper.setFileUrl(md5, objectName);
+                    fileService.setFileUrl(md5, objectName);
                 }
             });
         } else {
-            Im.get().messageHelper.setFileUrl(md5, objectName);
+            fileService.setFileUrl(md5, objectName);
         }
 
         return Resps.txt(request, "true");

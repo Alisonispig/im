@@ -1,4 +1,4 @@
-package org.example.packets;
+package org.example.packets.bean;
 
 import cn.hutool.core.bean.BeanUtil;
 import com.alibaba.fastjson.annotation.JSONField;
@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.bson.codecs.pojo.annotations.BsonId;
+import org.example.packets.Status;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -20,6 +22,7 @@ public class User implements Serializable {
     /**
      * 主键
      */
+    @BsonId
     @JSONField(name = "_id")
     private String id;
 

@@ -4,8 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.example.packets.Group;
-import org.example.packets.User;
+import org.example.packets.bean.Group;
+import org.example.packets.bean.User;
 
 @Builder
 @AllArgsConstructor

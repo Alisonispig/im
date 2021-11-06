@@ -1,24 +1,21 @@
-package org.example.packets.handler;
+package org.example.packets.bean;
 
 import com.alibaba.fastjson.annotation.JSONField;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
+import org.bson.codecs.pojo.annotations.BsonId;
 import org.example.packets.ReplyMessage;
+import org.example.packets.handler.FileMessageBody;
 
 import java.util.List;
 import java.util.Map;
 
-@Builder
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
-public class ChatRespBody {
+public class Message {
 
     /**
      * 消息ID
      */
+    @BsonId
     @JSONField(name = "_id")
     private String id;
 
@@ -46,16 +43,6 @@ public class ChatRespBody {
      * 房间ID
      */
     private String roomId;
-
-    /**
-     * 用户名
-     */
-    private String username;
-
-    /**
-     * 用户头像
-     */
-    private String avatar;
 
     /**
      * 年月日
@@ -103,5 +90,4 @@ public class ChatRespBody {
      * 表情回复消息
      */
     private Map<String, List<String>> reactions;
-
 }

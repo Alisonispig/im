@@ -2,12 +2,13 @@ package org.example.packets;
 
 import lombok.Builder;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
+import org.example.packets.bean.User;
 
-@EqualsAndHashCode(callSuper = true)
 @Builder
 @Data
-public class ImClientNode extends Message {
+public class ImClientNode {
+
+    private String id;
 
     /**
      * 客户端ip

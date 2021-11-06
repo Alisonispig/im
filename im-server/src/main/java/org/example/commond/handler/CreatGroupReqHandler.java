@@ -8,13 +8,13 @@ import com.alibaba.fastjson.serializer.SerializerFeature;
 import lombok.extern.slf4j.Slf4j;
 import org.example.commond.AbstractCmdHandler;
 import org.example.commond.CommandManager;
+import org.example.config.Chat;
 import org.example.config.Im;
 import org.example.enums.CommandEnum;
 import org.example.enums.DefaultEnum;
 import org.example.enums.JoinGroupEnum;
-import org.example.packets.FriendInfo;
-import org.example.packets.Group;
-import org.example.packets.User;
+import org.example.packets.bean.Group;
+import org.example.packets.bean.User;
 import org.example.packets.handler.CreateGroupReqBody;
 import org.example.packets.handler.JoinGroupNotifyBody;
 import org.example.packets.handler.RespBody;
@@ -23,6 +23,8 @@ import org.tio.core.ChannelContext;
 import org.tio.core.intf.Packet;
 import org.tio.websocket.common.WsRequest;
 import org.tio.websocket.common.WsResponse;
+
+import java.util.ArrayList;
 
 @Slf4j
 public class CreatGroupReqHandler extends AbstractCmdHandler {
@@ -34,6 +36,7 @@ public class CreatGroupReqHandler extends AbstractCmdHandler {
 
     @Override
     public WsResponse handler(Packet packet, ChannelContext channelContext) {
+
         log.info("创建群组");
         WsRequest httpPacket = (WsRequest) packet;
         System.out.println(httpPacket.getWsBodyText());
@@ -45,28 +48,27 @@ public class CreatGroupReqHandler extends AbstractCmdHandler {
 
         String url = UploadService.uploadDefault(DefaultEnum.ACCOUNT_GROUP);
         // 创建群聊
-        Group build = Group.builder().roomId(IdUtil.getSnowflake().nextIdStr()).index(System.currentTimeMillis()).roomName(roomName)
-                .addUser(user).build();
-        if(!request.getIsFriend()){
+        Group build = Group.builder().roomId(IdUtil.getSnowflake().nextIdStr()).isFriend(request.getIsFriend()).index(System.currentTimeMillis()).roomName(roomName).users(new ArrayList<>())
+                .build();
+        build.getUsers().add(user);
+        if (!request.getIsFriend()) {
             build.setAvatar(Im.fileUrl + request.getAvatar());
         }
-        if(!request.getIsFriend() && StrUtil.isBlank(request.getAvatar())){
+        if (!request.getIsFriend() && StrUtil.isBlank(request.getAvatar())) {
             build.setAvatar(url);
         }
         for (User addUser : request.getUsers()) {
-            User userInfo = messageHelper.getUserInfo(addUser.getId());
+            User userInfo = userService.getUserInfo(addUser.getId());
             build.getUsers().add(userInfo);
         }
 
         // 如果是好友会话 1. 将群组的好友ID和备注字段放进各自的信息中
         if (request.getIsFriend()) {
-            messageHelper.putFriendInfo(user.getId(), build.getRoomId(), new FriendInfo(request.getUsers().get(0).getId(), ""));
-            messageHelper.putFriendInfo(request.getUsers().get(0).getId(), build.getRoomId(), new FriendInfo(user.getId(), ""));
+            friendInfoService.createFriendTwoWay(build.getRoomId(), user.getId(), request.getUsers().get(0).getId());
         }
 
-        // 更新群组信息
-        messageHelper.setGroupInfo(build);
-        messageHelper.addGroupUser(user.getId(),build.getRoomId());
+        groupService.saveOrUpdateById(build);
+        userGroupService.addGroupUser(build.getRoomId(), user.getId());
 
         JoinGroupNotifyBody joinGroupNotifyBody = JoinGroupNotifyBody.builder().group(build).users(request.getUsers()).code(JoinGroupEnum.STATE_CREATE.getValue()).build();
 
@@ -75,7 +77,7 @@ public class CreatGroupReqHandler extends AbstractCmdHandler {
         AbstractCmdHandler command = CommandManager.getCommand(CommandEnum.COMMAND_JOIN_GROUP_REQ);
         command.handler(wsRequest, channelContext);
 
-        Im.resetGroup(build, user.getId(), null);
+        Chat.resetGroup(build, user.getId());
 
         // 发送群组创建成功消息
         WsResponse response = WsResponse.fromText(RespBody.success(CommandEnum.COMMAND_CREATE_GROUP_RESP, build), Im.CHARSET);
@@ -83,8 +85,8 @@ public class CreatGroupReqHandler extends AbstractCmdHandler {
 
         Im.addGroup(channelContext, joinGroupNotifyBody.getGroup());
         Im.bindGroup(channelContext, joinGroupNotifyBody.getGroup());
-        // 添加会话
-        messageHelper.addChat(user.getId(), build.getRoomId());
+//        // TODO 添加会话
+//        messageHelper.addChat(user.getId(), build.getRoomId());
         return null;
     }
 }

@@ -24,7 +24,7 @@ public class MessageReadReqHandler extends AbstractCmdHandler {
         WsRequest request = (WsRequest) packet;
 
         MessageReadReqBody messageReadReqBody = JSONObject.parseObject(request.getWsBodyText(), MessageReadReqBody.class);
-        Im.get().messageHelper.clearUnReadMessage(channelContext,messageReadReqBody.getRoomId());
+        unReadMessageService.clearUnReadMessage(Im.getUser(channelContext).getId(),messageReadReqBody.getRoomId());
 
         WsResponse response = WsResponse.fromText(RespBody.success(CommandEnum.COMMAND_MESSAGE_READ_RESP, messageReadReqBody), Im.CHARSET);
 

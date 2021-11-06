@@ -4,18 +4,18 @@ import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.example.commond.AbstractCmdHandler;
+import org.example.config.Chat;
 import org.example.config.Im;
 import org.example.config.ImConfig;
 import org.example.enums.CommandEnum;
 import org.example.enums.DefaultEnum;
-import org.example.packets.Group;
 import org.example.packets.Status;
-import org.example.packets.User;
+import org.example.packets.bean.Group;
+import org.example.packets.bean.User;
 import org.example.packets.handler.LoginRespBody;
 import org.example.packets.handler.RespBody;
 import org.example.packets.handler.UserStatusBody;
 import org.example.protocol.http.service.UploadService;
-import org.example.store.MessageHelper;
 import org.example.util.TestUtil;
 import org.tio.core.ChannelContext;
 import org.tio.core.intf.Packet;
@@ -34,7 +34,7 @@ public class LoginReqHandler extends AbstractCmdHandler {
 
     @Override
     public WsResponse handler(Packet packet, ChannelContext channelContext) {
-        MessageHelper messageHelper = ImConfig.get().messageHelper;
+
         HttpRequest httpRequest = (HttpRequest) packet;
         String account = httpRequest.getParam("account");
         String password = httpRequest.getParam("password");
@@ -44,17 +44,16 @@ public class LoginReqHandler extends AbstractCmdHandler {
         }
 
         // 持久化获取用户信息
-        User user = messageHelper.getByAccount(account);
+        User user = userService.getByAccount(account);
         if (user == null) {
             String url = UploadService.uploadDefault(DefaultEnum.ACCOUNT);
             log.info("未查询到用户信息，模拟创建用户");
-            user = User.builder().id(IdUtil.getSnowflake().nextIdStr()).username(TestUtil.chineseName()).status(Status.online())
+            user = User.builder().id(IdUtil.getSnowflake().nextIdStr()).account(account).username(TestUtil.chineseName()).status(Status.online())
                     .avatar(url).build();
-            Im.get().messageHelper.initAccount(account, user.getId());
         }
 
         // 获取持久化用户群组信息
-        List<Group> groups = messageHelper.getUserGroups(user.getId());
+        List<Group> groups = userGroupService.getUserGroups(user.getId());
         user.setStatus(Status.online());
         user.setGroups(groups);
 
@@ -71,10 +70,10 @@ public class LoginReqHandler extends AbstractCmdHandler {
             // 绑定群组
             Im.bindGroup(channelContext, group);
             // 给所在群组发送上线消息 用户状态更新
-            List<User> groupUsers = messageHelper.getGroupUsers(group.getRoomId());
+            List<User> groupUsers = userGroupService.getGroupUsers(group.getRoomId());
             group.setUsers(groupUsers);
             build.setGroup(group);
-            Im.sendToGroup(build, channelContext);
+            Chat.sendToGroup(build, channelContext);
         }
         return null;
     }

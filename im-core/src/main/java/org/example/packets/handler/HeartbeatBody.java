@@ -4,14 +4,13 @@
 package org.example.packets.handler;
 
 import lombok.Data;
-import org.example.packets.Message;
 
 /**
  * @author WChao
  *
  */
 @Data
-public class HeartbeatBody extends Message {
+public class HeartbeatBody  {
 	
 	private static final long serialVersionUID = -1773817279179288833L;
 

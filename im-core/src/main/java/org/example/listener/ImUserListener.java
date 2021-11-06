@@ -1,6 +1,6 @@
 package org.example.listener;
 
-import org.example.packets.User;
+import org.example.packets.bean.User;
 import org.tio.core.ChannelContext;
 
 public interface ImUserListener {

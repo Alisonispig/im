@@ -9,7 +9,7 @@ import org.example.config.Im;
 import org.example.config.ImConfig;
 import org.example.enums.DefaultEnum;
 import org.example.enums.KeyEnum;
-import org.example.store.redis.RedisStore;
+import org.example.service.FileService;
 import org.example.util.MinIoUtils;
 
 import java.io.InputStream;
@@ -21,6 +21,7 @@ import java.util.Map;
  * @date 2021/3/23
  */
 public class UploadService {
+    private static final FileService fileService = new FileService();
 
     public static Map<String, Object> initMultiPartUpload(String filename, Integer partCount, String contentType) {
 
@@ -51,12 +52,12 @@ public class UploadService {
     }
 
     public static String uploadDefault(DefaultEnum defaultEnum) {
-        String url = RedisStore.hGet(KeyEnum.IM_FILE_UPLOAD_KEY.getKey(), defaultEnum.getKey());
+        String url = fileService.getFileUrl(defaultEnum.getKey());
         if (StrUtil.isBlank(url)) {
             byte[] bytes = ResourceUtil.readBytes(ImConfig.GLOBAL_PATH + "img/" + defaultEnum.getValue());
             boolean b = uploadFile(bytes, defaultEnum.getValue());
             if (b) {
-                RedisStore.hSet(KeyEnum.IM_FILE_UPLOAD_KEY.getKey(), defaultEnum.getKey(), defaultEnum.getValue());
+                fileService.setFileUrl(defaultEnum.getKey(), defaultEnum.getValue());
             }
         }
         return Im.fileUrl + defaultEnum.getValue();

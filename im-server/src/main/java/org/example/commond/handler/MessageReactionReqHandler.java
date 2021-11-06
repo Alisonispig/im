@@ -3,9 +3,10 @@ package org.example.commond.handler;
 import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
 import org.example.commond.AbstractCmdHandler;
+import org.example.config.Chat;
 import org.example.config.Im;
 import org.example.enums.CommandEnum;
-import org.example.packets.User;
+import org.example.packets.bean.User;
 import org.example.packets.handler.MessageReactionReqBody;
 import org.example.packets.handler.MessageReactionRespBody;
 import org.tio.core.ChannelContext;
@@ -40,15 +41,14 @@ public class MessageReactionReqHandler extends AbstractCmdHandler {
         messageReactionRespBody.setMessageId(messageReactionReqBody.getMessageId());
 
         // 添加一个表情回复
-        messageHelper.addReaction(messageReactionReqBody.getRoomId(),messageReactionReqBody.getMessageId()
+        messageService.addReaction(messageReactionReqBody.getMessageId()
                 ,messageReactionReqBody.getReaction(),messageReactionReqBody.getRemove(),user.getId());
-//        messageHelper.getGroupMessage(messageReactionReqBody.getRoomId(),String.valueOf());
 
-        Map<String, List<String>> reaction = messageHelper.getReaction(messageReactionReqBody.getRoomId(), messageReactionReqBody.getMessageId());
+        Map<String, List<String>> reaction = messageService.getReaction( messageReactionReqBody.getMessageId());
 
         messageReactionRespBody.setReactions(reaction);
 
-        Im.sendToGroup(messageReactionRespBody);
+        Chat.sendToGroup(messageReactionRespBody);
 
         return null;
     }

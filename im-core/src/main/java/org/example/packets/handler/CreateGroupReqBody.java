@@ -1,7 +1,7 @@
 package org.example.packets.handler;
 
 import lombok.Data;
-import org.example.packets.User;
+import org.example.packets.bean.User;
 
 import java.util.List;
 

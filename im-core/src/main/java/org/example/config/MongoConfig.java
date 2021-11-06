@@ -1,4 +1,4 @@
-package org.example.store.mango;
+package org.example.config;
 
 import com.mongodb.ConnectionString;
 import com.mongodb.MongoClientSettings;

@@ -6,9 +6,10 @@ import cn.hutool.core.util.IdUtil;
 import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
 import org.example.commond.AbstractCmdHandler;
-import org.example.config.Im;
+import org.example.config.Chat;
 import org.example.config.ImConfig;
 import org.example.enums.CommandEnum;
+import org.example.packets.bean.Message;
 import org.example.packets.handler.ChatReqBody;
 import org.example.packets.handler.ChatRespBody;
 import org.tio.core.ChannelContext;
@@ -34,21 +35,21 @@ public class ChatReqHandler extends AbstractCmdHandler {
         Date date = new Date();
         request.setDate(DateUtil.formatDate(date));
         request.setTimestamp(DateUtil.formatTime(date));
-        request.set_id(IdUtil.getSnowflake().nextIdStr());
+        request.setId(IdUtil.getSnowflake().nextIdStr());
         request.getFiles().forEach(x -> {
             x.setUrl(ImConfig.fileUrl + x.getUrl());
         });
 
+        Message message = BeanUtil.copyProperties(request, Message.class);
         // 消息缓存至redis
-        Im.get().messageHelper.putGroupMessage(request);
-
+        messageService.putGroupMessage(message);
         ChatRespBody response = BeanUtil.copyProperties(request, ChatRespBody.class);
 
         // 发送给群组用户
-        Im.sendToGroup(response);
+        Chat.sendToGroup(response);
 
         // 更新群组最后一条信息
-        Im.get().messageHelper.updateLastMessage(request);
+        groupService.updateLastMessage(message);
 
         return null;
     }

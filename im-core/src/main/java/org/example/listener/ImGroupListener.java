@@ -1,6 +1,6 @@
 package org.example.listener;
 
-import org.example.packets.Group;
+import org.example.packets.bean.Group;
 import org.tio.core.ChannelContext;
 
 public interface ImGroupListener {

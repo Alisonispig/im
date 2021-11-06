@@ -5,7 +5,6 @@ import cn.hutool.setting.Setting;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.example.listener.ImUserListener;
-import org.example.store.MessageHelper;
 import org.tio.core.TioConfig;
 import org.tio.utils.prop.MapWithLockPropSupport;
 import org.tio.utils.time.Time;
@@ -21,7 +20,7 @@ public class ImConfig extends MapWithLockPropSupport {
     /**
      * 消息处理器，Redis持久化， 处理在线离线消息
      */
-    public MessageHelper messageHelper;
+//    public MessageHelper messageHelper;
 
     /**
      * 用户绑定监听器
