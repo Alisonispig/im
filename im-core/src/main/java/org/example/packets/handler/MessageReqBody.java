@@ -20,9 +20,9 @@ public class MessageReqBody {
     /**
      * 分页偏移量
      */
-    private Integer offset;
+    private Integer page;
     /**
      * 数量
      */
-    private Integer count;
+    private Integer number;
 }

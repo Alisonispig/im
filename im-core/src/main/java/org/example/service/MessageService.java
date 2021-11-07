@@ -15,12 +15,15 @@ public class MessageService {
 
     private final MessageRepository messageRepository;
 
-    public MessageService(){
+    public MessageService() {
         messageRepository = new MessageRepository();
     }
 
-    public List<Message> getHistoryMessage(String roomId) {
-       return messageRepository.find(eq("roomId",roomId));
+    public List<Message> getHistoryMessage(String roomId, Integer page, Integer number) {
+        if (page == null || number == null) {
+            return messageRepository.findSort(eq("roomId", roomId), eq("_id", 1));
+        }
+        return messageRepository.find(eq("roomId", roomId), eq("_id", -1), page , number);
     }
 
     public void addReaction(String messageId, String reaction, Boolean remove, String userId) {

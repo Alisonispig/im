@@ -25,7 +25,7 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 public class MinIoUtils {
 
-    static String MINIO_BUCKET = "im";
+    static String MINIO_BUCKET = "courier";
 
     private static CustomMinioClient customMinioClient;
 

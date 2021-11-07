@@ -1,6 +1,7 @@
 package org.example.commond.handler;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.IdUtil;
 import com.alibaba.fastjson.JSONObject;
@@ -36,9 +37,9 @@ public class ChatReqHandler extends AbstractCmdHandler {
         request.setDate(DateUtil.formatDate(date));
         request.setTimestamp(DateUtil.formatTime(date));
         request.setId(IdUtil.getSnowflake().nextIdStr());
-        request.getFiles().forEach(x -> {
-            x.setUrl(ImConfig.fileUrl + x.getUrl());
-        });
+        if(CollUtil.isNotEmpty(request.getFiles())){
+            request.getFiles().forEach(x -> x.setUrl(ImConfig.fileUrl + x.getUrl()));
+        }
 
         Message message = BeanUtil.copyProperties(request, Message.class);
         // 消息缓存至redis

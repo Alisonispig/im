@@ -47,6 +47,8 @@ public class Chat {
         chatRespBody.setDeleted(false);
         chatRespBody.setSystem(false);
 
+        chatRespBody.setFiles(CollUtil.isEmpty(chatRespBody.getFiles()) ? null : chatRespBody.getFiles());
+
         log.info("目标数据：" + RespBody.success(CommandEnum.COMMAND_CHAT_REQ, chatRespBody));
 
         // 获取到群组内的所有用户
@@ -145,7 +147,7 @@ public class Chat {
 
     public static void resetGroup(Group group, String userId) {
         log.info("{}", group);
-        if(!group.getIsFriend()){
+        if (!group.getIsFriend()) {
             return;
         }
         // 获取好友信息
@@ -156,7 +158,7 @@ public class Chat {
 
             group.setFriendId(friend.getId());
             group.setAvatar(friend.getAvatar());
-            if(StrUtil.isBlank(group.getRoomName())){
+            if (StrUtil.isBlank(group.getRoomName())) {
                 group.setRoomName(friend.getUsername());
             }
         }

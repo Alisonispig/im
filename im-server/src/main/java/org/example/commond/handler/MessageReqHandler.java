@@ -1,6 +1,7 @@
 package org.example.commond.handler;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.collection.CollUtil;
 import com.alibaba.fastjson.JSON;
 import org.example.commond.AbstractCmdHandler;
 import org.example.config.Im;
@@ -30,7 +31,7 @@ public class MessageReqHandler extends AbstractCmdHandler {
 
         WsRequest request = (WsRequest) packet;
         MessageReqBody messageReqBody = JSON.parseObject(request.getWsBodyText(), MessageReqBody.class);
-        List<Message> messages = messageService.getHistoryMessage(messageReqBody.getRoomId());
+        List<Message> messages = messageService.getHistoryMessage(messageReqBody.getRoomId(),messageReqBody.getPage(),messageReqBody.getNumber());
 
         User user = Im.getUser(channelContext);
 
@@ -42,6 +43,7 @@ public class MessageReqHandler extends AbstractCmdHandler {
             chatRespBody.setCurrentUserId(user.getId());
             chatRespBody.setDeleted(false);
             chatRespBody.setSystem(false);
+            chatRespBody.setFiles(CollUtil.isEmpty(chatRespBody.getFiles()) ? null : chatRespBody.getFiles());
             return chatRespBody;
         }).collect(Collectors.toList());
 
