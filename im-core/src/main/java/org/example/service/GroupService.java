@@ -44,6 +44,7 @@ public class GroupService {
                 lastMessage.setContent("[文件] - " + message.getFiles().get(0).getName() + "等多个文件");
             }
         }
+        group.setIndex(System.currentTimeMillis());
         group.setLastMessage(lastMessage);
         groupRepository.updateById(group);
     }
