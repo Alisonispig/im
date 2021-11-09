@@ -47,7 +47,7 @@ public class Chat {
         chatRespBody.setDeleted(false);
         chatRespBody.setSystem(false);
 
-        chatRespBody.setFiles(CollUtil.isEmpty(chatRespBody.getFiles()) ? null : chatRespBody.getFiles());
+//        chatRespBody.setFiles(CollUtil.isEmpty(chatRespBody.getFiles()) ? null : chatRespBody.getFiles());
 
         log.info("目标数据：" + RespBody.success(CommandEnum.COMMAND_CHAT_REQ, chatRespBody));
 

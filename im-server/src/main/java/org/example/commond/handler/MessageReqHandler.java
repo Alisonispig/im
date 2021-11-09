@@ -1,7 +1,6 @@
 package org.example.commond.handler;
 
 import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.core.collection.CollUtil;
 import com.alibaba.fastjson.JSON;
 import org.example.commond.AbstractCmdHandler;
 import org.example.config.Im;
@@ -43,7 +42,7 @@ public class MessageReqHandler extends AbstractCmdHandler {
             chatRespBody.setCurrentUserId(user.getId());
             chatRespBody.setDeleted(false);
             chatRespBody.setSystem(false);
-            chatRespBody.setFiles(CollUtil.isEmpty(chatRespBody.getFiles()) ? null : chatRespBody.getFiles());
+//            chatRespBody.setFiles(CollUtil.isEmpty(chatRespBody.getFiles()) ? null : chatRespBody.getFiles());
             return chatRespBody;
         }).collect(Collectors.toList());
 
