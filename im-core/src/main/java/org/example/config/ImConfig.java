@@ -41,15 +41,7 @@ public class ImConfig extends MapWithLockPropSupport {
      */
     public static final String PROTOCOL_NAME = "IM";
 
-    /**
-     * Redis 地址 密码
-     */
-    public static String redisHost, redisAuth;
-
-    /**
-     * Redis 端口, 超时时间
-     */
-    public static int redisPort, redisTimeOut;
+    public static String minioUrl;
 
     /**
      * Http 端口 最大活跃时间
@@ -74,15 +66,12 @@ public class ImConfig extends MapWithLockPropSupport {
         if (StrUtil.isNotBlank(property)) {
             setting = new Setting(GLOBAL_PATH + "config/application.setting");
             fileUrl = setting.getByGroup("file.url","prod");
-            redisAuth = setting.getByGroup("redis.auth","prod");
+            minioUrl = setting.getByGroup("minio.url","prod");
         } else {
             setting = new Setting("application.setting");
             fileUrl = setting.getByGroup("file.url","dev");
-            redisAuth = setting.getByGroup("redis.auth","dev");
+            minioUrl = setting.getByGroup("minio.url","dev");
         }
-        redisHost = setting.getStr("redis.host");
-        redisPort = setting.getInt("redis.port");
-        redisTimeOut = setting.getInt("redis.timeout");
         httpPort = setting.getInt("http.port");
         httpMaxLiveTime = setting.getInt("http.max.live.time");
         httpUseSession = setting.getBool("http.use.session");

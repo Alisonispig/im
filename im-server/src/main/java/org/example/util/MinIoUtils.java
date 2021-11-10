@@ -7,6 +7,7 @@ import io.minio.errors.*;
 import io.minio.http.Method;
 import io.minio.messages.Part;
 import lombok.extern.slf4j.Slf4j;
+import org.example.config.Im;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -57,7 +58,7 @@ public class MinIoUtils {
 
     public void init() {
         MinioClient minioClient = MinioClient.builder()
-                .endpoint("http://127.0.0.1:9000")
+                .endpoint(Im.minioUrl)
                 .credentials("AKIAIOSFODNN7EXAMPLE", "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY")
                 .build();
         customMinioClient = new CustomMinioClient(minioClient);
@@ -71,8 +72,8 @@ public class MinIoUtils {
      */
     public static String getUploadObjectUrl(String objectName) {
         // 上传文件时携带content-type头即可
-        HashMultimap<String, String> headers = HashMultimap.create();
-        headers.put("Content-Type", "application/octet-stream");
+//        HashMultimap<String, String> headers = HashMultimap.create();
+//        headers.put("Content-Type", "application/octet-stream");
         try {
             return customMinioClient.getPresignedObjectUrl(
                     GetPresignedObjectUrlArgs.builder()
@@ -80,7 +81,7 @@ public class MinIoUtils {
                             .bucket(MINIO_BUCKET)
                             .object(objectName)
                             .expiry(1, TimeUnit.DAYS)
-                            .extraHeaders(headers)
+//                            .extraHeaders(headers)
                             .build()
             );
         } catch (Exception e) {
@@ -123,7 +124,8 @@ public class MinIoUtils {
                                 .expiry(1, TimeUnit.DAYS)
                                 .extraQueryParams(reqParams)
                                 .build());
-                partList.add(uploadUrl);
+//                String replace = uploadUrl.replace("http://8.142.64.52:7708", "http://127.0.0.1:7708");
+//                partList.add(uploadUrl);
             }
             result.put("uploadUrls", partList);
         } catch (Exception e) {

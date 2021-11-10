@@ -1,9 +1,5 @@
 application.name=IM
 
-redis.host=127.0.0.1
-redis.port=6379
-redis.timeout=2000
-
 socket.port=9326
 socket.heartbeat=60000
 
@@ -14,7 +10,9 @@ http.check.host=false
 
 [dev]
 file.url=http://localhost:8088/download/
+minio.url=http://127.0.0.1:9000
+#minio.url=http://8.142.64.52:7708
 
 [prod]
-file.url=http://106.12.118.54:8888/api/download/
-redis.auth=lowback88.
+file.url=http://8.142.64.52:8888/api/download/
+minio.url=http://8.142.64.52:7708

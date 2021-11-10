@@ -1,16 +1,6 @@
 package org.example.util;
 
-import cn.hutool.core.date.DateUtil;
-import cn.hutool.core.date.TimeInterval;
-import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.RandomUtil;
-import org.example.dao.MessageRepository;
-import org.example.packets.bean.Message;
-
-import java.util.Date;
-import java.util.List;
-
-import static com.mongodb.client.model.Filters.eq;
 
 public class TestUtil {
 
@@ -30,23 +20,27 @@ public class TestUtil {
         return "https://t1.huishahe.com/uploads/tu/202107/9999/7690765ea7.jpg";
     }
 
-    public static void main(String[] args) {
-        TimeInterval timer = DateUtil.timer();
-        MessageRepository messageRepository = new MessageRepository();
-        for (int i = 0; i < 10000; i++) {
-            Message message = new Message();
-            message.setId(IdUtil.getSnowflake().nextIdStr());
-            message.setContent(i + "你好");
-            message.setRoomId("1457312478603968512");
-//            message.set("1457312478603968512");
-            message.setDate(DateUtil.formatDate(new Date()));
-            message.setTimestamp(DateUtil.formatTime(new Date()));
-            message.setSenderId("1457227084663349248");
-            messageRepository.insert(message);
-        }
-        System.out.println(timer.intervalRestart());
+//    public static void main(String[] args) {
+//        TimeInterval timer = DateUtil.timer();
+//        MessageRepository messageRepository = new MessageRepository();
+//        for (int i = 0; i < 10000; i++) {
+//            Message message = new Message();
+//            message.setId(IdUtil.getSnowflake().nextIdStr());
+//            message.setContent(i + "你好");
+//            message.setRoomId("1457312478603968512");
+////            message.set("1457312478603968512");
+//            message.setDate(DateUtil.formatDate(new Date()));
+//            message.setTimestamp(DateUtil.formatTime(new Date()));
+//            message.setSenderId("1457227084663349248");
+//            messageRepository.insert(message);
+//        }
+//        System.out.println(timer.intervalRestart());
+//
+//        List<Message> messages = messageRepository.find(eq("roomId", "1457312478603968512"), eq("_id", 1), 21, 20);
+//        messages.forEach(System.out::println);
+//    }
 
-        List<Message> messages = messageRepository.find(eq("roomId", "1457312478603968512"), eq("_id", 1), 21, 20);
-        messages.forEach(System.out::println);
+    public static void main(String[] args) {
+
     }
 }
