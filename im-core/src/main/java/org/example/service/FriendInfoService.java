@@ -27,6 +27,7 @@ public class FriendInfoService {
         friendInfo.setSelf(self);
         friendInfo.setFriendId(friendId);
         friendInfoRepository.insert(friendInfo);
+
         friendInfo.setSelf(friendId);
         friendInfo.setFriendId(self);
         friendInfoRepository.insert(friendInfo);

@@ -251,13 +251,24 @@ public enum CommandEnum {
      * </pre>
      * <code>COMMAND_EDIT_PROFILE_REST = 31</code>
      */
-    COMMAND_EDIT_PROFILE_REST(31)
+    COMMAND_EDIT_PROFILE_RESP(31),
 
+    /**
+     * <pre>
+     * 移除用户请求
+     * </pre>
+     * <code>COMMAND_REMOVE_GROUP_USER_REQ = 32</code>
+     */
+    COMMAND_REMOVE_GROUP_USER_REQ(32),
 
+    /**
+     * <pre>
+     * 移除用户响应
+     * </pre>
+     * <code>COMMAND_REMOVE_GROUP_USER_RESP = 33</code>
+     */
+    COMMAND_REMOVE_GROUP_USER_RESP(33),
     ;
-
-
-
 
     private final int value;
 

@@ -23,14 +23,14 @@ public class ImServerGroupListener extends AbstractImGroupListener {
         String roomId = group.getRoomId();
         User user = Im.getUser(channelContext);
         // 添加用户群组信息 顺手就完成了群组用户 用户群组的绑定
-        userGroupService.addGroupUser(user.getId(), roomId);
+//        userGroupService.addGroupUser(roomId, user.getId());
 
-        for (Group userGroup : user.getGroups()) {
-            if (!userGroup.getRoomId().equals(roomId)) {
-                continue;
-            }
-            groupService.updateById(userGroup);
-        }
+//        for (Group userGroup : user.getGroups()) {
+//            if (!userGroup.getRoomId().equals(roomId)) {
+//                continue;
+//            }
+//            groupService.updateById(userGroup);
+//        }
     }
 
     @Override

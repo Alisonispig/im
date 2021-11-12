@@ -12,13 +12,9 @@ import org.example.packets.bean.User;
 import org.example.packets.handler.*;
 import org.example.service.*;
 import org.tio.core.ChannelContext;
-import org.tio.core.Tio;
-import org.tio.utils.lock.SetWithLock;
 import org.tio.websocket.common.WsResponse;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Slf4j
 public class Chat {
@@ -91,8 +87,8 @@ public class Chat {
      */
     public static void sendToGroup(UserStatusBody userStatusBody, ChannelContext channelContext, Boolean sendAll) {
         WsResponse wsResponse = WsResponse.fromText(RespBody.success(CommandEnum.COMMAND_USER_STATUS_RESP, userStatusBody), Im.CHARSET);
-        SetWithLock<ChannelContext> users = Tio.getByGroup(Im.get().getTioConfig(), userStatusBody.getGroup().getRoomId());
-        List<ChannelContext> channelContexts = Im.convertChannel(users);
+        List<ChannelContext> channelContexts = Im.getByGroup(userStatusBody.getGroup().getRoomId());
+
         User nowUser = Im.getUser(channelContext, false);
         for (ChannelContext context : channelContexts) {
             User user = Im.getUser(context);
@@ -110,34 +106,55 @@ public class Chat {
      */
     public static void sendToGroup(MessageReactionRespBody messageReactionRespBody) {
         WsResponse wsResponse = WsResponse.fromText(RespBody.success(CommandEnum.COMMAND_SEND_MESSAGE_REACTION_RESP, messageReactionRespBody), Im.CHARSET);
-        SetWithLock<ChannelContext> users = Tio.getByGroup(Im.get().getTioConfig(), messageReactionRespBody.getRoomId());
-        List<ChannelContext> channelContexts = Im.convertChannel(users);
+
+        List<ChannelContext> channelContexts = Im.getByGroup(messageReactionRespBody.getRoomId());
         for (ChannelContext context : channelContexts) {
             Im.send(context, wsResponse);
         }
     }
 
+    /**
+     * 人员离开群组消息
+     *
+     * @param removeGroupUserReqBody 移除群组消息
+     */
+    public static void sendToGroup(RemoveGroupUserReqBody removeGroupUserReqBody) {
+        List<ChannelContext> channelContexts = Im.getByGroup(removeGroupUserReqBody.getRoomId());
+        WsResponse response = WsResponse.fromText(RespBody.success(CommandEnum.COMMAND_REMOVE_GROUP_USER_RESP, removeGroupUserReqBody), Im.CHARSET);
+        for (ChannelContext context : channelContexts) {
+            Im.send(context, response);
+        }
+    }
+
 
     public static void sendToGroup(JoinGroupNotifyBody joinGroupNotifyBody) {
-
+        // 获取群组成员并补充进去
         List<User> groupUsers = userGroupService.getGroupUsers(joinGroupNotifyBody.getGroup().getRoomId());
         joinGroupNotifyBody.getGroup().setUsers(groupUsers);
 
+        // 判空, 说明有异常
         if (CollUtil.isEmpty(joinGroupNotifyBody.getUsers())) {
             return;
         }
-        SetWithLock<ChannelContext> users = Tio.getByGroup(Im.get().tioConfig, joinGroupNotifyBody.getGroup().getRoomId());
-        if (users == null) {
-            return;
-        }
-        List<User> userList = new ArrayList<>();
+
+/*      List<User> userList = new ArrayList<>();
         joinGroupNotifyBody.getUsers().forEach(x -> userList.add(userService.getUserInfo(x.getId())));
-
-        List<ChannelContext> channelContexts = Im.convertChannel(users);
         String collect = userList.stream().map(User::getUsername).collect(Collectors.joining(StrUtil.COMMA));
+        joinGroupNotifyBody.setMessage(collect + ",已加入群聊!");*/
+        // 此处分为两种情况,或者用户,或者群组. 群组直接群发
+        if (joinGroupNotifyBody.getGroup().getIsFriend()) {
+            for (User user : joinGroupNotifyBody.getUsers()) {
+                List<ChannelContext> channelContexts = Im.getChannelByUserId(user.getId());
+                Chat.resetGroup(joinGroupNotifyBody.getGroup(), user.getId());
+                for (ChannelContext channelContext : channelContexts) {
+                    WsResponse wsResponse = WsResponse.fromText(RespBody.success(CommandEnum.COMMAND_JOIN_GROUP_NOTIFY_RESP, joinGroupNotifyBody), Im.CHARSET);
+                    Im.send(channelContext, wsResponse);
+                }
+            }
+            return ;
+        }
 
-        joinGroupNotifyBody.setMessage(collect + ",已加入群聊!");
-
+        List<ChannelContext> channelContexts = Im.getByGroup(joinGroupNotifyBody.getGroup().getRoomId());
         WsResponse wsResponse = WsResponse.fromText(RespBody.success(CommandEnum.COMMAND_JOIN_GROUP_NOTIFY_RESP, joinGroupNotifyBody), Im.CHARSET);
         for (ChannelContext context : channelContexts) {
             Im.send(context, wsResponse);
@@ -164,5 +181,6 @@ public class Chat {
         }
         log.info("{}", group);
     }
+
 
 }

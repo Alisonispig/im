@@ -55,6 +55,16 @@ public class Im extends ImConfig {
     }
 
     /**
+     * 移除群组绑定
+     *
+     * @param channelContext 上下文
+     * @param roomId         群组Id
+     */
+    public static void unBindGroup(ChannelContext channelContext, String roomId) {
+        Tio.unbindGroup(roomId, channelContext);
+    }
+
+    /**
      * 绑定用户(如果配置了回调函数执行回调)
      *
      * @param channelContext IM通道上下文
@@ -83,6 +93,15 @@ public class Im extends ImConfig {
             lock.unlock();
         }
     }
+
+    public static List<ChannelContext> getByGroup(String roomId){
+        SetWithLock<ChannelContext> users = Tio.getByGroup(Im.get().tioConfig, roomId);
+        if (users == null) {
+            return new ArrayList<>();
+        }
+        return convertChannel(users);
+    }
+
 
     public static List<ChannelContext> convertChannel(SetWithLock<ChannelContext> channelContextSetWithLock) {
         ReentrantReadWriteLock.ReadLock lock = channelContextSetWithLock.getLock().readLock();
@@ -193,7 +212,6 @@ public class Im extends ImConfig {
         }
         return convertChannel(userChannelContext);
     }
-
 
 
 }

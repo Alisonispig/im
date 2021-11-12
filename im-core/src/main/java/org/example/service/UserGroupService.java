@@ -44,4 +44,8 @@ public class UserGroupService {
         List<UserGroup> userIds = userGroupRepository.find(eq("userId", userId));
         return userIds.stream().map(userGroup -> groupRepository.findById(userGroup.getRoomId())).sorted(Comparator.comparing(Group::getIndex).reversed()).collect(Collectors.toList());
     }
+
+    public void remove(String roomId, String userId) {
+        userGroupRepository.delete(and(eq("roomId",roomId),eq("userId",userId)));
+    }
 }

@@ -50,7 +50,7 @@ public class EditProfileHandler extends AbstractCmdHandler {
         // 发送修改响应消息
         UserStatusBody userStatusBody = new UserStatusBody();
         userStatusBody.setUser(userInfo);
-        WsResponse response = WsResponse.fromText(RespBody.success(CommandEnum.COMMAND_EDIT_PROFILE_REST, userStatusBody), Im.CHARSET);
+        WsResponse response = WsResponse.fromText(RespBody.success(CommandEnum.COMMAND_EDIT_PROFILE_RESP, userStatusBody), Im.CHARSET);
 
         Im.send(channelContext, response);
 
