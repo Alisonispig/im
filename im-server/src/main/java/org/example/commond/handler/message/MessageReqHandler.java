@@ -1,4 +1,4 @@
-package org.example.commond.handler;
+package org.example.commond.handler.message;
 
 import cn.hutool.core.bean.BeanUtil;
 import com.alibaba.fastjson.JSON;
@@ -8,7 +8,7 @@ import org.example.enums.CommandEnum;
 import org.example.packets.bean.Message;
 import org.example.packets.bean.User;
 import org.example.packets.handler.ChatRespBody;
-import org.example.packets.handler.MessageReqBody;
+import org.example.packets.handler.message.MessageReqBody;
 import org.example.packets.handler.RespBody;
 import org.tio.core.ChannelContext;
 import org.tio.core.intf.Packet;

@@ -268,6 +268,24 @@ public enum CommandEnum {
      * <code>COMMAND_REMOVE_GROUP_USER_RESP = 33</code>
      */
     COMMAND_REMOVE_GROUP_USER_RESP(33),
+
+    /**
+     * <pre>
+     * 获取历史文件请求
+     * </pre>
+     * <code>COMMAND_MESSAGE_HISTORY_REQ = 34</code>
+     */
+    COMMAND_MESSAGE_HISTORY_REQ(34),
+
+    /**
+     * <pre>
+     * 获取历史文件响应
+     * </pre>
+     * <code>COMMAND_MESSAGE_HISTORY_RESP = 35</code>
+     */
+    COMMAND_MESSAGE_HISTORY_RESP(35)
+
+
     ;
 
     private final int value;

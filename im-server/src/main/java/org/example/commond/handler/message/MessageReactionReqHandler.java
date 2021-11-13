@@ -1,4 +1,4 @@
-package org.example.commond.handler;
+package org.example.commond.handler.message;
 
 import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
@@ -7,8 +7,8 @@ import org.example.config.Chat;
 import org.example.config.Im;
 import org.example.enums.CommandEnum;
 import org.example.packets.bean.User;
-import org.example.packets.handler.MessageReactionReqBody;
-import org.example.packets.handler.MessageReactionRespBody;
+import org.example.packets.handler.message.MessageReactionReqBody;
+import org.example.packets.handler.message.MessageReactionRespBody;
 import org.tio.core.ChannelContext;
 import org.tio.core.intf.Packet;
 import org.tio.websocket.common.WsRequest;

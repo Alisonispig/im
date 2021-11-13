@@ -1,4 +1,4 @@
-package org.example.commond.handler;
+package org.example.commond.handler.room;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.IdUtil;
@@ -15,8 +15,8 @@ import org.example.enums.DefaultEnum;
 import org.example.enums.JoinGroupEnum;
 import org.example.packets.bean.Group;
 import org.example.packets.bean.User;
-import org.example.packets.handler.CreateGroupReqBody;
-import org.example.packets.handler.JoinGroupNotifyBody;
+import org.example.packets.handler.room.CreateGroupReqBody;
+import org.example.packets.handler.room.JoinGroupNotifyBody;
 import org.example.protocol.http.service.UploadService;
 import org.tio.core.ChannelContext;
 import org.tio.core.intf.Packet;

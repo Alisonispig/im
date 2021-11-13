@@ -1,4 +1,4 @@
-package org.example.commond.handler;
+package org.example.commond.handler.room;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
@@ -12,7 +12,7 @@ import org.example.config.Im;
 import org.example.enums.CommandEnum;
 import org.example.packets.bean.Group;
 import org.example.packets.bean.User;
-import org.example.packets.handler.JoinGroupNotifyBody;
+import org.example.packets.handler.room.JoinGroupNotifyBody;
 import org.example.packets.handler.RespBody;
 import org.tio.core.ChannelContext;
 import org.tio.core.intf.Packet;

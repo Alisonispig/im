@@ -69,6 +69,10 @@ public class MongoRepository<T> {
         return collection.find(eq(mongoKey, key), entityClass).first();
     }
 
+    public T findOneLimit(Bson bson, Bson sort, int limit) {
+        return collection.find(bson).sort(sort).limit(limit).first();
+    }
+
     public void saveOrUpdateById(T data) {
         Object fieldValue = ReflectUtil.getFieldValue(data, keyName);
         Assertions.notNull("[主键值]", fieldValue);
@@ -114,5 +118,6 @@ public class MongoRepository<T> {
             }
         }
     }
+
 
 }

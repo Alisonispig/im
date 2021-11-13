@@ -1,4 +1,4 @@
-package org.example.packets.handler;
+package org.example.packets.handler.message;
 
 import lombok.Data;
 

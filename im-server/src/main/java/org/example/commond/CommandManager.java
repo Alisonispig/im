@@ -2,6 +2,13 @@ package org.example.commond;
 
 import lombok.extern.slf4j.Slf4j;
 import org.example.commond.handler.*;
+import org.example.commond.handler.message.ChatReqHandler;
+import org.example.commond.handler.message.MessageReactionReqHandler;
+import org.example.commond.handler.message.MessageReadReqHandler;
+import org.example.commond.handler.message.MessageReqHandler;
+import org.example.commond.handler.room.CreatGroupReqHandler;
+import org.example.commond.handler.room.JoinGroupReqHandler;
+import org.example.commond.handler.room.RemoveGroupUserReqHandler;
 import org.example.enums.CommandEnum;
 
 import java.util.HashMap;

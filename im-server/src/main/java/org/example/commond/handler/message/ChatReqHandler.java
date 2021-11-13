@@ -1,4 +1,4 @@
-package org.example.commond.handler;
+package org.example.commond.handler.message;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;

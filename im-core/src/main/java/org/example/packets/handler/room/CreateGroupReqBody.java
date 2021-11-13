@@ -1,4 +1,4 @@
-package org.example.packets.handler;
+package org.example.packets.handler.room;
 
 import lombok.Data;
 import org.example.packets.bean.User;

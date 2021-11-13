@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.mongodb.client.model.Filters.eq;
+import static com.mongodb.client.model.Filters.*;
 
 public class MessageService {
 
@@ -23,7 +23,7 @@ public class MessageService {
         if (page == null || number == null) {
             return messageRepository.findSort(eq("roomId", roomId), eq("_id", 1));
         }
-        return messageRepository.find(eq("roomId", roomId), eq("_id", -1), page , number);
+        return messageRepository.find(eq("roomId", roomId), eq("_id", -1), page, number);
     }
 
     public void addReaction(String messageId, String reaction, Boolean remove, String userId) {
@@ -57,5 +57,13 @@ public class MessageService {
 
     public void putGroupMessage(Message message) {
         messageRepository.insert(message);
+    }
+
+    public List<Message> getFileHistory(String roomId, String date) {
+        return messageRepository.find(and(eq("roomId", roomId), eq("date", date), not(size("files", 0))));
+    }
+
+    public Message getStartMessage(String roomId) {
+       return  messageRepository.findOneLimit(eq("roomId", roomId), eq("_id", 1), 1);
     }
 }

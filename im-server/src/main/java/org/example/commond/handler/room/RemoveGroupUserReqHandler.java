@@ -1,4 +1,4 @@
-package org.example.commond.handler;
+package org.example.commond.handler.room;
 
 import cn.hutool.core.collection.CollUtil;
 import com.alibaba.fastjson.JSON;
@@ -7,7 +7,7 @@ import org.example.config.Chat;
 import org.example.config.Im;
 import org.example.enums.CommandEnum;
 import org.example.packets.bean.Group;
-import org.example.packets.handler.RemoveGroupUserReqBody;
+import org.example.packets.handler.room.RemoveGroupUserReqBody;
 import org.tio.core.ChannelContext;
 import org.tio.core.intf.Packet;
 import org.tio.websocket.common.WsRequest;

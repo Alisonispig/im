@@ -1,10 +1,10 @@
-package org.example.commond.handler;
+package org.example.commond.handler.message;
 
 import com.alibaba.fastjson.JSONObject;
 import org.example.commond.AbstractCmdHandler;
 import org.example.config.Im;
 import org.example.enums.CommandEnum;
-import org.example.packets.handler.MessageReadReqBody;
+import org.example.packets.handler.message.MessageReadReqBody;
 import org.example.packets.handler.RespBody;
 import org.tio.core.ChannelContext;
 import org.tio.core.intf.Packet;
