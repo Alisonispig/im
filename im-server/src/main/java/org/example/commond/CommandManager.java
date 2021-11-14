@@ -2,10 +2,7 @@ package org.example.commond;
 
 import lombok.extern.slf4j.Slf4j;
 import org.example.commond.handler.*;
-import org.example.commond.handler.message.ChatReqHandler;
-import org.example.commond.handler.message.MessageReactionReqHandler;
-import org.example.commond.handler.message.MessageReadReqHandler;
-import org.example.commond.handler.message.MessageReqHandler;
+import org.example.commond.handler.message.*;
 import org.example.commond.handler.room.CreatGroupReqHandler;
 import org.example.commond.handler.room.JoinGroupReqHandler;
 import org.example.commond.handler.room.RemoveGroupUserReqHandler;
@@ -35,6 +32,7 @@ public class CommandManager {
             registerCommand(new MessageReactionReqHandler());
             registerCommand(new EditProfileHandler());
             registerCommand(new RemoveGroupUserReqHandler());
+            registerCommand(new MessageFileHistoryHandler());
         } catch (Exception e) {
             log.info("注册处理器失败");
         }
