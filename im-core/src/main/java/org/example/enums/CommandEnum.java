@@ -273,17 +273,34 @@ public enum CommandEnum {
      * <pre>
      * 获取历史文件请求
      * </pre>
-     * <code>COMMAND_MESSAGE_HISTORY_REQ = 34</code>
+     * <code>COMMAND_MESSAGE_FILE_HISTORY_REQ = 34</code>
      */
-    COMMAND_MESSAGE_HISTORY_REQ(34),
+    COMMAND_MESSAGE_FILE_HISTORY_REQ(34),
 
     /**
      * <pre>
      * 获取历史文件响应
      * </pre>
-     * <code>COMMAND_MESSAGE_HISTORY_RESP = 35</code>
+     * <code>COMMAND_MESSAGE_FILE_HISTORY_RESP = 35</code>
      */
-    COMMAND_MESSAGE_HISTORY_RESP(35)
+    COMMAND_MESSAGE_FILE_HISTORY_RESP(35),
+
+    /**
+     * <pre>
+     * 获取历史消息请求
+     * </pre>
+     * <code>COMMAND_MESSAGE_HISTORY_REQ = 36</code>
+     */
+    COMMAND_MESSAGE_HISTORY_REQ(36),
+
+    /**
+     * <pre>
+     * 获取历史消息响应
+     * </pre>
+     * <code>COMMAND_MESSAGE_HISTORY_RESP = 37</code>
+     */
+    COMMAND_MESSAGE_HISTORY_RESP(37),
+
 
 
     ;

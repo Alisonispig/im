@@ -33,6 +33,7 @@ public class CommandManager {
             registerCommand(new EditProfileHandler());
             registerCommand(new RemoveGroupUserReqHandler());
             registerCommand(new MessageFileHistoryHandler());
+            registerCommand(new MessageHistoryHandler());
         } catch (Exception e) {
             log.info("注册处理器失败");
         }

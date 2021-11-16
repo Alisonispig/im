@@ -69,6 +69,10 @@ public class MongoRepository<T> {
         return collection.find(eq(mongoKey, key), entityClass).first();
     }
 
+    public int count(Bson bson){
+       return (int)collection.countDocuments(bson);
+    }
+
     public T findOneLimit(Bson bson, Bson sort, int limit) {
         return collection.find(bson).sort(sort).limit(limit).first();
     }

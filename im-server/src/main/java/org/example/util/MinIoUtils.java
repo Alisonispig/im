@@ -72,8 +72,6 @@ public class MinIoUtils {
      */
     public static String getUploadObjectUrl(String objectName) {
         // 上传文件时携带content-type头即可
-//        HashMultimap<String, String> headers = HashMultimap.create();
-//        headers.put("Content-Type", "application/octet-stream");
         try {
             return customMinioClient.getPresignedObjectUrl(
                     GetPresignedObjectUrlArgs.builder()
@@ -125,7 +123,7 @@ public class MinIoUtils {
                                 .extraQueryParams(reqParams)
                                 .build());
 //                String replace = uploadUrl.replace("http://8.142.64.52:7708", "http://127.0.0.1:7708");
-//                partList.add(uploadUrl);
+                partList.add(uploadUrl);
             }
             result.put("uploadUrls", partList);
         } catch (Exception e) {

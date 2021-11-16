@@ -19,11 +19,16 @@ public class MessageService {
         messageRepository = new MessageRepository();
     }
 
-    public List<Message> getHistoryMessage(String roomId, Integer page, Integer number) {
+    public List<Message> getHistoryMessage(String roomId, Integer page, Integer number, int asc) {
+
         if (page == null || number == null) {
             return messageRepository.findSort(eq("roomId", roomId), eq("_id", 1));
         }
-        return messageRepository.find(eq("roomId", roomId), eq("_id", -1), page, number);
+        return messageRepository.find(eq("roomId", roomId), eq("_id", asc), page, number);
+    }
+
+    public List<Message> getHistoryMessage(String roomId, Integer page, Integer number) {
+       return this.getHistoryMessage(roomId, page, number, -1);
     }
 
     public void addReaction(String messageId, String reaction, Boolean remove, String userId) {
@@ -51,6 +56,7 @@ public class MessageService {
         return message.getReactions();
     }
 
+
     public Message getMessage(String messageId) {
         return messageRepository.findById(messageId);
     }
@@ -64,6 +70,10 @@ public class MessageService {
     }
 
     public Message getStartMessage(String roomId) {
-       return  messageRepository.findOneLimit(eq("roomId", roomId), eq("_id", 1), 1);
+        return messageRepository.findOneLimit(eq("roomId", roomId), eq("_id", 1), 1);
+    }
+
+    public int getCount(String roomId) {
+        return messageRepository.count(eq("roomId", roomId));
     }
 }

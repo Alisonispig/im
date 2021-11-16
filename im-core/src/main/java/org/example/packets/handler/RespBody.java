@@ -37,19 +37,33 @@ public class RespBody implements Serializable {
      */
     protected Object data;
 
+    protected int page;
+
+    protected int count;
+
     public RespBody(CommandEnum command) {
         this.command = command.getValue();
     }
 
     public static String success(CommandEnum command) {
-        return success(command, null);
+        return success(command, null, 0, 0);
     }
 
     public static String success(CommandEnum command, Object data) {
+        return success(command, data, 0, 0);
+    }
+
+    public static String successPage(CommandEnum command, Object data, int page, int count) {
+        return success(command, data, page, count);
+    }
+
+    public static String success(CommandEnum command, Object data, int page, int count) {
         RespBody respBody = new RespBody(command);
         respBody.setData(data);
         respBody.setSuccess(true);
         respBody.setMsg("操作成功");
+        respBody.setPage(page);
+        respBody.setCount(count);
 
         return JSON.toJSONString(respBody, SerializerFeature.DisableCircularReferenceDetect);
     }

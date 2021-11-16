@@ -1,6 +1,9 @@
 package org.example.packets;
 
 import lombok.Data;
+import org.example.packets.handler.FileMessageBody;
+
+import java.util.List;
 
 @Data
 public class ReplyMessage {
@@ -18,6 +21,6 @@ public class ReplyMessage {
     /**
      * 文件信息
      */
-    private FileSource file;
+    private List<FileMessageBody> files;
 
 }

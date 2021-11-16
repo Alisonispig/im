@@ -26,7 +26,7 @@ public class MessageFileHistoryHandler extends AbstractCmdHandler {
 
     @Override
     public CommandEnum command() {
-        return CommandEnum.COMMAND_MESSAGE_HISTORY_REQ;
+        return CommandEnum.COMMAND_MESSAGE_FILE_HISTORY_REQ;
     }
 
     @Override
@@ -47,7 +47,7 @@ public class MessageFileHistoryHandler extends AbstractCmdHandler {
         messages.forEach(x -> fileMessageBodies.addAll(x.getFiles()));
         respBody.setFiles(fileMessageBodies);
 
-        WsResponse response = WsResponse.fromText(RespBody.success(CommandEnum.COMMAND_MESSAGE_HISTORY_RESP, respBody), Im.CHARSET);
+        WsResponse response = WsResponse.fromText(RespBody.success(CommandEnum.COMMAND_MESSAGE_FILE_HISTORY_RESP, respBody), Im.CHARSET);
         Im.send(channelContext, response);
 
         return null;
