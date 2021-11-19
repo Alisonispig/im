@@ -10,6 +10,7 @@ import org.example.commond.AbstractCmdHandler;
 import org.example.config.Chat;
 import org.example.config.Im;
 import org.example.enums.CommandEnum;
+import org.example.enums.RoomRoleEnum;
 import org.example.packets.bean.Group;
 import org.example.packets.bean.User;
 import org.example.packets.handler.room.JoinGroupNotifyBody;
@@ -46,13 +47,15 @@ public class JoinGroupReqHandler extends AbstractCmdHandler {
         Group group = groupService.getGroupInfo(joinGroupNotifyBody.getGroup().getRoomId());
         joinGroupNotifyBody.setGroup(group);
 
-        // 处理要加入的完整信息
+        // 处理要加入的完整信息， 有可能来自创建群组， 群组创建时的创建者用户是完整的，不需要进行拷贝
         for (User user : joinGroupNotifyBody.getUsers()) {
-            User userInfo = userService.getUserInfo(user.getId());
-            BeanUtil.copyProperties(userInfo, user);
+            if (null == user.getRole()) {
+                User userInfo = userService.getUserInfo(user.getId());
+                userInfo.setRole(RoomRoleEnum.GENERAL);
+                BeanUtil.copyProperties(userInfo, user);
+            }
         }
 
-        // TODO 加入群组是否成功
         log.info("加入群组消息：" + JSON.toJSONString(joinGroupNotifyBody, SerializerFeature.DisableCircularReferenceDetect));
 
         // 绑定到群聊
@@ -67,7 +70,7 @@ public class JoinGroupReqHandler extends AbstractCmdHandler {
                 }
             }
             // 持久化到数据库
-            userGroupService.addGroupUser(group.getRoomId(), addUser.getId());
+            userGroupService.addGroupUser(group.getRoomId(), addUser.getId(),addUser.getRole());
         }
 
         // 发送申请加入群组响应

@@ -13,6 +13,7 @@ import org.example.config.Im;
 import org.example.enums.CommandEnum;
 import org.example.enums.DefaultEnum;
 import org.example.enums.JoinGroupEnum;
+import org.example.enums.RoomRoleEnum;
 import org.example.packets.bean.Group;
 import org.example.packets.bean.User;
 import org.example.packets.handler.room.CreateGroupReqBody;
@@ -42,8 +43,9 @@ public class CreatGroupReqHandler extends AbstractCmdHandler {
         CreateGroupReqBody request = JSONObject.parseObject(httpPacket.getWsBodyText(), CreateGroupReqBody.class);
 
         String roomName = request.getRoomName();
-        // 当前用户
+        // 当前用户, 并设置用户为管理员
         User user = Im.getUser(channelContext, false);
+        user.setRole(RoomRoleEnum.ADMIN);
 
         String url = UploadService.uploadDefault(DefaultEnum.ACCOUNT_GROUP);
         // 创建群聊
@@ -59,7 +61,7 @@ public class CreatGroupReqHandler extends AbstractCmdHandler {
         for (User addUser : request.getUsers()) {
             User userInfo = userService.getUserInfo(addUser.getId());
             build.getUsers().add(userInfo);
-            BeanUtil.copyProperties(userInfo, addUser);
+            BeanUtil.copyProperties(userInfo, addUser,"role");
         }
 
         // 如果是好友会话 1. 将群组的好友ID和备注字段放进各自的信息中

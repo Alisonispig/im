@@ -5,14 +5,12 @@ import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.example.enums.CommandEnum;
-import org.example.packets.bean.FriendInfo;
-import org.example.packets.bean.Group;
-import org.example.packets.bean.UnReadMessage;
-import org.example.packets.bean.User;
+import org.example.packets.bean.*;
 import org.example.packets.handler.*;
 import org.example.packets.handler.message.MessageReactionRespBody;
+import org.example.packets.handler.room.HandoverGroupRespBody;
 import org.example.packets.handler.room.JoinGroupNotifyBody;
-import org.example.packets.handler.room.RemoveGroupUserReqBody;
+import org.example.packets.handler.room.GroupUserReqBody;
 import org.example.service.*;
 import org.tio.core.ChannelContext;
 import org.tio.websocket.common.WsResponse;
@@ -93,6 +91,7 @@ public class Chat {
         List<ChannelContext> channelContexts = Im.getByGroup(userStatusBody.getGroup().getRoomId());
 
         User nowUser = Im.getUser(channelContext, false);
+
         for (ChannelContext context : channelContexts) {
             User user = Im.getUser(context);
             if (user.getId().equals(nowUser.getId()) && !sendAll) {
@@ -102,38 +101,10 @@ public class Chat {
         }
     }
 
-    /**
-     * 群组表情回复
-     *
-     * @param messageReactionRespBody 表情回复
-     */
-    public static void sendToGroup(MessageReactionRespBody messageReactionRespBody) {
-        WsResponse wsResponse = WsResponse.fromText(RespBody.success(CommandEnum.COMMAND_SEND_MESSAGE_REACTION_RESP, messageReactionRespBody), Im.CHARSET);
-
-        List<ChannelContext> channelContexts = Im.getByGroup(messageReactionRespBody.getRoomId());
-        for (ChannelContext context : channelContexts) {
-            Im.send(context, wsResponse);
-        }
-    }
-
-    /**
-     * 人员离开群组消息
-     *
-     * @param removeGroupUserReqBody 移除群组消息
-     */
-    public static void sendToGroup(RemoveGroupUserReqBody removeGroupUserReqBody) {
-        List<ChannelContext> channelContexts = Im.getByGroup(removeGroupUserReqBody.getRoomId());
-        WsResponse response = WsResponse.fromText(RespBody.success(CommandEnum.COMMAND_REMOVE_GROUP_USER_RESP, removeGroupUserReqBody), Im.CHARSET);
-        for (ChannelContext context : channelContexts) {
-            Im.send(context, response);
-        }
-    }
-
-
     public static void sendToGroup(JoinGroupNotifyBody joinGroupNotifyBody) {
         // 获取群组成员并补充进去
-        List<User> groupUsers = userGroupService.getGroupUsers(joinGroupNotifyBody.getGroup().getRoomId());
-        joinGroupNotifyBody.getGroup().setUsers(groupUsers);
+//        List<User> groupUsers = userGroupService.getGroupUsers(joinGroupNotifyBody.getGroup().getRoomId());
+//        joinGroupNotifyBody.getGroup().setUsers(groupUsers);
 
         // 判空, 说明有异常
         if (CollUtil.isEmpty(joinGroupNotifyBody.getUsers())) {
@@ -157,13 +128,10 @@ public class Chat {
             return ;
         }
 
-        List<ChannelContext> channelContexts = Im.getByGroup(joinGroupNotifyBody.getGroup().getRoomId());
         WsResponse wsResponse = WsResponse.fromText(RespBody.success(CommandEnum.COMMAND_JOIN_GROUP_NOTIFY_RESP, joinGroupNotifyBody), Im.CHARSET);
-        for (ChannelContext context : channelContexts) {
-            Im.send(context, wsResponse);
-        }
-    }
+        Im.sendToGroup(joinGroupNotifyBody.getGroup().getRoomId(),wsResponse);
 
+    }
 
     public static void resetGroup(Group group, String userId) {
         log.info("{}", group);

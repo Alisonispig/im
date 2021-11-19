@@ -301,7 +301,53 @@ public enum CommandEnum {
      */
     COMMAND_MESSAGE_HISTORY_RESP(37),
 
+    /**
+     * <pre>
+     * 解散群聊请求
+     * </pre>
+     * <code>COMMAND_DISBAND_GROUP_REQ = 38</code>
+     */
+    COMMAND_DISBAND_GROUP_REQ(38),
 
+    /**
+     * <pre>
+     * 解散群聊响应
+     * </pre>
+     * <code>COMMAND_DISBAND_GROUP_RESP = 39</code>
+     */
+    COMMAND_DISBAND_GROUP_RESP(39),
+
+    /**
+     * <pre>
+     * 移交群组请求
+     * </pre>
+     * <code>COMMAND_HANDOVER_GROUP_REQ = 40</code>
+     */
+    COMMAND_HANDOVER_GROUP_REQ(40),
+
+    /**
+     * <pre>
+     * 移交群组响应
+     * </pre>
+     * <code>COMMAND_HANDOVER_GROUP_RESP = 41</code>
+     */
+    COMMAND_HANDOVER_GROUP_RESP(41),
+
+    /**
+     * <pre>
+     * 修改群组资料请求
+     * </pre>
+     * <code>COMMAND_EDIT_GROUP_PROFILE_REQ = 42</code>
+     */
+    COMMAND_EDIT_GROUP_PROFILE_REQ(42),
+
+    /**
+     * <pre>
+     * 修改群组资料响应
+     * </pre>
+     * <code>COMMAND_EDIT_GROUP_PROFILE_RESP = 43</code>
+     */
+    COMMAND_EDIT_GROUP_PROFILE_RESP(43),
 
     ;
 

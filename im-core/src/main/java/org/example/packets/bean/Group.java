@@ -56,6 +56,11 @@ public class Group implements Serializable {
     private LastMessage lastMessage;
 
     /**
+     * 是否删除
+     */
+    private Boolean isDeleted;
+
+    /**
      * 组用户
      */
     private List<User> users;

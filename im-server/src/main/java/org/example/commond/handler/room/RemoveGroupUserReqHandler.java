@@ -7,7 +7,8 @@ import org.example.config.Chat;
 import org.example.config.Im;
 import org.example.enums.CommandEnum;
 import org.example.packets.bean.Group;
-import org.example.packets.handler.room.RemoveGroupUserReqBody;
+import org.example.packets.handler.RespBody;
+import org.example.packets.handler.room.GroupUserReqBody;
 import org.tio.core.ChannelContext;
 import org.tio.core.intf.Packet;
 import org.tio.websocket.common.WsRequest;
@@ -25,22 +26,23 @@ public class RemoveGroupUserReqHandler extends AbstractCmdHandler {
     @Override
     public WsResponse handler(Packet packet, ChannelContext channelContext) {
         WsRequest request = (WsRequest) packet;
-        RemoveGroupUserReqBody removeGroupUserReqBody = JSON.parseObject(request.getWsBodyText(), RemoveGroupUserReqBody.class);
-
+        GroupUserReqBody groupUserReqBody = JSON.parseObject(request.getWsBodyText(), GroupUserReqBody.class);
 
         // 给剩下的人发送人员离开消息
-        Chat.sendToGroup(removeGroupUserReqBody);
+        WsResponse response = WsResponse.fromText(RespBody.success(CommandEnum.COMMAND_REMOVE_GROUP_USER_RESP, groupUserReqBody), Im.CHARSET);
+        Im.sendToGroup(groupUserReqBody.getRoomId(), response);
 
-        Group group = groupService.getGroupInfo(removeGroupUserReqBody.getRoomId());
+        Group group = groupService.getGroupInfo(groupUserReqBody.getRoomId());
         if (group.getIsFriend()) {
+
         }
-        userGroupService.remove(removeGroupUserReqBody.getRoomId(), removeGroupUserReqBody.getUserId());
+        userGroupService.remove(groupUserReqBody.getRoomId(), groupUserReqBody.getUserId());
 
-        List<ChannelContext> channelContexts = Im.getChannelByUserId(removeGroupUserReqBody.getUserId());
-
+        // 将当前所有的连接端都解除掉
+        List<ChannelContext> channelContexts = Im.getChannelByUserId(groupUserReqBody.getUserId());
         if (CollUtil.isNotEmpty(channelContexts)) {
             channelContexts.forEach(x -> {
-                Im.unBindGroup(x, removeGroupUserReqBody.getRoomId());
+                Im.unBindGroup(x, groupUserReqBody.getRoomId());
             });
         }
 

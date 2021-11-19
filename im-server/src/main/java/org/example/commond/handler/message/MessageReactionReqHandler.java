@@ -7,6 +7,7 @@ import org.example.config.Chat;
 import org.example.config.Im;
 import org.example.enums.CommandEnum;
 import org.example.packets.bean.User;
+import org.example.packets.handler.RespBody;
 import org.example.packets.handler.message.MessageReactionReqBody;
 import org.example.packets.handler.message.MessageReactionRespBody;
 import org.tio.core.ChannelContext;
@@ -42,13 +43,14 @@ public class MessageReactionReqHandler extends AbstractCmdHandler {
 
         // 添加一个表情回复
         messageService.addReaction(messageReactionReqBody.getMessageId()
-                ,messageReactionReqBody.getReaction(),messageReactionReqBody.getRemove(),user.getId());
+                , messageReactionReqBody.getReaction(), messageReactionReqBody.getRemove(), user.getId());
 
-        Map<String, List<String>> reaction = messageService.getReaction( messageReactionReqBody.getMessageId());
+        Map<String, List<String>> reaction = messageService.getReaction(messageReactionReqBody.getMessageId());
 
         messageReactionRespBody.setReactions(reaction);
 
-        Chat.sendToGroup(messageReactionRespBody);
+        WsResponse wsResponse = WsResponse.fromText(RespBody.success(CommandEnum.COMMAND_SEND_MESSAGE_REACTION_RESP, messageReactionRespBody), Im.CHARSET);
+        Im.sendToGroup(messageReactionRespBody.getRoomId(), wsResponse);
 
         return null;
     }

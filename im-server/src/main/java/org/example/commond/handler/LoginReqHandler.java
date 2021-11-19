@@ -12,6 +12,7 @@ import org.example.enums.DefaultEnum;
 import org.example.packets.Status;
 import org.example.packets.bean.Group;
 import org.example.packets.bean.User;
+import org.example.packets.bean.UserGroup;
 import org.example.packets.handler.LoginRespBody;
 import org.example.packets.handler.RespBody;
 import org.example.packets.handler.UserStatusBody;
@@ -67,6 +68,8 @@ public class LoginReqHandler extends AbstractCmdHandler {
         UserStatusBody build = UserStatusBody.builder().user(Im.getUser(channelContext, false)).build();
 
         for (Group group : groups) {
+            UserGroup userGroup = userGroupService.getUserGroup(group.getRoomId(), user.getId());
+            build.getUser().setRole(userGroup.getRole());
             // 绑定群组
             Im.bindGroup(channelContext, group);
             // 给所在群组发送上线消息 用户状态更新

@@ -96,7 +96,12 @@ public class MongoRepository<T> {
     }
 
     public void replace(Bson bson, T data) {
+
         collection.replaceOne(bson, data);
+    }
+
+    public void updateMany(Bson bson, Bson update) {
+        collection.updateMany(bson,update);
     }
 
     public void updateById(T data) {

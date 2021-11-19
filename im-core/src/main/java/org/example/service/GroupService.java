@@ -52,4 +52,10 @@ public class GroupService {
     public void updateById(Group userGroup) {
         groupRepository.updateById(userGroup.clone());
     }
+
+    public void delete(String roomId) {
+        Group group = groupRepository.findById(roomId);
+        group.setIsDeleted(true);
+        groupRepository.updateById(group);
+    }
 }

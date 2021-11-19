@@ -68,6 +68,14 @@ public class RespBody implements Serializable {
         return JSON.toJSONString(respBody, SerializerFeature.DisableCircularReferenceDetect);
     }
 
+    public static String fail(CommandEnum command, String msg) {
+        RespBody respBody = new RespBody(command);
+        respBody.setData(null);
+        respBody.setSuccess(false);
+        respBody.setMsg(msg);
+        return JSON.toJSONString(respBody, SerializerFeature.DisableCircularReferenceDetect);
+    }
+
     public RespBody setData(Object data) {
         this.data = data;
         return this;

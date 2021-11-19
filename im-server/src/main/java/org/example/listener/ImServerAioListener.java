@@ -7,6 +7,7 @@ import org.example.enums.KeyEnum;
 import org.example.packets.ImClientNode;
 import org.example.packets.bean.Group;
 import org.example.packets.bean.User;
+import org.example.packets.bean.UserGroup;
 import org.example.packets.handler.UserStatusBody;
 import org.example.service.UserGroupService;
 import org.example.service.UserService;
@@ -71,6 +72,8 @@ public class ImServerAioListener extends WsServerAioListener {
         UserStatusBody build = UserStatusBody.builder().user(userService.getUserInfo(user.getId())).build();
 
         for (Group group : user.getGroups()) {
+            UserGroup userGroup = userGroupService.getUserGroup(group.getRoomId(), user.getId());
+            build.getUser().setRole(userGroup.getRole());
             // 给所在群组发送离线消息 用户状态更新
             List<User> groupUsers = userGroupService.getGroupUsers(group.getRoomId());
             group.setUsers(groupUsers);

@@ -43,6 +43,14 @@ public class Im extends ImConfig {
         Tio.send(channelContext, packet);
     }
 
+    public static void sendToGroup(String groupId, Packet packet) {
+        Tio.sendToGroup(Im.get().tioConfig, groupId, packet);
+    }
+
+    public static void bSendToGroup(String groupId, Packet packet) {
+        Tio.bSendToGroup(Im.get().tioConfig, groupId, packet);
+    }
+
     /**
      * 绑定到群组
      *
@@ -62,6 +70,18 @@ public class Im extends ImConfig {
      */
     public static void unBindGroup(ChannelContext channelContext, String roomId) {
         Tio.unbindGroup(roomId, channelContext);
+    }
+
+    /**
+     * 移除群组
+     *
+     * @param groupId 解散群组
+     */
+    public static void removeGroup(String groupId) {
+        List<ChannelContext> groupChannels = getByGroup(groupId);
+        for (ChannelContext channel : groupChannels) {
+            unBindGroup(channel,groupId);
+        }
     }
 
     /**
@@ -94,7 +114,7 @@ public class Im extends ImConfig {
         }
     }
 
-    public static List<ChannelContext> getByGroup(String roomId){
+    public static List<ChannelContext> getByGroup(String roomId) {
         SetWithLock<ChannelContext> users = Tio.getByGroup(Im.get().tioConfig, roomId);
         if (users == null) {
             return new ArrayList<>();

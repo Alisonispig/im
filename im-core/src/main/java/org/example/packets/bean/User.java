@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.bson.codecs.pojo.annotations.BsonId;
+import org.example.enums.RoomRoleEnum;
 import org.example.packets.Status;
 
 import java.io.Serializable;
@@ -45,6 +46,11 @@ public class User implements Serializable {
      * 用户状态
      */
     private Status status;
+
+    /**
+     * 群组身份
+     */
+    private RoomRoleEnum role;
 
     /**
      * 用户群组列表

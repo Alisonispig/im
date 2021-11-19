@@ -1,8 +1,10 @@
 package org.example.service;
 
+import com.mongodb.client.model.Field;
 import org.example.dao.GroupRepository;
 import org.example.dao.UserGroupRepository;
 import org.example.dao.UserRepository;
+import org.example.enums.RoomRoleEnum;
 import org.example.packets.bean.Group;
 import org.example.packets.bean.User;
 import org.example.packets.bean.UserGroup;
@@ -11,8 +13,9 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.mongodb.client.model.Filters.and;
-import static com.mongodb.client.model.Filters.eq;
+import static com.mongodb.client.model.Aggregates.set;
+import static com.mongodb.client.model.Filters.*;
+import static com.mongodb.client.model.Updates.combine;
 
 public class UserGroupService {
 
@@ -28,24 +31,46 @@ public class UserGroupService {
     }
 
     public void addGroupUser(String roomId, String userId) {
+        addGroupUser(roomId, userId, RoomRoleEnum.GENERAL);
+    }
+
+    public void addGroupUser(String roomId, String userId, RoomRoleEnum role) {
         UserGroup userGroup = new UserGroup();
         userGroup.setUserId(userId);
         userGroup.setRoomId(roomId);
+        userGroup.setRole(role);
         userGroupRepository.saveOrUpdate(and(eq("userId", userId), eq("roomId", roomId)), userGroup);
     }
 
     public List<User> getGroupUsers(String roomId) {
         List<UserGroup> roomIds = userGroupRepository.find(eq("roomId", roomId));
-        return roomIds.stream().map(userGroup -> userRepository.findById(userGroup.getUserId())).collect(Collectors.toList());
+        return roomIds.stream().map(userGroup -> {
+            User user = userRepository.findById(userGroup.getUserId());
+            user.setRole(userGroup.getRole());
+            return user;
+        }).collect(Collectors.toList());
     }
 
 
     public List<Group> getUserGroups(String userId) {
-        List<UserGroup> userIds = userGroupRepository.find(eq("userId", userId));
+        List<UserGroup> userIds = userGroupRepository.find(and(eq("userId", userId), ne("roomDeleted", true)));
         return userIds.stream().map(userGroup -> groupRepository.findById(userGroup.getRoomId())).sorted(Comparator.comparing(Group::getIndex).reversed()).collect(Collectors.toList());
     }
 
     public void remove(String roomId, String userId) {
-        userGroupRepository.delete(and(eq("roomId",roomId),eq("userId",userId)));
+        userGroupRepository.delete(and(eq("roomId", roomId), eq("userId", userId)));
+    }
+
+
+    public UserGroup getUserGroup(String roomId, String userId) {
+        return userGroupRepository.findOne(and(eq("roomId", roomId), eq("userId", userId)));
+    }
+
+    public void update(UserGroup userGroup) {
+        userGroupRepository.replace(and(eq("roomId", userGroup.getRoomId()), eq("userId", userGroup.getUserId())), userGroup);
+    }
+
+    public void delete(String roomId) {
+        userGroupRepository.updateMany(eq("roomId", roomId), set(new Field<>("roomDeleted", true)));
     }
 }

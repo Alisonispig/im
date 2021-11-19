@@ -3,9 +3,7 @@ package org.example.commond;
 import lombok.extern.slf4j.Slf4j;
 import org.example.commond.handler.*;
 import org.example.commond.handler.message.*;
-import org.example.commond.handler.room.CreatGroupReqHandler;
-import org.example.commond.handler.room.JoinGroupReqHandler;
-import org.example.commond.handler.room.RemoveGroupUserReqHandler;
+import org.example.commond.handler.room.*;
 import org.example.enums.CommandEnum;
 
 import java.util.HashMap;
@@ -34,6 +32,9 @@ public class CommandManager {
             registerCommand(new RemoveGroupUserReqHandler());
             registerCommand(new MessageFileHistoryHandler());
             registerCommand(new MessageHistoryHandler());
+            registerCommand(new HandoverGroupHandler());
+            registerCommand(new DisbandGroupHandler());
+            registerCommand(new EditGroupProfileReqHandler());
         } catch (Exception e) {
             log.info("注册处理器失败");
         }
