@@ -53,7 +53,7 @@ public class UploadService {
     public static String uploadDefault(DefaultEnum defaultEnum) {
         String url = fileService.getFileUrl(defaultEnum.getKey());
         if (StrUtil.isBlank(url)) {
-            byte[] bytes = ResourceUtil.readBytes(ImConfig.GLOBAL_PATH + "img/" + defaultEnum.getValue());
+            byte[] bytes = ResourceUtil.readBytes("img/" + defaultEnum.getValue());
             boolean b = uploadFile(bytes, defaultEnum.getValue());
             if (b) {
                 fileService.setFileUrl(defaultEnum.getKey(), defaultEnum.getValue());
