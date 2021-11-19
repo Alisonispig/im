@@ -37,5 +37,7 @@ Windows下执行startup.bat方法,Linux执行startup.sh
 ### 基础功能展示截图
 ![基础功能展示](https://images.gitee.com/uploads/images/2021/1023/172511_3aa221d9_1446263.png "屏幕截图.png")
 
+### 求个Star啊。。。啊啊啊啊。。。。。
+
 ### 交流群(交友投分，切磨箴视)
 ![QQ](https://images.gitee.com/uploads/images/2021/1011/000709_d88c0f1a_1446263.png "屏幕截图.png")
