@@ -29,7 +29,7 @@ Windows下执行startup.bat方法,Linux执行startup.sh
  
 ### 🤣蓝图 
 更新不及时访问 [在线文档](https://www.yuque.com/docs/share/8d1a4d1d-954d-478c-b23d-511d4558eed9)
-![屏幕](https://images.gitee.com/uploads/images/2021/1023/200545_15db0dc8_1446263.png "屏幕截图.png")
+![蓝图](https://images.gitee.com/uploads/images/2021/1120/001640_63e5732b_1446263.png "屏幕截图.png")
 
 ### 🎉前端UI
 目前有一些初略的想法,基于electron和web实现,已有一些雏形,但短期目标还是集中在实现功能上面
