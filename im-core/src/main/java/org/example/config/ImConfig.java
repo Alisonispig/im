@@ -64,13 +64,12 @@ public class ImConfig extends MapWithLockPropSupport {
         GLOBAL_PATH = StrUtil.isNotBlank(property) ? property : "";
 
         if (StrUtil.isNotBlank(property)) {
-
+            fileUrl = setting.getByGroup("file.url", "prod");
             minioUrl = setting.getByGroup("minio.url", "prod");
         } else {
             fileUrl = setting.getByGroup("file.url", "dev");
             minioUrl = setting.getByGroup("minio.url", "dev");
         }
-        fileUrl = setting.getStr("file.url");
         httpPort = setting.getInt("http.port");
         httpMaxLiveTime = setting.getInt("http.max.live.time");
         httpUseSession = setting.getBool("http.use.session");
