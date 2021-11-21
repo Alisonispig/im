@@ -14,5 +14,5 @@ minio.url=http://127.0.0.1:9000
 #minio.url=http://8.142.64.52:7708
 
 [prod]
-file.url=/api/download/
+file.url=http://8.142.64.52:8888/api/download/
 minio.url=http://8.142.64.52:7708
