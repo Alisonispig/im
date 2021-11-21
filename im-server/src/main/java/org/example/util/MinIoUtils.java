@@ -21,7 +21,7 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 /**
-* minio 文件服务
+ * minio 文件服务
  */
 @Slf4j
 public class MinIoUtils {
@@ -32,7 +32,12 @@ public class MinIoUtils {
 
     static {
         MinIoUtils minIoUtils = new MinIoUtils();
-        minIoUtils.init();
+        try {
+            minIoUtils.init();
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("minio 初始化异常");
+        }
     }
 
     public static InputStream download(String filePath) {
@@ -56,12 +61,22 @@ public class MinIoUtils {
         return null;
     }
 
-    public void init() {
+    public void init() throws Exception {
         MinioClient minioClient = MinioClient.builder()
                 .endpoint(Im.minioUrl)
                 .credentials("AKIAIOSFODNN7EXAMPLE", "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY")
                 .build();
         customMinioClient = new CustomMinioClient(minioClient);
+        BucketExistsArgs build = BucketExistsArgs.builder().bucket(MINIO_BUCKET).build();
+        boolean isExist = minioClient.bucketExists(build);
+        if (!isExist) {
+            //创建存储桶并设置只读权限
+            minioClient.makeBucket(MakeBucketArgs.builder().bucket(MINIO_BUCKET).build());
+
+            String READ_ONLY = "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Principal\":{\"AWS\":[\"*\"]},\"Action\":[\"s3:GetBucketLocation\",\"s3:ListBucket\"],\"Resource\":[\"arn:aws:s3:::" + MINIO_BUCKET + "\"]},{\"Effect\":\"Allow\",\"Principal\":{\"AWS\":[\"*\"]},\"Action\":[\"s3:GetObject\"],\"Resource\":[\"arn:aws:s3:::" + MINIO_BUCKET + "/*\"]}]}";
+            SetBucketPolicyArgs build1 = SetBucketPolicyArgs.builder().bucket(MINIO_BUCKET).config(READ_ONLY).build();
+            minioClient.setBucketPolicy(build1);
+        }
     }
 
     /**
@@ -70,7 +85,7 @@ public class MinIoUtils {
      * @param objectName 文件全路径名称
      * @return /
      */
-    public static String getUploadObjectUrl(String objectName,String contentType) {
+    public static String getUploadObjectUrl(String objectName, String contentType) {
         // 上传文件时携带Content-Type头即可
         HashMultimap<String, String> headers = HashMultimap.create();
         headers.put("Content-Type", contentType);
@@ -161,7 +176,7 @@ public class MinIoUtils {
         return true;
     }
 
-    public static boolean uploadByte(byte[] bytes,String name) {
+    public static boolean uploadByte(byte[] bytes, String name) {
         try {
             InputStream inputStream = new ByteArrayInputStream(bytes);
             customMinioClient.putObject(PutObjectArgs.builder().bucket(MINIO_BUCKET).contentType("application/octet-stream").stream(inputStream, bytes.length, 5368709119L).object(name).build());
