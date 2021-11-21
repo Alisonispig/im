@@ -4,6 +4,7 @@ import cn.hutool.core.io.file.FileNameUtil;
 import cn.hutool.core.lang.Assert;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.core.util.ZipUtil;
 import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
 import org.example.config.Im;
@@ -12,6 +13,8 @@ import org.example.packets.file.FileMerge;
 import org.example.protocol.http.service.UploadService;
 import org.example.service.FileService;
 import org.example.util.ThreadPoolUtil;
+import org.tio.http.common.HeaderName;
+import org.tio.http.common.HeaderValue;
 import org.tio.http.common.HttpRequest;
 import org.tio.http.common.HttpResponse;
 import org.tio.http.server.annotation.RequestPath;
@@ -97,7 +100,9 @@ public class UploadController {
             return Resps.resp404(request);
         }
         try {
-            return Resps.bytes(request, inputStream.readAllBytes(), FileNameUtil.extName(name));
+            HttpResponse response = Resps.bytes(request, inputStream.readAllBytes(), FileNameUtil.extName(name));
+            response.setHasGzipped(true);
+            return response;
         } catch (IOException e) {
             return null;
         }
