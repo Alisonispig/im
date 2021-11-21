@@ -27,7 +27,7 @@ public class UploadService {
 
         Map<String, Object> result = new HashMap<>();
         if (partCount == 1) {
-            String uploadObjectUrl = MinIoUtils.getUploadObjectUrl(filePath);
+            String uploadObjectUrl = MinIoUtils.getUploadObjectUrl(filePath,contentType);
             if(uploadObjectUrl != null) {
                 result.put("uploadUrls", ImmutableList.of(uploadObjectUrl));
             }

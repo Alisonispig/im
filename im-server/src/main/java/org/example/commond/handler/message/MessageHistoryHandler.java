@@ -50,7 +50,6 @@ public class MessageHistoryHandler extends AbstractCmdHandler {
         WsResponse response = WsResponse.fromText(success, Im.CHARSET);
         Im.send(channelContext, response);
 
-
         return null;
     }
 }

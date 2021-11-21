@@ -349,6 +349,22 @@ public enum CommandEnum {
      */
     COMMAND_EDIT_GROUP_PROFILE_RESP(43),
 
+    /**
+     * <pre>
+     * 消息撤回请求
+     * </pre>
+     * <code>COMMAND_EDIT_GROUP_PROFILE_REQ = 42</code>
+     */
+    COMMAND_MESSAGE_DELETE_REQ(44),
+
+    /**
+     * <pre>
+     * 消息撤回响应
+     * </pre>
+     * <code>COMMAND_EDIT_GROUP_PROFILE_RESP = 43</code>
+     */
+    COMMAND_MESSAGE_DELETE_RESP(45),
+
     ;
 
     private final int value;

@@ -42,6 +42,7 @@ public class ChatReqHandler extends AbstractCmdHandler {
         }
 
         Message message = BeanUtil.copyProperties(request, Message.class);
+        message.setDeleted(false);
         // 消息缓存至redis
         messageService.putGroupMessage(message);
         ChatRespBody response = BeanUtil.copyProperties(request, ChatRespBody.class);

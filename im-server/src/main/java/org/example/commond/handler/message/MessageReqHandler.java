@@ -30,7 +30,7 @@ public class MessageReqHandler extends AbstractCmdHandler {
 
         WsRequest request = (WsRequest) packet;
         MessageReqBody messageReqBody = JSON.parseObject(request.getWsBodyText(), MessageReqBody.class);
-        List<Message> messages = messageService.getHistoryMessage(messageReqBody.getRoomId(),messageReqBody.getPage(),messageReqBody.getNumber());
+        List<Message> messages = messageService.getHistoryMessage(messageReqBody.getRoomId(), messageReqBody.getPage(), messageReqBody.getNumber());
 
         User user = Im.getUser(channelContext);
 
@@ -40,7 +40,6 @@ public class MessageReqHandler extends AbstractCmdHandler {
             chatRespBody.setAvatar(userInfo.getAvatar());
             chatRespBody.setUsername(userInfo.getUsername());
             chatRespBody.setCurrentUserId(user.getId());
-            chatRespBody.setDeleted(false);
             chatRespBody.setSystem(false);
 //            chatRespBody.setFiles(CollUtil.isEmpty(chatRespBody.getFiles()) ? null : chatRespBody.getFiles());
             return chatRespBody;

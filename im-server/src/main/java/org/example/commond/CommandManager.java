@@ -35,6 +35,7 @@ public class CommandManager {
             registerCommand(new HandoverGroupHandler());
             registerCommand(new DisbandGroupHandler());
             registerCommand(new EditGroupProfileReqHandler());
+            registerCommand(new MessageDeleteHandler());
         } catch (Exception e) {
             log.info("注册处理器失败");
         }

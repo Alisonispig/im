@@ -70,8 +70,10 @@ public class MinIoUtils {
      * @param objectName 文件全路径名称
      * @return /
      */
-    public static String getUploadObjectUrl(String objectName) {
-        // 上传文件时携带content-type头即可
+    public static String getUploadObjectUrl(String objectName,String contentType) {
+        // 上传文件时携带Content-Type头即可
+        HashMultimap<String, String> headers = HashMultimap.create();
+        headers.put("Content-Type", contentType);
         try {
             return customMinioClient.getPresignedObjectUrl(
                     GetPresignedObjectUrlArgs.builder()
@@ -79,7 +81,7 @@ public class MinIoUtils {
                             .bucket(MINIO_BUCKET)
                             .object(objectName)
                             .expiry(1, TimeUnit.DAYS)
-//                            .extraHeaders(headers)
+                            .extraHeaders(headers)
                             .build()
             );
         } catch (Exception e) {

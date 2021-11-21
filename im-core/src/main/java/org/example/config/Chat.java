@@ -51,13 +51,14 @@ public class Chat {
         // 获取到群组内的所有用户
         List<User> groupUsers = userGroupService.getGroupUsers(chatRespBody.getRoomId());
         for (User groupUser : groupUsers) {
-
             // 给这个用户设置未读消息
             unReadMessageService.putUnReadMessage(groupUser.getId(), chatRespBody.getRoomId(), chatRespBody.getId());
+
             // 取出未读消息, 并设置未读数量
             List<UnReadMessage> unReadMessage = unReadMessageService.getUnReadMessage(groupUser.getId(), chatRespBody.getRoomId());
             chatRespBody.setUnreadCount(CollUtil.isEmpty(unReadMessage) ? 0 : unReadMessage.size());
             WsResponse wsResponse = WsResponse.fromText(RespBody.success(CommandEnum.COMMAND_CHAT_REQ, chatRespBody), Im.CHARSET);
+
             // 发送给在线用户
             List<ChannelContext> channelContexts = Im.getChannelByUserId(groupUser.getId());
 

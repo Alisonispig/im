@@ -1,5 +1,6 @@
 package org.example.protocol.http;
 
+import cn.hutool.core.io.file.FileNameUtil;
 import cn.hutool.core.lang.Assert;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
@@ -96,7 +97,7 @@ public class UploadController {
             return Resps.resp404(request);
         }
         try {
-            return Resps.bytes(request, inputStream.readAllBytes(), Im.CHARSET);
+            return Resps.bytes(request, inputStream.readAllBytes(), FileNameUtil.extName(name));
         } catch (IOException e) {
             return null;
         }

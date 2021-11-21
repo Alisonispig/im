@@ -76,4 +76,8 @@ public class MessageService {
     public int getCount(String roomId) {
         return messageRepository.count(eq("roomId", roomId));
     }
+
+    public void update(Message message) {
+        messageRepository.updateById(message);
+    }
 }
