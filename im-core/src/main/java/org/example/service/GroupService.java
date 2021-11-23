@@ -7,6 +7,7 @@ import org.example.dao.GroupRepository;
 import org.example.packets.LastMessage;
 import org.example.packets.bean.Group;
 import org.example.packets.bean.Message;
+import org.example.packets.bean.User;
 
 import static com.mongodb.client.model.Filters.eq;
 
@@ -33,17 +34,21 @@ public class GroupService {
         return groupRepository.findById(roomId);
     }
 
-    public void updateLastMessage(Message message) {
+    public void updateLastMessage(Message message, User user) {
         Group group = groupRepository.findById(message.getRoomId());
+
         LastMessage lastMessage = BeanUtil.copyProperties(message, LastMessage.class);
         if (StrUtil.isBlank(message.getContent()) && CollUtil.isNotEmpty(message.getFiles())) {
             if (message.getFiles().size() == 1) {
                 lastMessage.setContent("[文件] - " + message.getFiles().get(0).getName());
-            }
-            else{
+            } else {
                 lastMessage.setContent("[文件] - " + message.getFiles().get(0).getName() + "等多个文件");
             }
         }
+        if (!group.getIsFriend()) {
+            lastMessage.setContent(user.getUsername() + " - " + lastMessage.getContent());
+        }
+
         group.setIndex(System.currentTimeMillis());
         group.setLastMessage(lastMessage);
         groupRepository.updateById(group);

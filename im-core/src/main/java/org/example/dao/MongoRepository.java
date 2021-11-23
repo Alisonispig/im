@@ -62,6 +62,10 @@ public class MongoRepository<T> {
         return collection.find(bson, entityClass).first();
     }
 
+    public T findOne(Bson bson,Bson sort) {
+        return collection.find(bson, entityClass).sort(sort).first();
+    }
+
     public T findById(String key) {
         if (StrUtil.isBlank(keyName)) {
             throw new NullPointerException("主键Key未指定");

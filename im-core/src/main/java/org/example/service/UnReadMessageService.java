@@ -26,6 +26,10 @@ public class UnReadMessageService {
         return unReadMessageRepository.find(and(eq("userId", userId), eq("roomId", roomId)));
     }
 
+    public UnReadMessage getLastUnReadMessage(String userId, String roomId) {
+        return unReadMessageRepository.findOne(and(eq("userId", userId), eq("roomId", roomId)), eq("_id", -1));
+    }
+
     public void clearUnReadMessage(String userId, String roomId) {
         unReadMessageRepository.delete(and(eq("userId", userId), eq("roomId", roomId)));
     }

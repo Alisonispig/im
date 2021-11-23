@@ -4,13 +4,17 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.IdUtil;
+import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
 import org.example.commond.AbstractCmdHandler;
 import org.example.config.Chat;
+import org.example.config.Im;
 import org.example.config.ImConfig;
 import org.example.enums.CommandEnum;
+import org.example.packets.LastMessage;
 import org.example.packets.bean.Message;
+import org.example.packets.bean.User;
 import org.example.packets.handler.ChatReqBody;
 import org.example.packets.handler.ChatRespBody;
 import org.tio.core.ChannelContext;
@@ -49,9 +53,10 @@ public class ChatReqHandler extends AbstractCmdHandler {
 
         // 发送给群组用户
         Chat.sendToGroup(response);
+        User user = Im.getUser(channelContext);
 
         // 更新群组最后一条信息
-        groupService.updateLastMessage(message);
+        groupService.updateLastMessage(message,user);
 
         return null;
     }

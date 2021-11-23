@@ -59,7 +59,7 @@ public class UserReqHandler extends AbstractCmdHandler {
             // 获取到最后一条消息未读消息,并且发重新发送
             List<UnReadMessage> unReadMessages = unReadMessageService.getUnReadMessage(user.getId(), group.getRoomId());
             if (CollUtil.isNotEmpty(unReadMessages)) {
-                UnReadMessage unReadMessage = unReadMessages.get(0);
+                UnReadMessage unReadMessage = unReadMessages.get(unReadMessages.size() - 1);
                 Message message = messageService.getMessage(unReadMessage.getMessageId());
                 ChatRespBody chatRespBody = BeanUtil.copyProperties(message, ChatRespBody.class);
                 User userInfo = userService.getUserInfo(chatRespBody.getSenderId());

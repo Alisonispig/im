@@ -35,6 +35,11 @@ public class LastMessage {
     private String timestamp;
 
     /**
+     * 发送年月日
+     */
+    private String date;
+
+    /**
      * 是否已保存
      */
     private Boolean saved;
