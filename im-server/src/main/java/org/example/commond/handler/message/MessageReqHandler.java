@@ -40,8 +40,6 @@ public class MessageReqHandler extends AbstractCmdHandler {
             chatRespBody.setAvatar(userInfo.getAvatar());
             chatRespBody.setUsername(userInfo.getUsername());
             chatRespBody.setCurrentUserId(user.getId());
-            chatRespBody.setSystem(false);
-//            chatRespBody.setFiles(CollUtil.isEmpty(chatRespBody.getFiles()) ? null : chatRespBody.getFiles());
             return chatRespBody;
         }).collect(Collectors.toList());
 

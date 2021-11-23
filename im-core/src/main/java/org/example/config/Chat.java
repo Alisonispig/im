@@ -5,12 +5,14 @@ import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.example.enums.CommandEnum;
-import org.example.packets.bean.*;
-import org.example.packets.handler.*;
-import org.example.packets.handler.message.MessageReactionRespBody;
-import org.example.packets.handler.room.HandoverGroupRespBody;
+import org.example.packets.bean.FriendInfo;
+import org.example.packets.bean.Group;
+import org.example.packets.bean.UnReadMessage;
+import org.example.packets.bean.User;
+import org.example.packets.handler.ChatRespBody;
+import org.example.packets.handler.RespBody;
+import org.example.packets.handler.UserStatusBody;
 import org.example.packets.handler.room.JoinGroupNotifyBody;
-import org.example.packets.handler.room.GroupUserReqBody;
 import org.example.service.*;
 import org.tio.core.ChannelContext;
 import org.tio.websocket.common.WsResponse;
@@ -42,7 +44,11 @@ public class Chat {
         chatRespBody.setAvatar(userInfo.getAvatar());
         chatRespBody.setUsername(userInfo.getUsername());
         chatRespBody.setDeleted(false);
-        chatRespBody.setSystem(false);
+
+        chatRespBody.setSystem(chatRespBody.getSystem());
+        if (chatRespBody.getSystem()) {
+            chatRespBody.setSenderId("");
+        }
 
 //        chatRespBody.setFiles(CollUtil.isEmpty(chatRespBody.getFiles()) ? null : chatRespBody.getFiles());
 
@@ -126,11 +132,11 @@ public class Chat {
                     Im.send(channelContext, wsResponse);
                 }
             }
-            return ;
+            return;
         }
 
         WsResponse wsResponse = WsResponse.fromText(RespBody.success(CommandEnum.COMMAND_JOIN_GROUP_NOTIFY_RESP, joinGroupNotifyBody), Im.CHARSET);
-        Im.sendToGroup(joinGroupNotifyBody.getGroup().getRoomId(),wsResponse);
+        Im.sendToGroup(joinGroupNotifyBody.getGroup().getRoomId(), wsResponse);
 
     }
 

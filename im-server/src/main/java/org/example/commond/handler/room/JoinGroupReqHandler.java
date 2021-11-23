@@ -7,12 +7,14 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import lombok.extern.slf4j.Slf4j;
 import org.example.commond.AbstractCmdHandler;
+import org.example.commond.CommandManager;
 import org.example.config.Chat;
 import org.example.config.Im;
 import org.example.enums.CommandEnum;
 import org.example.enums.RoomRoleEnum;
 import org.example.packets.bean.Group;
 import org.example.packets.bean.User;
+import org.example.packets.handler.ChatReqBody;
 import org.example.packets.handler.room.JoinGroupNotifyBody;
 import org.example.packets.handler.RespBody;
 import org.tio.core.ChannelContext;
@@ -70,7 +72,7 @@ public class JoinGroupReqHandler extends AbstractCmdHandler {
                 }
             }
             // 持久化到数据库
-            userGroupService.addGroupUser(group.getRoomId(), addUser.getId(),addUser.getRole());
+            userGroupService.addGroupUser(group.getRoomId(), addUser.getId(), addUser.getRole());
         }
 
         // 发送申请加入群组响应
@@ -79,6 +81,16 @@ public class JoinGroupReqHandler extends AbstractCmdHandler {
 
         // 发送加入群组消息
         Chat.sendToGroup(joinGroupNotifyBody);
+
+        // 发送加入群聊消息
+        User nowUser = Im.getUser(channelContext);
+        AbstractCmdHandler command = CommandManager.getCommand(CommandEnum.COMMAND_CHAT_REQ);
+        for (User user : joinGroupNotifyBody.getUsers()) {
+            ChatReqBody chatReqBody = ChatReqBody.buildSystem(joinGroupNotifyBody.getGroup().getRoomId(), nowUser.getId(), "\"" + user.getUsername() + "\" 已加入群聊");
+            WsRequest wsRequest = WsRequest.fromText(JSON.toJSONString(chatReqBody, SerializerFeature.DisableCircularReferenceDetect), Im.CHARSET);
+            command.handler(wsRequest, channelContext);
+        }
+
 
         return null;
     }

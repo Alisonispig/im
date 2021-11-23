@@ -4,6 +4,7 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.IdUtil;
+import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
@@ -36,16 +37,17 @@ public class ChatReqHandler extends AbstractCmdHandler {
     public WsResponse handler(Packet packet, ChannelContext channelContext) {
         WsRequest httpPacket = (WsRequest) packet;
         System.out.println(httpPacket.getWsBodyText());
-        ChatReqBody request = JSONObject.parseObject(httpPacket.getWsBodyText(), ChatReqBody.class);
+        ChatReqBody request = JSONObject.parseObject(httpPacket.getBody(), ChatReqBody.class);
         Date date = new Date();
+        request.setId(IdUtil.getSnowflake().nextIdStr());
         request.setDate(DateUtil.formatDate(date));
         request.setTimestamp(DateUtil.formatTime(date));
-        request.setId(IdUtil.getSnowflake().nextIdStr());
-        if(CollUtil.isNotEmpty(request.getFiles())){
+        if (CollUtil.isNotEmpty(request.getFiles())) {
             request.getFiles().forEach(x -> x.setUrl(ImConfig.fileUrl + x.getUrl()));
         }
 
         Message message = BeanUtil.copyProperties(request, Message.class);
+        message.setSystem(ObjectUtil.defaultIfNull(message.getSystem(), false));
         message.setDeleted(false);
         // 消息缓存至redis
         messageService.putGroupMessage(message);
@@ -56,7 +58,7 @@ public class ChatReqHandler extends AbstractCmdHandler {
         User user = Im.getUser(channelContext);
 
         // 更新群组最后一条信息
-        groupService.updateLastMessage(message,user);
+        groupService.updateLastMessage(message, user);
 
         return null;
     }

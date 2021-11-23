@@ -34,6 +34,11 @@ public class ChatReqBody {
     private String date;
 
     /**
+     * 是否系统消息
+     */
+    private Boolean system;
+
+    /**
      * 发送时间
      */
     private String timestamp;
@@ -47,5 +52,14 @@ public class ChatReqBody {
      * 回复消息
      */
     private ReplyMessage replyMessage;
+
+    public static ChatReqBody buildSystem(String roomId, String senderId, String content) {
+        ChatReqBody chatReqBody = new ChatReqBody();
+        chatReqBody.setRoomId(roomId);
+        chatReqBody.setSenderId(senderId);
+        chatReqBody.setContent(content);
+        chatReqBody.setSystem(true);
+        return chatReqBody;
+    }
 
 }

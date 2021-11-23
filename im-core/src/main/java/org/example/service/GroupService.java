@@ -45,7 +45,7 @@ public class GroupService {
                 lastMessage.setContent("[文件] - " + message.getFiles().get(0).getName() + "等多个文件");
             }
         }
-        if (!group.getIsFriend()) {
+        if (!group.getIsFriend() && !Boolean.TRUE.equals(message.getSystem())) {
             lastMessage.setContent(user.getUsername() + " - " + lastMessage.getContent());
         }
 
