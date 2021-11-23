@@ -2,6 +2,7 @@ package org.example.config;
 
 
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.example.enums.CommandEnum;
@@ -46,7 +47,7 @@ public class Chat {
         chatRespBody.setDeleted(false);
 
         chatRespBody.setSystem(chatRespBody.getSystem());
-        if (chatRespBody.getSystem()) {
+        if (ObjectUtil.defaultIfNull(chatRespBody.getSystem(), false)) {
             chatRespBody.setSenderId("");
         }
 
