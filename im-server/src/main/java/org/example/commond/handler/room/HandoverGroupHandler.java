@@ -59,7 +59,7 @@ public class HandoverGroupHandler extends AbstractCmdHandler {
         // 移交群主消息
         AbstractCmdHandler command = CommandManager.getCommand(CommandEnum.COMMAND_CHAT_REQ);
         // 发送退出群聊消息
-        String content = "群主已由" + "\"" + user.getUsername() + "\" 已变更为" + "\"" + userService.getUserInfo(body.getUserId()).getUsername() + "\" ";
+        String content = "群主已由" + "\"" + user.getUsername() + "\" 变更为" + "\"" + userService.getUserInfo(body.getUserId()).getUsername() + "\" ";
         ChatReqBody chatReqBody = ChatReqBody.buildSystem(body.getRoomId(), user.getId(), content);
 
         WsRequest wsRequest = WsRequest.fromText(JSON.toJSONString(chatReqBody, SerializerFeature.DisableCircularReferenceDetect), Im.CHARSET);

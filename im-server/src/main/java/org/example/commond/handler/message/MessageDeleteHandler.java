@@ -30,6 +30,8 @@ public class MessageDeleteHandler extends AbstractCmdHandler {
         message.setDeleted(true);
         messageService.update(message);
 
+
+
         WsResponse response = WsResponse.fromText(RespBody.success(CommandEnum.COMMAND_MESSAGE_DELETE_RESP, message), Im.CHARSET);
         Im.sendToGroup(message.getRoomId(), response);
 
