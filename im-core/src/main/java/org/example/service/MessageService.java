@@ -28,7 +28,7 @@ public class MessageService {
     }
 
     public List<Message> getHistoryMessage(String roomId, Integer page, Integer number) {
-       return this.getHistoryMessage(roomId, page, number, -1);
+        return this.getHistoryMessage(roomId, page, number, -1);
     }
 
     public void addReaction(String messageId, String reaction, Boolean remove, String userId) {
@@ -79,5 +79,9 @@ public class MessageService {
 
     public void update(Message message) {
         messageRepository.updateById(message);
+    }
+
+    public Message getLastMessage(String roomId) {
+        return messageRepository.findOne(eq("roomId", roomId), eq("_id", -1));
     }
 }

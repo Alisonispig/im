@@ -38,6 +38,9 @@ public class GroupService {
         Group group = groupRepository.findById(message.getRoomId());
 
         LastMessage lastMessage = BeanUtil.copyProperties(message, LastMessage.class);
+        if(message.getDeleted()){
+            lastMessage.setContent("删除了一条消息");
+        }
         if (StrUtil.isBlank(message.getContent()) && CollUtil.isNotEmpty(message.getFiles())) {
             if (message.getFiles().size() == 1) {
                 lastMessage.setContent("[文件] - " + message.getFiles().get(0).getName());

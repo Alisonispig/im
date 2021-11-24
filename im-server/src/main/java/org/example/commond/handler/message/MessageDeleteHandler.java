@@ -1,12 +1,15 @@
 package org.example.commond.handler.message;
 
+import cn.hutool.core.bean.BeanUtil;
 import com.alibaba.fastjson.JSON;
 import org.example.commond.AbstractCmdHandler;
 import org.example.config.Im;
 import org.example.enums.CommandEnum;
 import org.example.packets.bean.Message;
+import org.example.packets.bean.User;
 import org.example.packets.handler.RespBody;
 import org.example.packets.handler.message.MessageDeleteReqBody;
+import org.example.packets.handler.message.MessageDeleteRespBody;
 import org.tio.core.ChannelContext;
 import org.tio.core.intf.Packet;
 import org.tio.websocket.common.WsRequest;
@@ -30,9 +33,21 @@ public class MessageDeleteHandler extends AbstractCmdHandler {
         message.setDeleted(true);
         messageService.update(message);
 
+        MessageDeleteRespBody messageDeleteRespBody = BeanUtil.copyProperties(message, MessageDeleteRespBody.class);
 
+        Message lastMessage = messageService.getLastMessage(message.getRoomId());
+        if (lastMessage.getId().equals(message.getId())) {
 
-        WsResponse response = WsResponse.fromText(RespBody.success(CommandEnum.COMMAND_MESSAGE_DELETE_RESP, message), Im.CHARSET);
+            User userInfo = userService.getUserInfo(message.getSenderId());
+            // 更新群组最后一条信息
+            groupService.updateLastMessage(message, userInfo);
+            messageDeleteRespBody.setDeleteUserName(userInfo.getUsername());
+            messageDeleteRespBody.setIsLastMessage(true);
+        } else {
+            messageDeleteRespBody.setIsLastMessage(false);
+        }
+
+        WsResponse response = WsResponse.fromText(RespBody.success(CommandEnum.COMMAND_MESSAGE_DELETE_RESP, messageDeleteRespBody), Im.CHARSET);
         Im.sendToGroup(message.getRoomId(), response);
 
         return null;
