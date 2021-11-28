@@ -33,4 +33,8 @@ public class UnReadMessageService {
     public void clearUnReadMessage(String userId, String roomId) {
         unReadMessageRepository.delete(and(eq("userId", userId), eq("roomId", roomId)));
     }
+
+    public List<UnReadMessage> getMessageUnReads(String messageId) {
+        return unReadMessageRepository.find(eq("messageId",messageId));
+    }
 }

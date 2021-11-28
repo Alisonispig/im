@@ -78,6 +78,16 @@ public class ChatRespBody {
     private Boolean saved;
 
     /**
+     * 已分发
+     */
+    private Boolean distributed;
+
+    /**
+     * 已读
+     */
+    private Boolean seen;
+
+    /**
      * 是否删除的消息
      */
     private Boolean deleted;

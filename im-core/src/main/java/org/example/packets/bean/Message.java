@@ -65,6 +65,16 @@ public class Message {
     private Boolean saved;
 
     /**
+     * 已分发
+     */
+    private Boolean distributed;
+
+    /**
+     * 已读
+     */
+    private Boolean seen;
+
+    /**
      * 是否删除的消息
      */
     private Boolean deleted;
@@ -84,10 +94,16 @@ public class Message {
      */
     private ReplyMessage replyMessage;
 
+    /**
+     * 文件消息
+     */
     private List<FileMessageBody> files;
 
     /**
      * 表情回复消息
      */
     private Map<String, List<String>> reactions;
+
+
+    private Long sendTime;
 }

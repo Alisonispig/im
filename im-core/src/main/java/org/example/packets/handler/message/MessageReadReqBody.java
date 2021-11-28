@@ -6,4 +6,6 @@ import lombok.Data;
 public class MessageReadReqBody {
 
     private String roomId;
+
+    private String messageId;
 }

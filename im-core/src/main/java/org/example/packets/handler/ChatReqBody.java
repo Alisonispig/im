@@ -11,7 +11,8 @@ public class ChatReqBody {
     /**
      * 消息ID
      */
-    private String id;
+    private String _id;
+
 
     /**
      * 发送者编号

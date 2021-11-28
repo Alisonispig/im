@@ -38,7 +38,8 @@ public class GroupService {
         Group group = groupRepository.findById(message.getRoomId());
 
         LastMessage lastMessage = BeanUtil.copyProperties(message, LastMessage.class);
-        if(message.getDeleted()){
+        lastMessage.setMessageId(message.getId());
+        if (message.getDeleted()) {
             lastMessage.setContent("删除了一条消息");
         }
         if (StrUtil.isBlank(message.getContent()) && CollUtil.isNotEmpty(message.getFiles())) {
@@ -48,9 +49,6 @@ public class GroupService {
                 lastMessage.setContent("[文件] - " + message.getFiles().get(0).getName() + "等多个文件");
             }
         }
-/*        if (!group.getIsFriend() && !Boolean.TRUE.equals(message.getSystem())) {
-            lastMessage.setContent(user.getUsername() + " - " + lastMessage.getContent());
-        }*/
 
         group.setIndex(System.currentTimeMillis());
         group.setLastMessage(lastMessage);
@@ -65,5 +63,10 @@ public class GroupService {
         Group group = groupRepository.findById(roomId);
         group.setIsDeleted(true);
         groupRepository.updateById(group);
+    }
+
+    public void readLastMessage(Group groupInfo) {
+        groupInfo.getLastMessage().setSeen(true);
+        groupRepository.updateById(groupInfo);
     }
 }

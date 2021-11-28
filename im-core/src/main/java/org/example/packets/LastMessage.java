@@ -14,6 +14,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class LastMessage {
 
+    private String messageId;
+
     /**
      * 消息主体
      */
@@ -45,11 +47,13 @@ public class LastMessage {
     private Boolean saved;
 
     /**
-     * 是否
+     * 已分发
      */
     private Boolean distributed;
 
+    /**
+     * 已读
+     */
     private Boolean seen;
 
-    private Boolean isNew;
 }

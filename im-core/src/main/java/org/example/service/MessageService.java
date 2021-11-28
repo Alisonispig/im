@@ -22,9 +22,9 @@ public class MessageService {
     public List<Message> getHistoryMessage(String roomId, Integer page, Integer number, int asc) {
 
         if (page == null || number == null) {
-            return messageRepository.findSort(eq("roomId", roomId), eq("_id", 1));
+            return messageRepository.findSort(eq("roomId", roomId), eq("sendTime", 1));
         }
-        return messageRepository.find(eq("roomId", roomId), eq("_id", asc), page, number);
+        return messageRepository.find(eq("roomId", roomId), eq("sendTime", asc), page, number);
     }
 
     public List<Message> getHistoryMessage(String roomId, Integer page, Integer number) {
@@ -70,7 +70,7 @@ public class MessageService {
     }
 
     public Message getStartMessage(String roomId) {
-        return messageRepository.findOneLimit(eq("roomId", roomId), eq("_id", 1), 1);
+        return messageRepository.findOneLimit(eq("roomId", roomId), eq("sendTime", 1), 1);
     }
 
     public int getCount(String roomId) {
@@ -82,6 +82,12 @@ public class MessageService {
     }
 
     public Message getLastMessage(String roomId) {
-        return messageRepository.findOne(eq("roomId", roomId), eq("_id", -1));
+        return messageRepository.findOne(eq("roomId", roomId), eq("sendTime", -1));
+    }
+
+    public void read(String messageId) {
+        Message message = messageRepository.findById(messageId);
+        message.setSeen(true);
+        messageRepository.updateById(message);
     }
 }
