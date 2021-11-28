@@ -82,15 +82,16 @@ public class JoinGroupReqHandler extends AbstractCmdHandler {
         // 发送加入群组消息
         Chat.sendToGroup(joinGroupNotifyBody);
 
-        // 发送加入群聊消息
-        User nowUser = Im.getUser(channelContext);
-        AbstractCmdHandler command = CommandManager.getCommand(CommandEnum.COMMAND_CHAT_REQ);
-        for (User user : joinGroupNotifyBody.getUsers()) {
-            ChatReqBody chatReqBody = ChatReqBody.buildSystem(joinGroupNotifyBody.getGroup().getRoomId(), nowUser.getId(), "\"" + user.getUsername() + "\" 已加入群聊");
-            WsRequest wsRequest = WsRequest.fromText(JSON.toJSONString(chatReqBody, SerializerFeature.DisableCircularReferenceDetect), Im.CHARSET);
-            command.handler(wsRequest, channelContext);
+        if(!group.getIsFriend()){
+            // 发送加入群聊消息
+            User nowUser = Im.getUser(channelContext);
+            AbstractCmdHandler command = CommandManager.getCommand(CommandEnum.COMMAND_CHAT_REQ);
+            for (User user : joinGroupNotifyBody.getUsers()) {
+                ChatReqBody chatReqBody = ChatReqBody.buildSystem(joinGroupNotifyBody.getGroup().getRoomId(), nowUser.getId(), "\"" + user.getUsername() + "\" 已加入群聊");
+                WsRequest wsRequest = WsRequest.fromText(JSON.toJSONString(chatReqBody, SerializerFeature.DisableCircularReferenceDetect), Im.CHARSET);
+                command.handler(wsRequest, channelContext);
+            }
         }
-
 
         return null;
     }
