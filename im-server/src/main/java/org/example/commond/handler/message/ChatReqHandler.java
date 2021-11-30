@@ -3,6 +3,7 @@ package org.example.commond.handler.message;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.ObjectUtil;
 import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
@@ -43,7 +44,7 @@ public class ChatReqHandler extends AbstractCmdHandler {
         }
 
         Message message = BeanUtil.copyProperties(request, Message.class);
-        message.setId(request.get_id());
+        message.setId(ObjectUtil.defaultIfNull(request.get_id(), IdUtil.getSnowflake().nextIdStr()));
         message.setSystem(ObjectUtil.defaultIfNull(message.getSystem(), false));
         message.setDeleted(false);
         message.setSaved(true);
