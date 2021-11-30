@@ -6,7 +6,6 @@ import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
 import com.google.common.collect.ImmutableList;
 import org.example.config.Im;
-import org.example.config.ImConfig;
 import org.example.enums.DefaultEnum;
 import org.example.service.FileService;
 import org.example.util.MinIoUtils;
