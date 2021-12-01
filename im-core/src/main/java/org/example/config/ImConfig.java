@@ -56,6 +56,8 @@ public class ImConfig extends MapWithLockPropSupport {
 
     public static String GLOBAL_PATH;
 
+    public static Boolean checkFileMd5;
+
     private static final String GLOBAL_CONFIG_PATH = "global.config.path";
 
     static {
@@ -71,6 +73,7 @@ public class ImConfig extends MapWithLockPropSupport {
             minioUrl = setting.getByGroup("minio.url", "dev");
         }
         httpPort = setting.getInt("http.port");
+        checkFileMd5 = setting.getBool("check.file.md5");
         httpMaxLiveTime = setting.getInt("http.max.live.time");
         httpUseSession = setting.getBool("http.use.session");
         httpCheckHost = setting.getBool("http.check.host");

@@ -45,9 +45,10 @@ public class UploadController {
         String contentType = ObjectUtil.defaultIfNull(fileInit.getContentType(), "application/octet-stream");
         // md5-可进行秒传判断
         String md5 = ObjectUtil.defaultIfNull(fileInit.getMd5(), "");
+
         String url = fileService.getFileUrl(md5);
 
-        if (StrUtil.isNotBlank(url)) {
+        if (StrUtil.isNotBlank(url) && Im.checkFileMd5) {
             Map<String, Object> su = new HashMap<>();
             su.put("objectName", url);
             su.put("quick", true);
