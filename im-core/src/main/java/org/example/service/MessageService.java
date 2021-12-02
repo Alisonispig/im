@@ -24,7 +24,7 @@ public class MessageService {
         if (page == null || number == null) {
             return messageRepository.findSort(eq("roomId", roomId), eq("sendTime", 1));
         }
-        return messageRepository.find(eq("roomId", roomId), eq("sendTime", asc), page, number);
+        return messageRepository.find(and(eq("roomId", roomId),ne("system",true)), eq("sendTime", asc), page, number);
     }
 
     public List<Message> getHistoryMessage(String roomId, Integer page, Integer number) {

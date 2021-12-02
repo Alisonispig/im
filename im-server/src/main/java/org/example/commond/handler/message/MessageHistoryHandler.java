@@ -31,7 +31,7 @@ public class MessageHistoryHandler extends AbstractCmdHandler {
         WsRequest request = (WsRequest) packet;
 
         MessageReqBody messageReqBody = JSON.parseObject(request.getWsBodyText(), MessageReqBody.class);
-        List<Message> messages = messageService.getHistoryMessage(messageReqBody.getRoomId(), messageReqBody.getPage() - 1, messageReqBody.getNumber(), 1);
+        List<Message> messages = messageService.getHistoryMessage(messageReqBody.getRoomId(), messageReqBody.getPage() - 1, messageReqBody.getNumber(), -1);
         int count = messageService.getCount(messageReqBody.getRoomId());
         User user = Im.getUser(channelContext);
 
@@ -41,7 +41,6 @@ public class MessageHistoryHandler extends AbstractCmdHandler {
             chatRespBody.setAvatar(userInfo.getAvatar());
             chatRespBody.setUsername(userInfo.getUsername());
             chatRespBody.setCurrentUserId(user.getId());
-//            chatRespBody.setFiles(CollUtil.isEmpty(chatRespBody.getFiles()) ? null : chatRespBody.getFiles());
             return chatRespBody;
         }).collect(Collectors.toList());
         int page = count / messageReqBody.getNumber();
