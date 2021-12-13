@@ -70,8 +70,6 @@ public class CreatGroupReqHandler extends AbstractCmdHandler {
         }
 
         groupService.saveOrUpdateById(build);
-//        userGroupService.addGroupUser(build.getRoomId(), user.getId());
-
         JoinGroupNotifyBody joinGroupNotifyBody = JoinGroupNotifyBody.builder().group(build).users(request.getUsers())
                 .code(JoinGroupEnum.STATE_CREATE.getValue()).build();
 
@@ -80,16 +78,6 @@ public class CreatGroupReqHandler extends AbstractCmdHandler {
         AbstractCmdHandler command = CommandManager.getCommand(CommandEnum.COMMAND_JOIN_GROUP_REQ);
         command.handler(wsRequest, channelContext);
 
-//        Chat.resetGroup(build, user.getId());
-//
-//        // 发送群组创建成功消息
-//        WsResponse response = WsResponse.fromText(RespBody.success(CommandEnum.COMMAND_CREATE_GROUP_RESP, build), Im.CHARSET);
-//        Im.send(channelContext, response);
-
-//        Im.addGroup(channelContext, joinGroupNotifyBody.getGroup());
-//        Im.bindGroup(channelContext, joinGroupNotifyBody.getGroup());
-//        // TODO 添加会话
-//        messageHelper.addChat(user.getId(), build.getRoomId());
         return null;
     }
 }
