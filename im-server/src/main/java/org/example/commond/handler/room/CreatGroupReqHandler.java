@@ -53,7 +53,7 @@ public class CreatGroupReqHandler extends AbstractCmdHandler {
                 .build();
         request.getUsers().add(user);
         if (!request.getIsFriend()) {
-            build.setAvatar(Im.fileUrl + request.getAvatar());
+            build.setAvatar(request.getAvatar());
         }
         if (!request.getIsFriend() && StrUtil.isBlank(request.getAvatar())) {
             build.setAvatar(url);

@@ -39,7 +39,7 @@ public class EditProfileHandler extends AbstractCmdHandler {
 
         User userInfo = userService.getUserInfo(editProfileReqBody.getRoomId());
         if (StrUtil.isNotBlank(editProfileReqBody.getAvatar())) {
-            userInfo.setAvatar(Im.fileUrl + editProfileReqBody.getAvatar());
+            userInfo.setAvatar(editProfileReqBody.getAvatar());
         }
 
         if (StrUtil.isNotBlank(editProfileReqBody.getName())) {
