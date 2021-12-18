@@ -19,3 +19,4 @@ minio.url=http://127.0.0.1:9000
 [prod]
 file.url=http://8.142.64.52:7708/courier/
 minio.url=http://8.142.64.52:7708
+
