@@ -23,6 +23,7 @@ import org.tio.websocket.common.WsRequest;
 import org.tio.websocket.common.WsResponse;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 public class JoinGroupReqHandler extends AbstractCmdHandler {
@@ -86,11 +87,13 @@ public class JoinGroupReqHandler extends AbstractCmdHandler {
             // 发送加入群聊消息
             User nowUser = Im.getUser(channelContext);
             AbstractCmdHandler command = CommandManager.getCommand(CommandEnum.COMMAND_CHAT_REQ);
-            for (User user : joinGroupNotifyBody.getUsers()) {
-                ChatReqBody chatReqBody = ChatReqBody.buildSystem(joinGroupNotifyBody.getGroup().getRoomId(), nowUser.getId(), "\"" + user.getUsername() + "\" 已加入群聊");
-                WsRequest wsRequest = WsRequest.fromText(JSON.toJSONString(chatReqBody, SerializerFeature.DisableCircularReferenceDetect), Im.CHARSET);
-                command.handler(wsRequest, channelContext);
-            }
+
+            String collect = joinGroupNotifyBody.getUsers().stream().map(User::getUsername).collect(Collectors.joining(StrUtil.COMMA));
+
+            ChatReqBody chatReqBody = ChatReqBody.buildSystem(joinGroupNotifyBody.getGroup().getRoomId(), nowUser.getId(), "\"" + collect + "\" 已加入群聊");
+            WsRequest wsRequest = WsRequest.fromText(JSON.toJSONString(chatReqBody, SerializerFeature.DisableCircularReferenceDetect), Im.CHARSET);
+            command.handler(wsRequest, channelContext);
+
         }
 
         return null;

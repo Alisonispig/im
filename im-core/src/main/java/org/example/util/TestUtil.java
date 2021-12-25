@@ -82,7 +82,6 @@ public class TestUtil {
                 String qc = (String) stringObjectMap.get("optionD");
                 System.out.printf(qc);
             }
-            System.out.println("");
         }
 
 

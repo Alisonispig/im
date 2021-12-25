@@ -5,10 +5,9 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import org.example.commond.AbstractCmdHandler;
 import org.example.commond.CommandManager;
-import org.example.config.Chat;
 import org.example.config.Im;
 import org.example.enums.CommandEnum;
-import org.example.enums.OutGroupTypeEnum;
+import org.example.enums.GroupOutTypeEnum;
 import org.example.packets.bean.Group;
 import org.example.packets.bean.User;
 import org.example.packets.handler.ChatReqBody;
@@ -54,7 +53,7 @@ public class RemoveGroupUserReqHandler extends AbstractCmdHandler {
         User user = Im.getUser(channelContext);
         AbstractCmdHandler command = CommandManager.getCommand(CommandEnum.COMMAND_CHAT_REQ);
         // 发送退出群聊消息
-        String content = "\"" + userService.getUserInfo(body.getUserId()).getUsername() + "\" " + (body.getType().equals(OutGroupTypeEnum.OUT) ? "已退出群聊" : "已被移出群聊");
+        String content = "\"" + userService.getUserInfo(body.getUserId()).getUsername() + "\" " + (body.getType().equals(GroupOutTypeEnum.OUT) ? "已退出群聊" : "已被移出群聊");
         ChatReqBody chatReqBody = ChatReqBody.buildSystem(body.getRoomId(), user.getId(), content);
         WsRequest wsRequest = WsRequest.fromText(JSON.toJSONString(chatReqBody, SerializerFeature.DisableCircularReferenceDetect), Im.CHARSET);
 

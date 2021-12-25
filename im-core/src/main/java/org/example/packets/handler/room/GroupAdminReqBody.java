@@ -1,10 +1,11 @@
 package org.example.packets.handler.room;
 
 import lombok.Data;
+import org.example.enums.GroupAdminTypeEnum;
 import org.example.enums.GroupOutTypeEnum;
 
 @Data
-public class GroupUserReqBody {
+public class GroupAdminReqBody {
 
     /**
      * 用户ID
@@ -17,7 +18,7 @@ public class GroupUserReqBody {
     private String roomId;
 
     /**
-     * 移除类型: 主动退出\踢出群组
+     * 移除类型: 设置\解除
      */
-    private GroupOutTypeEnum type;
+    private GroupAdminTypeEnum type;
 }

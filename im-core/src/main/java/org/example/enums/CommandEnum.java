@@ -365,6 +365,22 @@ public enum CommandEnum {
      */
     COMMAND_MESSAGE_DELETE_RESP(45),
 
+    /**
+     * <pre>
+     * 设置管理员请求
+     * </pre>
+     * <code>COMMAND_SET_ROOM_ADMIN_REQ = 46</code>
+     */
+    COMMAND_SET_ROOM_ADMIN_REQ(46),
+
+    /**
+     * <pre>
+     * 设置管理员响应
+     * </pre>
+     * <code>COMMAND_SET_ROOM_ADMIN_RESP = 47</code>
+     */
+    COMMAND_SET_ROOM_ADMIN_RESP(47),
+
     ;
 
     private final int value;

@@ -110,19 +110,11 @@ public class Chat {
     }
 
     public static void sendToGroup(JoinGroupNotifyBody joinGroupNotifyBody) {
-        // 获取群组成员并补充进去
-//        List<User> groupUsers = userGroupService.getGroupUsers(joinGroupNotifyBody.getGroup().getRoomId());
-//        joinGroupNotifyBody.getGroup().setUsers(groupUsers);
-
         // 判空, 说明有异常
         if (CollUtil.isEmpty(joinGroupNotifyBody.getUsers())) {
             return;
         }
 
-/*      List<User> userList = new ArrayList<>();
-        joinGroupNotifyBody.getUsers().forEach(x -> userList.add(userService.getUserInfo(x.getId())));
-        String collect = userList.stream().map(User::getUsername).collect(Collectors.joining(StrUtil.COMMA));
-        joinGroupNotifyBody.setMessage(collect + ",已加入群聊!");*/
         // 此处分为两种情况,或者用户,或者群组. 群组直接群发
         if (joinGroupNotifyBody.getGroup().getIsFriend()) {
             for (User user : joinGroupNotifyBody.getUsers()) {
