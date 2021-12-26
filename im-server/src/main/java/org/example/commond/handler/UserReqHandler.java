@@ -65,8 +65,6 @@ public class UserReqHandler extends AbstractCmdHandler {
                 User userInfo = userService.getUserInfo(chatRespBody.getSenderId());
                 chatRespBody.setAvatar(userInfo.getAvatar());
                 chatRespBody.setUsername(userInfo.getUsername());
-                chatRespBody.setDeleted(false);
-                chatRespBody.setSystem(false);
                 chatRespBody.setUnreadCount(CollUtil.isEmpty(unReadMessages) ? 0 : unReadMessages.size());
                 WsResponse wsResponse = WsResponse.fromText(RespBody.success(CommandEnum.COMMAND_CHAT_REQ, chatRespBody), Im.CHARSET);
                 Im.send(channelContext, wsResponse);
