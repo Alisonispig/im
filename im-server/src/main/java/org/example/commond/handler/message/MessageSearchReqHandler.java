@@ -8,8 +8,8 @@ import org.example.enums.CommandEnum;
 import org.example.packets.bean.Message;
 import org.example.packets.bean.User;
 import org.example.packets.handler.ChatRespBody;
-import org.example.packets.handler.message.MessageReqBody;
 import org.example.packets.handler.RespBody;
+import org.example.packets.handler.message.MessageReqBody;
 import org.tio.core.ChannelContext;
 import org.tio.core.intf.Packet;
 import org.tio.websocket.common.WsRequest;
@@ -18,19 +18,21 @@ import org.tio.websocket.common.WsResponse;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class MessageReqHandler extends AbstractCmdHandler {
+public class MessageSearchReqHandler extends AbstractCmdHandler {
 
     @Override
     public CommandEnum command() {
-        return CommandEnum.COMMAND_GET_MESSAGE_REQ;
+        return CommandEnum.COMMAND_SEARCH_MESSAGE_REQ;
     }
 
     @Override
     public WsResponse handler(Packet packet, ChannelContext channelContext) {
 
         WsRequest request = (WsRequest) packet;
+
         MessageReqBody messageReqBody = JSON.parseObject(request.getWsBodyText(), MessageReqBody.class);
-        List<Message> messages = messageService.getHistoryMessage(messageReqBody.getRoomId(), messageReqBody.getPage(), messageReqBody.getNumber());
+
+        List<Message> messages = messageService.getMessage(messageReqBody.getRoomId(),messageReqBody.getContent());
 
         User user = Im.getUser(channelContext);
 
@@ -43,11 +45,10 @@ public class MessageReqHandler extends AbstractCmdHandler {
             return chatRespBody;
         }).collect(Collectors.toList());
 
-        String success = RespBody.success(CommandEnum.COMMAND_GET_MESSAGE_RESP, collect);
+        String success = RespBody.success(CommandEnum.COMMAND_SEARCH_MESSAGE_RESP, collect);
         WsResponse response = WsResponse.fromText(success, Im.CHARSET);
         Im.send(channelContext, response);
 
         return null;
     }
-
 }

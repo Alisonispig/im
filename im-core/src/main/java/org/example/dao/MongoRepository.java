@@ -16,6 +16,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
 
+import static com.mongodb.client.model.Filters.and;
 import static com.mongodb.client.model.Filters.eq;
 
 public class MongoRepository<T> {

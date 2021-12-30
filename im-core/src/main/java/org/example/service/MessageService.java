@@ -2,12 +2,14 @@ package org.example.service;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
 import org.example.dao.MessageRepository;
 import org.example.packets.bean.Message;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 import static com.mongodb.client.model.Filters.*;
 
@@ -89,5 +91,10 @@ public class MessageService {
         Message message = messageRepository.findById(messageId);
         message.setSeen(true);
         messageRepository.updateById(message);
+    }
+
+    public List<Message> getMessage(String roomId, String content) {
+        Pattern pattern = Pattern.compile("^.*" + content + ".*$", Pattern.CASE_INSENSITIVE);
+        return messageRepository.findSort(and(eq("roomId", roomId), regex("content", pattern)), eq("sendTime", -1));
     }
 }

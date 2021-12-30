@@ -21,6 +21,7 @@ public class CommandManager {
             registerCommand(new LoginReqHandler());
             registerCommand(new UserReqHandler());
             registerCommand(new MessageReqHandler());
+            registerCommand(new MessageSearchReqHandler());
             registerCommand(new JoinGroupReqHandler());
             registerCommand(new ChatReqHandler());
             registerCommand(new CreatGroupReqHandler());

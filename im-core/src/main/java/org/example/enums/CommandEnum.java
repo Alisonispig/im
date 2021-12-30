@@ -381,6 +381,22 @@ public enum CommandEnum {
      */
     COMMAND_SET_ROOM_ADMIN_RESP(47),
 
+    /**
+     * <pre>
+     * 搜索消息
+     * </pre>
+     * <code>COMMAND_SEARCH_MESSAGE_REQ = 48</code>
+     */
+    COMMAND_SEARCH_MESSAGE_REQ(48),
+
+    /**
+     * <pre>
+     * 搜索消息
+     * </pre>
+     * <code>COMMAND_SEARCH_MESSAGE_RESP = 49</code>
+     */
+    COMMAND_SEARCH_MESSAGE_RESP(49),
+
     ;
 
     private final int value;

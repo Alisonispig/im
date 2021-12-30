@@ -10,6 +10,10 @@ public class MessageReqBody {
      */
     private String roomId;
     /**
+     * 查询内容
+     */
+    private String content;
+    /**
      * 消息开始时间;
      */
     private Double beginTime;
