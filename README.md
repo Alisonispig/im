@@ -35,7 +35,8 @@ Windows下执行startup.bat方法,Linux执行startup.sh
 目前有一些初略的想法,基于electron和web实现,已有一些雏形,但短期目标还是集中在实现功能上面
 
 ### 基础功能展示截图
-![基础功能展示](https://images.gitee.com/uploads/images/2021/1023/172511_3aa221d9_1446263.png "屏幕截图.png")
+![功能展示](doc/20211230235837.png)
+![功能展示](doc/20211230235931.png)
 
 ### 求个Star啊。。。啊啊啊啊。。。。。
 
