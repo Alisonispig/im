@@ -48,6 +48,11 @@ public class User implements Serializable {
     private Status status;
 
     /**
+     * 是否系统账号
+     */
+    private Boolean isSystem;
+
+    /**
      * 群组身份
      */
     private RoomRoleEnum role;

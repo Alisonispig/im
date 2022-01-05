@@ -391,11 +391,43 @@ public enum CommandEnum {
 
     /**
      * <pre>
-     * 搜索消息
-     * </pre>
-     * <code>COMMAND_SEARCH_MESSAGE_RESP = 49</code>
+     *      * 搜索消息
+     *      * </pre>
+     *      * <code>COMMAND_SEARCH_MESSAGE_RESP = 49</code>
      */
     COMMAND_SEARCH_MESSAGE_RESP(49),
+
+    /**
+     * <pre>
+     * 系统消息请求
+     * </pre>
+     * <code>COMMAND_SYSTEM_MESSAGE_REQ = 50</code>
+     */
+    COMMAND_SYSTEM_MESSAGE_REQ(50),
+
+    /**
+     * <pre>
+     * 系统消息响应
+     * </pre>
+     * <code>COMMAND_SYSTEM_MESSAGE_RESP = 51</code>
+     */
+    COMMAND_SYSTEM_MESSAGE_RESP(51),
+
+    /**
+     * <pre>
+     * 用户群组配置请求
+     * </pre>
+     * <code>COMMAND_USER_GROUP_CONFIG_REQ = 52</code>
+     */
+    COMMAND_USER_GROUP_CONFIG_REQ(52),
+
+    /**
+     * <pre>
+     * 用户群组配置响应
+     * </pre>
+     * <code>COMMAND_USER_GROUP_CONFIG_RESP = 53</code>
+     */
+    COMMAND_USER_GROUP_CONFIG_RESP(53),
 
     ;
 

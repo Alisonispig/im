@@ -40,7 +40,7 @@ public class MessageDeleteHandler extends AbstractCmdHandler {
 
             User userInfo = userService.getUserInfo(message.getSenderId());
             // 更新群组最后一条信息
-            groupService.updateLastMessage(message, userInfo);
+            groupService.updateLastMessage(message);
             messageDeleteRespBody.setDeleteUserName(userInfo.getUsername());
             messageDeleteRespBody.setIsLastMessage(true);
         } else {

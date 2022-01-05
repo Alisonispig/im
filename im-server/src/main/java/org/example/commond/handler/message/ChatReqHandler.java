@@ -57,10 +57,9 @@ public class ChatReqHandler extends AbstractCmdHandler {
         ChatRespBody response = BeanUtil.copyProperties(message, ChatRespBody.class);
         // 发送给群组用户
         Chat.sendToGroup(response);
-        User user = Im.getUser(channelContext);
 
         // 更新群组最后一条信息
-        groupService.updateLastMessage(message, user);
+        groupService.updateLastMessage(message);
 
         return null;
     }

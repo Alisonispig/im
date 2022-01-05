@@ -33,13 +33,22 @@ public class UserGroupService {
     public void addGroupUser(String roomId, String userId) {
         addGroupUser(roomId, userId, RoomRoleEnum.GENERAL);
     }
+    public void addGroupUser(String roomId, String userId,Boolean isSystem) {
+        addGroupUser(roomId, userId, RoomRoleEnum.GENERAL,isSystem);
+    }
 
-    public void addGroupUser(String roomId, String userId, RoomRoleEnum role) {
+    public void addGroupUser(String roomId, String userId, RoomRoleEnum role, Boolean isSystem) {
         UserGroup userGroup = new UserGroup();
         userGroup.setUserId(userId);
         userGroup.setRoomId(roomId);
+        userGroup.setNotice(true);
         userGroup.setRole(role);
+        userGroup.setIsSystem(isSystem);
         userGroupRepository.saveOrUpdate(and(eq("userId", userId), eq("roomId", roomId)), userGroup);
+    }
+
+    public void addGroupUser(String roomId, String userId, RoomRoleEnum role) {
+        addGroupUser(roomId, userId, role, false);
     }
 
     public List<User> getGroupUsers(String roomId) {
@@ -61,7 +70,6 @@ public class UserGroupService {
         userGroupRepository.delete(and(eq("roomId", roomId), eq("userId", userId)));
     }
 
-
     public UserGroup getUserGroup(String roomId, String userId) {
         return userGroupRepository.findOne(and(eq("roomId", roomId), eq("userId", userId)));
     }
@@ -72,5 +80,9 @@ public class UserGroupService {
 
     public void delete(String roomId) {
         userGroupRepository.updateMany(eq("roomId", roomId), set(new Field<>("roomDeleted", true)));
+    }
+
+    public UserGroup getSystemUserGroup(String userId) {
+        return userGroupRepository.findOne(and(eq("isSystem", true), eq("userId", userId)));
     }
 }

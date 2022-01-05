@@ -1,6 +1,8 @@
 package org.example.util;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.date.DateUnit;
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.RandomUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
@@ -10,6 +12,7 @@ import org.bson.conversions.Bson;
 import org.example.dao.MessageRepository;
 import org.example.packets.bean.Message;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -34,12 +37,15 @@ public class TestUtil {
         return "https://t1.huishahe.com/uploads/tu/202107/9999/7690765ea7.jpg";
     }
 
+    public static int betweenDay(Date startTime, Date endTime) {
+        long between = DateUtil.between(startTime, endTime, DateUnit.MS, true);
+        int day = Math.toIntExact(between / (1000 * 60 * 60 * 24));
+        return between % (1000 * 60 * 60 * 24) == 0 ? day : day + 1;
+    }
     public static void main(String[] args) {
-        for (int i = 0; i < 20; i++) {
-
-        }
+        System.out.println(betweenDay(DateUtil.parse("2021-12-01 00:00:00"), DateUtil.parse("2021-12-02 23:59:59")));
 //        TimeInterval timer = DateUtil.timer();
-        MessageRepository messageRepository = new MessageRepository();
+//        MessageRepository messageRepository = new MessageRepository();
 //        for (int i = 0; i < 10000; i++) {
 //            Message message = new Message();
 //            message.setId(IdUtil.getSnowflake().nextIdStr());
@@ -54,10 +60,10 @@ public class TestUtil {
 //        System.out.println(timer.intervalRestart());
 //        List<Message> messages1 = messageRepository.find(and(eq("roomId", "1459053033268625408"), not(size("files", 0))));
 //        messages1.forEach(System.out::println);
-        Pattern compile = Pattern.compile("/2/",Pattern.CASE_INSENSITIVE);
-        Pattern pattern = Pattern.compile("^.*2.*$", Pattern.CASE_INSENSITIVE);
-        List<Message> messages = messageRepository.find(and(eq("roomId", "1462764224268779520"), regex("content", pattern)));
-        messages.forEach(System.out::println);
+//        Pattern compile = Pattern.compile("/2/",Pattern.CASE_INSENSITIVE);
+//        Pattern pattern = Pattern.compile("^.*2.*$", Pattern.CASE_INSENSITIVE);
+//        List<Message> messages = messageRepository.find(and(eq("roomId", "1462764224268779520"), regex("content", pattern)));
+//        messages.forEach(System.out::println);
 
     }
 

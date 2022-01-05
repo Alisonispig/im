@@ -34,7 +34,7 @@ public class GroupService {
         return groupRepository.findById(roomId);
     }
 
-    public void updateLastMessage(Message message, User user) {
+    public void updateLastMessage(Message message) {
         Group group = groupRepository.findById(message.getRoomId());
 
         LastMessage lastMessage = BeanUtil.copyProperties(message, LastMessage.class);

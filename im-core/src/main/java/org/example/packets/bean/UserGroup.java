@@ -25,4 +25,16 @@ public class UserGroup {
      * 房间是否删除
      */
     private Boolean roomDeleted;
+
+    /**
+     * 当前群组是否系统会话
+     */
+    private Boolean isSystem;
+
+    /**
+     * 是否开启通知
+     */
+    private Boolean notice;
 }
+
+

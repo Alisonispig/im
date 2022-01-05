@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.example.commond.handler.*;
 import org.example.commond.handler.message.*;
 import org.example.commond.handler.room.*;
+import org.example.commond.handler.system.SystemTextMessageHandler;
 import org.example.enums.CommandEnum;
 
 import java.util.HashMap;
@@ -32,12 +33,14 @@ public class CommandManager {
             registerCommand(new EditProfileHandler());
             registerCommand(new RemoveGroupUserReqHandler());
             registerCommand(new SetRoomAdminReqHandler());
+            registerCommand(new SystemTextMessageHandler());
             registerCommand(new MessageFileHistoryHandler());
             registerCommand(new MessageHistoryHandler());
             registerCommand(new HandoverGroupHandler());
             registerCommand(new DisbandGroupHandler());
             registerCommand(new EditGroupProfileReqHandler());
             registerCommand(new MessageDeleteHandler());
+            registerCommand(new UserGroupConfigReqHandler());
         } catch (Exception e) {
             log.info("注册处理器失败");
         }

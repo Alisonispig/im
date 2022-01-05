@@ -9,10 +9,7 @@ import org.example.config.Chat;
 import org.example.config.Im;
 import org.example.config.ImConfig;
 import org.example.enums.CommandEnum;
-import org.example.packets.bean.Group;
-import org.example.packets.bean.Message;
-import org.example.packets.bean.UnReadMessage;
-import org.example.packets.bean.User;
+import org.example.packets.bean.*;
 import org.example.packets.handler.ChatRespBody;
 import org.example.packets.handler.RespBody;
 import org.example.packets.handler.UserReqBody;
@@ -47,7 +44,8 @@ public class UserReqHandler extends AbstractCmdHandler {
             String roomId = group.getRoomId();
             List<User> groupUsers = userGroupService.getGroupUsers(roomId);
             group.setUsers(groupUsers);
-
+            UserGroup userGroup = userGroupService.getUserGroup(group.getRoomId(), user.getId());
+            group.setNotice(userGroup.getNotice());
             Chat.resetGroup(group, user.getId());
         }
         user.setChats(chats);

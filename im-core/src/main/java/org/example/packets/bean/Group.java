@@ -45,6 +45,11 @@ public class Group implements Serializable {
     private String avatar;
 
     /**
+     * 是否系统会话
+     */
+    private Boolean isSystem;
+
+    /**
      * 好友ID
      */
     @BsonIgnore
@@ -59,6 +64,11 @@ public class Group implements Serializable {
      * 是否删除
      */
     private Boolean isDeleted;
+
+    /**
+     * 是否打开通知
+     */
+    private Boolean notice;
 
     /**
      * 组用户
