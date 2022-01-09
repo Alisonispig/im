@@ -7,6 +7,7 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.core.util.ZipUtil;
 import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
+import org.example.config.CourierConfig;
 import org.example.config.Im;
 import org.example.packets.file.FileInit;
 import org.example.packets.file.FileMerge;
@@ -48,7 +49,7 @@ public class UploadController {
 
         String url = fileService.getFileUrl(md5);
 
-        if (StrUtil.isNotBlank(url) && Im.checkFileMd5) {
+        if (StrUtil.isNotBlank(url) && CourierConfig.checkFileMd5) {
             Map<String, Object> su = new HashMap<>();
             su.put("objectName", url);
             su.put("quick", true);

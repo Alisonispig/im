@@ -9,6 +9,7 @@ import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
 import org.example.commond.AbstractCmdHandler;
 import org.example.config.Chat;
+import org.example.config.CourierConfig;
 import org.example.config.Im;
 import org.example.config.ImConfig;
 import org.example.enums.CommandEnum;
@@ -40,7 +41,7 @@ public class ChatReqHandler extends AbstractCmdHandler {
         request.setDate(DateUtil.formatDate(date));
         request.setTimestamp(DateUtil.formatTime(date));
         if (CollUtil.isNotEmpty(request.getFiles())) {
-            request.getFiles().forEach(x -> x.setUrl(ImConfig.fileUrl + x.getUrl()));
+            request.getFiles().forEach(x -> x.setUrl(CourierConfig.fileUrl + x.getUrl()));
         }
 
         Message message = BeanUtil.copyProperties(request, Message.class);

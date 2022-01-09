@@ -5,6 +5,7 @@ import cn.hutool.core.io.resource.ResourceUtil;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
 import com.google.common.collect.ImmutableList;
+import org.example.config.CourierConfig;
 import org.example.config.Im;
 import org.example.enums.DefaultEnum;
 import org.example.service.FileService;
@@ -58,6 +59,6 @@ public class UploadService {
                 fileService.setFileUrl(defaultEnum.getKey(), defaultEnum.getValue());
             }
         }
-        return Im.fileUrl + defaultEnum.getValue();
+        return CourierConfig.fileUrl + defaultEnum.getValue();
     }
 }

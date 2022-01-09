@@ -7,6 +7,7 @@ import io.minio.errors.*;
 import io.minio.http.Method;
 import io.minio.messages.Part;
 import lombok.extern.slf4j.Slf4j;
+import org.example.config.CourierConfig;
 import org.example.config.Im;
 
 import java.io.ByteArrayInputStream;
@@ -63,7 +64,7 @@ public class MinIoUtils {
 
     public void init() throws Exception {
         MinioClient minioClient = MinioClient.builder()
-                .endpoint(Im.minioUrl)
+                .endpoint(CourierConfig.minioUrl)
                 .credentials("AKIAIOSFODNN7EXAMPLE", "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY")
                 .build();
         customMinioClient = new CustomMinioClient(minioClient);

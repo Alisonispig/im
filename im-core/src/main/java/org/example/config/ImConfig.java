@@ -17,8 +17,8 @@ public class ImConfig extends MapWithLockPropSupport {
 
     public TioConfig tioConfig;
 
-    /**
-     * 消息处理器，Redis持久化， 处理在线离线消息
+    /*
+      消息处理器，Redis持久化， 处理在线离线消息
      */
 //    public MessageHelper messageHelper;
 
@@ -41,46 +41,7 @@ public class ImConfig extends MapWithLockPropSupport {
      */
     public static final String PROTOCOL_NAME = "IM";
 
-    public static String minioUrl;
 
-    /**
-     * Http 端口 最大活跃时间
-     */
-    public static int httpPort, httpMaxLiveTime;
-
-    public static boolean httpUseSession, httpCheckHost;
-
-    public static int socketPort, socketHeartbeat;
-
-    public static String fileUrl;
-
-    public static String GLOBAL_PATH;
-
-    public static Boolean checkFileMd5;
-
-    private static final String GLOBAL_CONFIG_PATH = "global.config.path";
-
-    static {
-        Setting setting = new Setting("application.setting");
-        String property = System.getProperty(GLOBAL_CONFIG_PATH);
-        GLOBAL_PATH = StrUtil.isNotBlank(property) ? property : "";
-
-        if (StrUtil.isNotBlank(property)) {
-            fileUrl = setting.getByGroup("file.url", "prod");
-            minioUrl = setting.getByGroup("minio.url", "prod");
-        } else {
-            fileUrl = setting.getByGroup("file.url", "dev");
-            minioUrl = setting.getByGroup("minio.url", "dev");
-        }
-        httpPort = setting.getInt("http.port");
-        checkFileMd5 = setting.getBool("check.file.md5");
-        httpMaxLiveTime = setting.getInt("http.max.live.time");
-        httpUseSession = setting.getBool("http.use.session");
-        httpCheckHost = setting.getBool("http.check.host");
-        socketPort = setting.getInt("socket.port");
-        socketHeartbeat = setting.getInt("socket.heartbeat");
-
-    }
 
     /**
      * 监听的ip

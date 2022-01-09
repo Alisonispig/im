@@ -14,17 +14,17 @@ public class MongoConfig {
 
     private static MongoClient mongoClient = null;
 
-    public static MongoClient getClient(){
-        if(mongoClient == null){
+    public static MongoClient getClient() {
+        if (mongoClient == null) {
             CodecRegistry pojoCodecRegistry = fromRegistries(MongoClientSettings.getDefaultCodecRegistry(),
                     fromProviders(PojoCodecProvider.builder().automatic(true).build()));
 
             MongoClientSettings settings = MongoClientSettings.builder()
                     .codecRegistry(pojoCodecRegistry)
-                    .applyConnectionString(new ConnectionString("mongodb://localhost"))
+                    .applyConnectionString(new ConnectionString("mongodb://" + CourierConfig.mongoHost))
                     .build();
 
-             mongoClient = MongoClients.create(settings);
+            mongoClient = MongoClients.create(settings);
         }
         return mongoClient;
     }

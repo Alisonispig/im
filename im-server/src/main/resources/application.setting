@@ -1,22 +1,22 @@
-application.name=IM
+applicationName=IM
 
-socket.port=9326
-socket.heartbeat=60000
+socketPort=9326
+socketHeartbeat=60000
 
-http.port=8088
-http.max.live.time=2000
-http.use.session=false
-http.check.host=false
+httpPort=8088
+httpMaxLiveTime=2000
+httpUseSession=false
+httpCheckHost=false
 
-check.file.md5=true
+checkFileMd5=true
 
 [dev]
-file.url=http://127.0.0.1:9000/courier/
-minio.url=http://127.0.0.1:9000
-#file.url=http://8.142.64.52:7708/courier/
-#minio.url=http://8.142.64.52:7708
+mongoHost=192.168.31.93
+fileUrl=http://${dev.mongo.host}:9000/courier/
+minioUrl=http://${dev.mongo.host}:9000
 
 [prod]
-file.url=http://8.142.64.52:7708/courier/
-minio.url=http://8.142.64.52:7708
+mongoHost=8.142.64.52
+fileUrl=http://${prod.mongo.host}:7708/courier/
+minioUrl=http://${prod.mongo.host}:7708
 

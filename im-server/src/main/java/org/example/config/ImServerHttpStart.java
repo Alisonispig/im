@@ -19,13 +19,13 @@ public class ImServerHttpStart {
 
     public static void start() throws Exception {
 
-        httpConfig = new HttpConfig(Im.httpPort, null, null, null);
+        httpConfig = new HttpConfig(CourierConfig.httpPort, null, null, null);
         httpConfig.setPageRoot("classpath:page");
-        httpConfig.setMaxLiveTimeOfStaticRes(Im.httpMaxLiveTime);
+        httpConfig.setMaxLiveTimeOfStaticRes(CourierConfig.httpMaxLiveTime);
         httpConfig.setPage404("404.html");
         httpConfig.setPage500("500.html");
-        httpConfig.setUseSession(Im.httpUseSession);
-        httpConfig.setCheckHost(Im.httpCheckHost);
+        httpConfig.setUseSession(CourierConfig.httpUseSession);
+        httpConfig.setCheckHost(CourierConfig.httpCheckHost);
 
         requestHandler = new DefaultHttpRequestHandler(httpConfig, ImServer.class);//第二个参数也可以是数组
 

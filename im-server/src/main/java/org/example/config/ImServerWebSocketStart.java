@@ -21,11 +21,11 @@ public class ImServerWebSocketStart {
         serverTioConfig.setName(ImConfig.PROTOCOL_NAME);
         serverTioConfig.setServerAioListener(ImServerAioListener.me);
         serverTioConfig.ipStats.addDurations(ImConfig.IpStatDuration.IPSTAT_DURATIONS);
-        serverTioConfig.setHeartbeatTimeout(ImConfig.socketHeartbeat);
+        serverTioConfig.setHeartbeatTimeout(CourierConfig.socketHeartbeat);
     }
 
     public static void start() throws Exception {
-        ImServerWebSocketStart appStarter = new ImServerWebSocketStart(ImConfig.socketPort, WsMsgHandler.me);
+        ImServerWebSocketStart appStarter = new ImServerWebSocketStart(CourierConfig.socketPort, WsMsgHandler.me);
 
         ImConfig imServerConfig = new ImConfig();
 //        imServerConfig.setMessageHelper(new MongoMessageHelper());
