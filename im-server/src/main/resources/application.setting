@@ -12,11 +12,11 @@ checkFileMd5=true
 
 [dev]
 mongoHost=192.168.31.93
-fileUrl=http://${dev.mongo.host}:9000/courier/
-minioUrl=http://${dev.mongo.host}:9000
+fileUrl=http://${dev.mongoHost}:9000/courier/
+minioUrl=http://${dev.mongoHost}:9000
 
 [prod]
 mongoHost=8.142.64.52
-fileUrl=http://${prod.mongo.host}:7708/courier/
-minioUrl=http://${prod.mongo.host}:7708
+fileUrl=http://${prod.mongoHost}:7708/courier/
+minioUrl=http://${prod.mongoHost}:7708
 

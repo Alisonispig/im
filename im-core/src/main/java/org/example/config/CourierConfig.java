@@ -4,6 +4,8 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.setting.Setting;
 import lombok.Data;
 
+import java.nio.charset.Charset;
+
 public class CourierConfig {
 
     /**
@@ -64,7 +66,7 @@ public class CourierConfig {
     public static String env;
 
     static {
-        Setting setting = new Setting("application.setting");
+        Setting setting = new Setting("application.setting", Charset.defaultCharset(), true);
         String property = System.getProperty("ENV");
         env = StrUtil.isNotBlank(property) ? property : "dev";
 
