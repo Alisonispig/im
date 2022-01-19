@@ -28,7 +28,7 @@ import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 @Slf4j
-@RequestPath
+@RequestPath("/file")
 public class UploadController {
 
     private final FileService fileService;

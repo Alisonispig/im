@@ -13,14 +13,13 @@ import org.example.packets.handler.system.RespBody;
 import org.example.protocol.http.service.UploadService;
 import org.example.service.AuthService;
 import org.example.service.UserService;
-import org.example.util.TestUtil;
 import org.tio.http.common.HttpRequest;
 import org.tio.http.common.HttpResponse;
 import org.tio.http.server.annotation.RequestPath;
 import org.tio.http.server.util.Resps;
 
 @Slf4j
-@RequestPath("")
+@RequestPath("/account")
 public class RegisterController {
 
     private final AuthService authService;
@@ -55,7 +54,7 @@ public class RegisterController {
         return Resps.txt(httpRequest, RespBody.success(CommandEnum.COMMAND_REGISTER_RESP));
     }
 
-    @RequestPath(value = "/check/account")
+    @RequestPath(value = "/check")
     public HttpResponse checkAccount(String account, HttpRequest request) {
         Auth auth = authService.getByAccount(account);
         if (auth != null) {
