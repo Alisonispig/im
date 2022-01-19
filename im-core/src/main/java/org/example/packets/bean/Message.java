@@ -4,7 +4,7 @@ import com.alibaba.fastjson.annotation.JSONField;
 import lombok.Data;
 import org.bson.codecs.pojo.annotations.BsonId;
 import org.example.packets.ReplyMessage;
-import org.example.packets.handler.FileMessageBody;
+import org.example.packets.handler.message.FileMessageBody;
 
 import java.util.List;
 import java.util.Map;

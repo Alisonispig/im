@@ -21,6 +21,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+/*
+
+docker run -d -p 9000:9000 -p 9001:9001 --name minio -v E:\minio\data:/data -e "MINIO_ROOT_USER=AKIAIOSFODNN7EXAMPLE" -e "MINIO_ROOT_PASSWORD=wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY" --restart=always quay.io/minio/minio server /data --console-address ":9001"
+
+ */
+
+
 /**
  * minio 文件服务
  */

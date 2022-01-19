@@ -7,8 +7,10 @@ import org.example.commond.AbstractCmdHandler;
 import org.example.commond.CommandManager;
 import org.example.commond.handler.LoginReqHandler;
 import org.example.config.Im;
+import org.example.config.ImConfig;
 import org.example.enums.CommandEnum;
 import org.example.packets.bean.User;
+import org.example.packets.handler.system.LoginReqBody;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.tio.core.ChannelContext;
@@ -35,7 +37,11 @@ public class WsMsgHandler implements IWsMsgHandler {
     @Override
     public void onAfterHandshaked(HttpRequest httpRequest, HttpResponse httpResponse, ChannelContext channelContext) {
         LoginReqHandler loginHandler = (LoginReqHandler) CommandManager.getCommand(CommandEnum.COMMAND_LOGIN_REQ);
-        loginHandler.handler(httpRequest, channelContext);
+
+        String account = httpRequest.getParam("account");
+        String password = httpRequest.getParam("password");
+        WsRequest wsRequest = WsRequest.fromText(JSON.toJSONString(new LoginReqBody(account,password)), ImConfig.CHARSET);
+        loginHandler.handler(wsRequest, channelContext);
         log.info("握手完毕{},{}", "66", "666");
     }
 

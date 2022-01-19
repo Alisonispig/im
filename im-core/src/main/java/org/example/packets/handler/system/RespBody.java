@@ -1,7 +1,7 @@
 /**
  *
  */
-package org.example.packets.handler;
+package org.example.packets.handler.system;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
@@ -44,6 +44,7 @@ public class RespBody implements Serializable {
     public RespBody(CommandEnum command) {
         this.command = command.getValue();
     }
+
 
     public static String success(CommandEnum command) {
         return success(command, null, 0, 0);

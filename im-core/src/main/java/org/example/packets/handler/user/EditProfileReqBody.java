@@ -1,4 +1,4 @@
-package org.example.packets.handler;
+package org.example.packets.handler.user;
 
 import lombok.Data;
 
@@ -6,14 +6,9 @@ import lombok.Data;
 public class EditProfileReqBody {
 
     /**
-     * 房间号 / 用户ID
+     * 用户ID
      */
-    private String roomId;
-
-    /**
-     * 是否群组
-     */
-    private Boolean isGroup;
+    private String userId;
 
     /**
      * 头像路径

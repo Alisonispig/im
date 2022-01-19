@@ -1,7 +1,7 @@
 package org.example.packets;
 
 import lombok.Data;
-import org.example.packets.handler.FileMessageBody;
+import org.example.packets.handler.message.FileMessageBody;
 
 import java.util.List;
 

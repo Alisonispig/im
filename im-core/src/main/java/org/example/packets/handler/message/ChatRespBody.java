@@ -1,4 +1,4 @@
-package org.example.packets.handler;
+package org.example.packets.handler.message;
 
 import com.alibaba.fastjson.annotation.JSONField;
 import lombok.AllArgsConstructor;

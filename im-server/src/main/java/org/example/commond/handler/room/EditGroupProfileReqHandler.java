@@ -6,7 +6,7 @@ import org.example.commond.AbstractCmdHandler;
 import org.example.config.Im;
 import org.example.enums.CommandEnum;
 import org.example.packets.bean.Group;
-import org.example.packets.handler.RespBody;
+import org.example.packets.handler.system.RespBody;
 import org.example.packets.handler.room.GroupProfileReqBody;
 import org.tio.core.ChannelContext;
 import org.tio.core.intf.Packet;

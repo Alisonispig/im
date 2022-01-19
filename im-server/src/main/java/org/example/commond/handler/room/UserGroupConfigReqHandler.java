@@ -2,20 +2,16 @@ package org.example.commond.handler.room;
 
 import com.alibaba.fastjson.JSON;
 import org.example.commond.AbstractCmdHandler;
-import org.example.config.Chat;
 import org.example.config.Im;
 import org.example.enums.CommandEnum;
-import org.example.packets.bean.Group;
 import org.example.packets.bean.User;
 import org.example.packets.bean.UserGroup;
-import org.example.packets.handler.RespBody;
+import org.example.packets.handler.system.RespBody;
 import org.example.packets.handler.room.UserGroupConfigReqBody;
 import org.tio.core.ChannelContext;
 import org.tio.core.intf.Packet;
 import org.tio.websocket.common.WsRequest;
 import org.tio.websocket.common.WsResponse;
-
-import java.util.List;
 
 /**
  * 群组用户修改自己的配置

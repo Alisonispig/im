@@ -8,7 +8,7 @@ import org.example.packets.ImClientNode;
 import org.example.packets.bean.Group;
 import org.example.packets.bean.User;
 import org.example.packets.bean.UserGroup;
-import org.example.packets.handler.UserStatusBody;
+import org.example.packets.handler.user.UserStatusBody;
 import org.example.service.UserGroupService;
 import org.example.service.UserService;
 import org.tio.core.ChannelContext;

@@ -8,9 +8,9 @@ import org.example.config.Im;
 import org.example.enums.CommandEnum;
 import org.example.packets.bean.Group;
 import org.example.packets.bean.User;
-import org.example.packets.handler.EditProfileReqBody;
-import org.example.packets.handler.RespBody;
-import org.example.packets.handler.UserStatusBody;
+import org.example.packets.handler.user.EditProfileReqBody;
+import org.example.packets.handler.system.RespBody;
+import org.example.packets.handler.user.UserStatusBody;
 import org.tio.core.ChannelContext;
 import org.tio.core.intf.Packet;
 import org.tio.websocket.common.WsRequest;
@@ -32,12 +32,7 @@ public class EditProfileHandler extends AbstractCmdHandler {
 
         EditProfileReqBody editProfileReqBody = JSON.parseObject(request.getWsBodyText(), EditProfileReqBody.class);
 
-        if (editProfileReqBody.getIsGroup()) {
-
-            return null;
-        }
-
-        User userInfo = userService.getUserInfo(editProfileReqBody.getRoomId());
+        User userInfo = userService.getUserInfo(editProfileReqBody.getUserId());
         if (StrUtil.isNotBlank(editProfileReqBody.getAvatar())) {
             userInfo.setAvatar(editProfileReqBody.getAvatar());
         }

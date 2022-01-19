@@ -1,4 +1,4 @@
-package org.example.packets.handler;
+package org.example.packets.handler.system;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

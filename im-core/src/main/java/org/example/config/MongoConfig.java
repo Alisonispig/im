@@ -10,6 +10,10 @@ import org.bson.codecs.pojo.PojoCodecProvider;
 import static org.bson.codecs.configuration.CodecRegistries.fromProviders;
 import static org.bson.codecs.configuration.CodecRegistries.fromRegistries;
 
+/**
+ * docker run --name mongodb -d -p 27017:27017 --restart=always mongo
+ */
+
 public class MongoConfig {
 
     private static MongoClient mongoClient = null;

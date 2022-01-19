@@ -429,6 +429,15 @@ public enum CommandEnum {
      */
     COMMAND_USER_GROUP_CONFIG_RESP(53),
 
+    /**
+     * <pre>
+     * 注册响应
+     * </pre>
+     * <code>COMMAND_REGISTER_RESP = 54</code>
+     */
+    COMMAND_REGISTER_RESP(54),
+
+
     ;
 
     private final int value;

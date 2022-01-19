@@ -14,9 +14,9 @@ import org.example.enums.CommandEnum;
 import org.example.enums.RoomRoleEnum;
 import org.example.packets.bean.Group;
 import org.example.packets.bean.User;
-import org.example.packets.handler.ChatReqBody;
+import org.example.packets.handler.message.ChatReqBody;
 import org.example.packets.handler.room.JoinGroupNotifyBody;
-import org.example.packets.handler.RespBody;
+import org.example.packets.handler.system.RespBody;
 import org.tio.core.ChannelContext;
 import org.tio.core.intf.Packet;
 import org.tio.websocket.common.WsRequest;
@@ -48,6 +48,7 @@ public class JoinGroupReqHandler extends AbstractCmdHandler {
 
         // 获取完整的群组信息并返回
         Group group = groupService.getGroupInfo(joinGroupNotifyBody.getGroup().getRoomId());
+        group.setNotice(true);
         joinGroupNotifyBody.setGroup(group);
 
         // 处理要加入的完整信息， 有可能来自创建群组， 群组创建时的创建者用户是完整的，不需要进行拷贝
