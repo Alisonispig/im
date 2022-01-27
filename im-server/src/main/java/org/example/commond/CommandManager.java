@@ -5,6 +5,7 @@ import org.example.commond.handler.*;
 import org.example.commond.handler.message.*;
 import org.example.commond.handler.room.*;
 import org.example.commond.handler.system.SystemTextMessageHandler;
+import org.example.commond.handler.video.VideoReqHandler;
 import org.example.enums.CommandEnum;
 
 import java.util.HashMap;
@@ -41,6 +42,7 @@ public class CommandManager {
             registerCommand(new EditGroupProfileReqHandler());
             registerCommand(new MessageDeleteHandler());
             registerCommand(new UserGroupConfigReqHandler());
+            registerCommand(new VideoReqHandler());
         } catch (Exception e) {
             log.info("注册处理器失败");
         }

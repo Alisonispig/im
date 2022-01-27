@@ -437,6 +437,21 @@ public enum CommandEnum {
      */
     COMMAND_REGISTER_RESP(54),
 
+    /**
+     * <pre>
+     * 音视频通话请求
+     * </pre>
+     * <code>COMMAND_VIDEO_REQ = 55</code>
+     */
+    COMMAND_VIDEO_REQ(55),
+
+    /**
+     * <pre>
+     * 音视频通话响应
+     * </pre>
+     * <code>COMMAND_VIDEO_RESP = 56</code>
+     */
+    COMMAND_VIDEO_RESP(56)
 
     ;
 
