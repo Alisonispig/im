@@ -59,7 +59,16 @@ public class VideoReqHandler extends AbstractCmdHandler {
 
         // 同意通话
         if (body.getCommand().equals(VideoCommandEnum.AGREE)) {
-            Im.getChannelByUserId(body.getUserId());
+
+            List<ChannelContext> waits = Im.getChannelByUserId(body.getUserId());
+            // 如果发起端已下线
+            if (CollUtil.isEmpty(waits)) {
+                body.setCommand(VideoCommandEnum.NOT_ONLINE);
+                WsResponse wsResponse = WsResponse.fromText(RespBody.success(CommandEnum.COMMAND_VIDEO_RESP, body), Im.CHARSET);
+                Im.send(channelContext, wsResponse);
+                return null;
+            }
+
         }
 
         // 拒绝通话
