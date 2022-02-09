@@ -11,7 +11,7 @@ import static org.bson.codecs.configuration.CodecRegistries.fromProviders;
 import static org.bson.codecs.configuration.CodecRegistries.fromRegistries;
 
 /**
- * docker run --name mongodb -d -p 27017:27017 --restart=always mongo
+ * docker run --name mongo --restart=always -p 27017:27017 -v /home/mongodb:/data/db -e MONGO_INITDB_ROOT_USERNAME=admin -e MONGO_INITDB_ROOT_PASSWORD=QuniMade!  -d mongo:latest mongod --auth
  */
 
 public class MongoConfig {
@@ -25,7 +25,7 @@ public class MongoConfig {
 
             MongoClientSettings settings = MongoClientSettings.builder()
                     .codecRegistry(pojoCodecRegistry)
-                    .applyConnectionString(new ConnectionString("mongodb://" + CourierConfig.mongoHost))
+                    .applyConnectionString(new ConnectionString("mongodb://" + CourierConfig.mongoUserName + ":" + CourierConfig.mongoPassword + "@" + CourierConfig.mongoHost+"/"))
                     .build();
 
             mongoClient = MongoClients.create(settings);

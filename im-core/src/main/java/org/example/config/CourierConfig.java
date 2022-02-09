@@ -53,6 +53,10 @@ public class CourierConfig {
      */
     public static String mongoHost;
 
+    public static String mongoUserName;
+
+    public static String mongoPassword;
+
     /**
      * 文件地址
      */
@@ -83,6 +87,8 @@ public class CourierConfig {
         checkFileMd5 = setting.getBool("checkFileMd5");
 
         mongoHost = setting.get(env, "mongoHost");
+        mongoUserName = setting.get(env, "mongoUserName");
+        mongoPassword = setting.get(env, "mongoPassword");
         fileUrl = setting.get(env, "fileUrl");
         minioUrl = setting.get(env, "minioUrl");
     }
