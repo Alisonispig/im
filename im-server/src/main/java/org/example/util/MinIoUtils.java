@@ -25,6 +25,9 @@ import java.util.concurrent.TimeUnit;
 
 docker run -d -p 9000:9000 -p 9001:9001 --name minio -v E:\minio\data:/data -e "MINIO_ROOT_USER=AKIAIOSFODNN7EXAMPLE" -e "MINIO_ROOT_PASSWORD=wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY" --restart=always quay.io/minio/minio server /data --console-address ":9001"
 
+docker run -d -p 9000:9000 -p 9001:9001 --name minio -v E:\minio\data:/data -v E:\minio\cert:/root/.minio -e "MINIO_ROOT_USER=AKIAIOSFODNN7EXAMPLE" -e "MINIO_ROOT_PASSWORD=wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY" --restart=always quay.io/minio/minio server /data --console-address ":9001"
+
+
  */
 
 
@@ -71,7 +74,7 @@ public class MinIoUtils {
 
     public void init() throws Exception {
         MinioClient minioClient = MinioClient.builder()
-                .endpoint(CourierConfig.minioUrl)
+                .endpoint("192.168.31.93",9000,true)
                 .credentials("AKIAIOSFODNN7EXAMPLE", "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY")
                 .build();
         customMinioClient = new CustomMinioClient(minioClient);

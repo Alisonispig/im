@@ -43,7 +43,9 @@ public class TestUtil {
         return between % (1000 * 60 * 60 * 24) == 0 ? day : day + 1;
     }
     public static void main(String[] args) {
-        System.out.println(betweenDay(DateUtil.parse("2021-12-01 00:00:00"), DateUtil.parse("2021-12-02 23:59:59")));
+
+
+//        System.out.println(betweenDay(DateUtil.parse("2021-12-01 00:00:00"), DateUtil.parse("2021-12-02 23:59:59")));
 //        TimeInterval timer = DateUtil.timer();
 //        MessageRepository messageRepository = new MessageRepository();
 //        for (int i = 0; i < 10000; i++) {
