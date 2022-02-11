@@ -54,7 +54,7 @@ public class VideoReqHandler extends AbstractCmdHandler {
             body.setCommand(VideoCommandEnum.REQ_SUCCESS);
             WsResponse wsResponse = WsResponse.fromText(RespBody.success(CommandEnum.COMMAND_VIDEO_RESP, body), Im.CHARSET);
             Im.send(channelContext, wsResponse);
-
+            return null;
         }
 
         // 同意通话
