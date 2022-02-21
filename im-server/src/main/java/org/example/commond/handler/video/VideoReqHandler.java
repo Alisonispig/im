@@ -29,15 +29,16 @@ public class VideoReqHandler extends AbstractCmdHandler {
         WsRequest request = (WsRequest) packet;
 
         VideoReqBody body = JSON.parseObject(request.getWsBodyText(), VideoReqBody.class);
-        body.setFromId(Im.getUser(channelContext).getId());
+//        body.setFromId(Im.getUser(channelContext).getId());
 
         List<ChannelContext> channels = Im.getChannelByUserId(body.getUserId());
 
         // 呼叫请求
         if (body.getCommand().equals(VideoCommandEnum.CALL)) {
 
-            // 如果当前人员不在线
+            // 如果当前被呼叫人不在线
             if (CollUtil.isEmpty(channels)) {
+                // 给呼叫人发送被呼叫人不在线的消息
                 body.setCommand(VideoCommandEnum.NOT_ONLINE);
                 WsResponse wsResponse = WsResponse.fromText(RespBody.success(CommandEnum.COMMAND_VIDEO_RESP, body), Im.CHARSET);
                 Im.send(channelContext, wsResponse);
@@ -57,10 +58,11 @@ public class VideoReqHandler extends AbstractCmdHandler {
             return null;
         }
 
-        // 同意通话
+        // 同意通话(被呼叫人指令)
         if (body.getCommand().equals(VideoCommandEnum.AGREE)) {
 
-            List<ChannelContext> waits = Im.getChannelByUserId(body.getUserId());
+            //
+            List<ChannelContext> waits = Im.getChannelByUserId(body.getFromId());
             // 如果发起端已下线
             if (CollUtil.isEmpty(waits)) {
                 body.setCommand(VideoCommandEnum.NOT_ONLINE);
@@ -69,12 +71,47 @@ public class VideoReqHandler extends AbstractCmdHandler {
                 return null;
             }
 
+            // 如果在线,那么就发送同意
+            for (ChannelContext wait : waits) {
+                body.setCommand(VideoCommandEnum.AGREE);
+                WsResponse wsResponse = WsResponse.fromText(RespBody.success(CommandEnum.COMMAND_VIDEO_RESP, body), Im.CHARSET);
+                Im.send(wait, wsResponse);
+            }
+
         }
 
-        // 拒绝通话
+        // 流准备完毕(被呼叫人指令)
+        if(body.getCommand().equals(VideoCommandEnum.STREAM_OK)){
+            List<ChannelContext> waits = Im.getChannelByUserId(body.getFromId());
+            // 如果在线,那么就发送同意
+            for (ChannelContext wait : waits) {
+                body.setCommand(VideoCommandEnum.STREAM_OK);
+                WsResponse wsResponse = WsResponse.fromText(RespBody.success(CommandEnum.COMMAND_VIDEO_RESP, body), Im.CHARSET);
+                Im.send(wait, wsResponse);
+            }
+        }
+
+        // 拒绝通话(被呼叫人指令)
+        if(body.getCommand().equals(VideoCommandEnum.REFUSE)){
+            List<ChannelContext> waits = Im.getChannelByUserId(body.getFromId());
+            // 如果在线,那么就发送同意
+            for (ChannelContext wait : waits) {
+                body.setCommand(VideoCommandEnum.REFUSE);
+                WsResponse wsResponse = WsResponse.fromText(RespBody.success(CommandEnum.COMMAND_VIDEO_RESP, body), Im.CHARSET);
+                Im.send(wait, wsResponse);
+            }
+        }
 
         // 超时未响应
-
+        if(body.getCommand().equals(VideoCommandEnum.TIME_OUT)){
+            List<ChannelContext> waits = Im.getChannelByUserId(body.getFromId());
+            // 如果在线,那么就发送同意
+            for (ChannelContext wait : waits) {
+                body.setCommand(VideoCommandEnum.TIME_OUT);
+                WsResponse wsResponse = WsResponse.fromText(RespBody.success(CommandEnum.COMMAND_VIDEO_RESP, body), Im.CHARSET);
+                Im.send(wait, wsResponse);
+            }
+        }
         return null;
     }
 }

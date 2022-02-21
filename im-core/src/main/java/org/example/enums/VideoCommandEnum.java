@@ -21,6 +21,11 @@ public enum VideoCommandEnum {
     AGREE,
 
     /**
+     * 流已准备好
+     */
+    STREAM_OK,
+
+    /**
      * 对方不在线
      */
     NOT_ONLINE,
