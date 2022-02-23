@@ -67,6 +67,9 @@ public class CourierConfig {
      */
     public static String minioUrl;
 
+    public static String minioHost;
+    public static Integer minioPort;
+
     public static String env;
 
     static {
@@ -91,5 +94,7 @@ public class CourierConfig {
         mongoPassword = setting.get(env, "mongoPassword");
         fileUrl = setting.get(env, "fileUrl");
         minioUrl = setting.get(env, "minioUrl");
+        minioHost = setting.get(env, "minioHost");
+        minioPort = setting.getInt(env, "minioPort");
     }
 }

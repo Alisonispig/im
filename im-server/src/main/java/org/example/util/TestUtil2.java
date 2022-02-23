@@ -10,6 +10,7 @@ public class TestUtil2 {
         MinIoUtils minIoUtils = new MinIoUtils();
         try {
             minIoUtils.init();
+            System.out.println("连接完成");
         } catch (Exception e) {
             e.printStackTrace();
         }

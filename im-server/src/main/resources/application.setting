@@ -16,11 +16,14 @@ mongoUserName=admin
 mongoPassword=QuniMade!
 fileUrl=http://${dev.mongoHost}:9000/courier/
 minioUrl=https://${dev.mongoHost}:9000
+minioHost=192.168.31.93
+minioHost=9000
 
 [prod]
 mongoHost=8.142.64.52
 mongoUserName=admin
 mongoPassword=QuniMade!
 fileUrl=http://${prod.mongoHost}:7708/courier/
-minioUrl=http://${prod.mongoHost}:7708
-
+minioUrl=https://miniodev.o0o0oo.com
+minioHost=miniodev.o0o0oo.com
+minioPort=443
