@@ -80,23 +80,23 @@ public class VideoReqHandler extends AbstractCmdHandler {
 
         }
 
-        // 流准备完毕(被呼叫人指令)
-        if(body.getCommand().equals(VideoCommandEnum.STREAM_OK)){
-            List<ChannelContext> waits = Im.getChannelByUserId(body.getFromId());
-            // 如果在线,那么就发送同意
+        // 拒绝通话(被呼叫人指令)
+        if(body.getCommand().equals(VideoCommandEnum.CALLED_REFUSE)){
+            List<ChannelContext> waits = Im.getChannelByUserId(body.getUserId());
+            // 如果在线,那么就发送拒绝
             for (ChannelContext wait : waits) {
-                body.setCommand(VideoCommandEnum.STREAM_OK);
+                body.setCommand(VideoCommandEnum.CALLED_REFUSE);
                 WsResponse wsResponse = WsResponse.fromText(RespBody.success(CommandEnum.COMMAND_VIDEO_RESP, body), Im.CHARSET);
                 Im.send(wait, wsResponse);
             }
         }
 
         // 拒绝通话(被呼叫人指令)
-        if(body.getCommand().equals(VideoCommandEnum.REFUSE)){
+        if(body.getCommand().equals(VideoCommandEnum.BE_CALLED_REFUSE)){
             List<ChannelContext> waits = Im.getChannelByUserId(body.getFromId());
-            // 如果在线,那么就发送同意
+            // 如果在线,那么就发送拒绝
             for (ChannelContext wait : waits) {
-                body.setCommand(VideoCommandEnum.REFUSE);
+                body.setCommand(VideoCommandEnum.BE_CALLED_REFUSE);
                 WsResponse wsResponse = WsResponse.fromText(RespBody.success(CommandEnum.COMMAND_VIDEO_RESP, body), Im.CHARSET);
                 Im.send(wait, wsResponse);
             }

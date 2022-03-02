@@ -11,9 +11,14 @@ public enum VideoCommandEnum {
     CALL,
 
     /**
-     * 拒绝
+     * 呼叫者拒绝/挂断
      */
-    REFUSE,
+    CALLED_REFUSE,
+
+    /**
+     * 呼叫者拒绝/挂断
+     */
+    BE_CALLED_REFUSE,
 
     /**
      * 同意
