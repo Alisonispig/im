@@ -13,7 +13,9 @@
 
 ### 😯演示地址
 
-[https://chat.o0o0oo.com/](https://chat.o0o0oo.com/)
+文档地址: [https://www.o0o0oo.com/](https://www.o0o0oo.com/)
+
+演示地址: [https://chat.o0o0oo.com/](https://chat.o0o0oo.com/)
 
 演示账号 a/a
 
