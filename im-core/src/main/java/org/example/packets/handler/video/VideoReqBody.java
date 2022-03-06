@@ -29,4 +29,9 @@ public class VideoReqBody {
      */
     private VideoCommandEnum command;
 
+    /**
+     * VIDEO / AUDIO 音频/视频
+     */
+    private String type;
+
 }
