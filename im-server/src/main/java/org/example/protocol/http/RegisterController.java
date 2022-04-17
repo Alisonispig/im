@@ -43,7 +43,7 @@ public class RegisterController {
         }
 
         String url = UploadService.uploadDefault(DefaultEnum.ACCOUNT);
-        log.info("未查询到用户信息，模拟创建用户");
+        log.info("未查询到用户信息，创建用户");
         User user = User.builder().id(IdUtil.getSnowflake().nextIdStr()).username(reqBody.getUsername()).status(Status.offline())
                 .avatar(url).build();
 

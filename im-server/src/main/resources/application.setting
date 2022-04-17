@@ -11,11 +11,11 @@ httpCheckHost=false
 checkFileMd5=true
 
 [dev]
-mongoHost=192.168.31.93
+mongoHost=localhost
 mongoUserName=admin
 mongoPassword=QuniMade!
 fileUrl=/courier/
-minioHost=192.168.31.93
+minioHost=localhost
 minioPort=9000
 
 [prod]

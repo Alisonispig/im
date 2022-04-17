@@ -27,9 +27,9 @@ docker run -d -p 9000:9000 -p 9001:9001 --name minio -v E:\minio\data:/data -e "
 
 docker run -d -p 9000:9000 -p 9001:9001 --name minio -v E:\minio\data:/data -v E:\minio\cert:/root/.minio -e "MINIO_ROOT_USER=AKIAIOSFODNN7EXAMPLE" -e "MINIO_ROOT_PASSWORD=wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY" --restart=always quay.io/minio/minio server /data --console-address ":9001"
 
-docker run -d -p 9000:9000 -p 9001:9001 --name minio -v /home/minio/data:/data -v /home/minio/cert:/root/.minio -e "MINIO_ROOT_USER=AKIAIOSFODNN7EXAMPLE" -e "MINIO_ROOT_PASSWORD=wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY" --restart=always quay.io/minio/minio server /data --console-address ":9001"
+docker run -d -p 9000:9000 -p 9001:9001 --name minio -v E:/docker/minio/data:/data -v E:/docker/minio/cert:/root/.minio -e "MINIO_ROOT_USER=AKIAIOSFODNN7EXAMPLE" -e "MINIO_ROOT_PASSWORD=wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY" --restart=always quay.io/minio/minio server /data --console-address ":9001"
 
-docker run -d --name minio -v /home/minio/data:/data -v /home/minio/cert:/root/.minio -e "MINIO_ROOT_USER=AKIAIOSFODNN7EXAMPLE" -e "MINIO_ROOT_PASSWORD=wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY" --restart=always --net=host quay.io/minio/minio server /data --console-address ":9001"
+docker run -d --name minio -v /home/minio/data:/data -v E:/docker/minio/cert:/root/.minio -e "MINIO_ROOT_USER=AKIAIOSFODNN7EXAMPLE" -e "MINIO_ROOT_PASSWORD=wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY" --restart=always --net=host quay.io/minio/minio server /data --console-address ":9001"
 
  */
 
