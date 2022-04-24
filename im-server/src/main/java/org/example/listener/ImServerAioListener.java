@@ -40,7 +40,7 @@ public class ImServerAioListener extends WsServerAioListener {
         build.setId(channelContext.getId());
         sessionContext.setImClientNode(build);
         channelContext.set(KeyEnum.IM_CHANNEL_SESSION_CONTEXT_KEY.getKey(), sessionContext);
-        super.onAfterConnected(channelContext,isConnected,isReconnect);
+        super.onAfterConnected(channelContext, isConnected, isReconnect);
     }
 
     @Override
@@ -65,21 +65,24 @@ public class ImServerAioListener extends WsServerAioListener {
 
     @Override
     public void onBeforeClose(ChannelContext channelContext, Throwable throwable, String remark, boolean isRemove) throws Exception {
-        // 更新用户为离线状态
-        userService.userOffline(Im.getUser(channelContext).getId());
 
         User user = Im.getUser(channelContext);
 
-        UserStatusBody build = UserStatusBody.builder().user(userService.getUserInfo(user.getId())).build();
+        if (user != null) {
+            // 更新用户为离线状态
+            userService.userOffline(user.getId());
 
-        for (Group group : user.getGroups()) {
-            UserGroup userGroup = userGroupService.getUserGroup(group.getRoomId(), user.getId());
-            build.getUser().setRole(userGroup.getRole());
-            // 给所在群组发送离线消息 用户状态更新
-            List<User> groupUsers = userGroupService.getGroupUsers(group.getRoomId());
-            group.setUsers(groupUsers);
-            build.setGroup(group);
-            Chat.sendToGroup(build, channelContext);
+            UserStatusBody build = UserStatusBody.builder().user(userService.getUserInfo(user.getId())).build();
+
+            for (Group group : user.getGroups()) {
+                UserGroup userGroup = userGroupService.getUserGroup(group.getRoomId(), user.getId());
+                build.getUser().setRole(userGroup.getRole());
+                // 给所在群组发送离线消息 用户状态更新
+                List<User> groupUsers = userGroupService.getGroupUsers(group.getRoomId());
+                group.setUsers(groupUsers);
+                build.setGroup(group);
+                Chat.sendToGroup(build, channelContext);
+            }
         }
 
         super.onBeforeClose(channelContext, throwable, remark, isRemove);

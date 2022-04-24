@@ -45,7 +45,7 @@ Windows下执行startup.bat方法,Linux执行startup.sh
 > 教程来自windows docker， linux同理
 1. 安装minio
 ```
-docker run -d -p 9000:9000 -p 9001:9001 --name minio -v E:/docker/minio/data:/data -v E:/docker/minio/cert:/root/.minio -e "MINIO_ROOT_USER=AKIAIOSFODNN7EXAMPLE" -e "MINIO_ROOT_PASSWORD=wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY" --restart=always quay.io/minio/minio server /data --console-address ":9001"
+docker run -d -p 9000:9000 -p 9001:9001 --name minio -v /home/minio/data:/data -v /home/minio/cert:/root/.minio -e "MINIO_ROOT_USER=AKIAIOSFODNN7EXAMPLE" -e "MINIO_ROOT_PASSWORD=wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY" --restart=always quay.io/minio/minio server /data --console-address ":9001"
 ```
 
 2. 安装MongoDB
@@ -56,7 +56,7 @@ docker run --name mongo --restart=always -p 27017:27017 -v /home/mongodb:/data/d
 3. 安装nginx， 作者使用nginxWebui
 ```
 # Linux
-docker run -itd -v E:/docker/nginxWebUI:/home/nginxWebUI -e BOOT_OPTIONS="--server.port=8080" --privileged=true --net=host cym1102/nginxwebui:latest
+docker run -itd -v /home/nginxWebUI:/home/nginxWebUI -e BOOT_OPTIONS="--server.port=8080" --privileged=true --net=host cym1102/nginxwebui:latest
 
 # Windows
 docker run -itd -p 8080:8080 -p 8888:8888 -v E:/docker/nginxWebUI:/home/nginxWebUI -e BOOT_OPTIONS="--server.port=8080" --privileged=true  cym1102/nginxwebui:latest

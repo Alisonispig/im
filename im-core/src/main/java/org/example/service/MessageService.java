@@ -2,13 +2,11 @@ package org.example.service;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ObjectUtil;
-import cn.hutool.core.util.StrUtil;
+import org.example.config.CourierConfig;
 import org.example.dao.MessageRepository;
 import org.example.packets.bean.Message;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Pattern;
 
 import static com.mongodb.client.model.Filters.*;

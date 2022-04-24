@@ -1,5 +1,6 @@
 package org.example.commond.handler;
 
+import lombok.extern.slf4j.Slf4j;
 import org.example.commond.AbstractCmdHandler;
 import org.example.config.Im;
 import org.example.enums.CommandEnum;
@@ -12,6 +13,7 @@ import org.tio.websocket.common.WsResponse;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 public class UserListHandler extends AbstractCmdHandler {
 
     @Override
@@ -23,6 +25,10 @@ public class UserListHandler extends AbstractCmdHandler {
     public WsResponse handler(Packet packet, ChannelContext channelContext) {
 
         User user = Im.getUser(channelContext);
+        if(user == null){
+            log.info("当前用户获取失败");
+            return null;
+        }
 
         List<User> userList = userService.getUserList();
         List<User> collect = userList.stream().filter(x -> !x.getId().equals(user.getId())).collect(Collectors.toList());
