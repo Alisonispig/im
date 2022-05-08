@@ -21,7 +21,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 
 @Slf4j
-@RequestPath("/account")
+@RequestPath("/user")
 public class LoginController {
 
     private final AuthService authService;
