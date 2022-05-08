@@ -6,11 +6,12 @@
 
 演示地址: [https://chat.o0o0oo.com/](https://chat.o0o0oo.com/)
 
+前端地址：[https://gitee.com/LiLongLong719/im-web](https://gitee.com/LiLongLong719/im-web)
+
 演示账号 a/a 仅演示目的.服务器的内容不定期清理
 
 
 ### 展示截图
-> 前端将于近期开源，敬请期待
 
 ![功能展示](doc/20220418005013.jpg)
 

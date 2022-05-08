@@ -18,6 +18,10 @@ public class AuthService {
         authRepository = new AuthRepository();
     }
 
+    public Auth getByUserId(String userId) {
+        return authRepository.findOne(Filters.eq("userId",userId));
+    }
+
     public Auth getByAccount(String account) {
        return authRepository.findOne(Filters.eq("account",account));
     }

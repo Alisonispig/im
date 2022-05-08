@@ -38,9 +38,8 @@ public class WsMsgHandler implements IWsMsgHandler {
     public void onAfterHandshaked(HttpRequest httpRequest, HttpResponse httpResponse, ChannelContext channelContext) {
         LoginReqHandler loginHandler = (LoginReqHandler) CommandManager.getCommand(CommandEnum.COMMAND_LOGIN_REQ);
 
-        String account = httpRequest.getParam("account");
-        String password = httpRequest.getParam("password");
-        WsRequest wsRequest = WsRequest.fromText(JSON.toJSONString(new LoginReqBody(account,password)), ImConfig.CHARSET);
+        String token = httpRequest.getParam("token");
+        WsRequest wsRequest = WsRequest.fromText(token, ImConfig.CHARSET);
         loginHandler.handler(wsRequest, channelContext);
         log.info("握手完毕{},{}", "66", "666");
     }
