@@ -1,6 +1,7 @@
 package org.example.packets.handler.message;
 
 import lombok.Data;
+import org.example.enums.MessageFetchTypeEnum;
 
 @Data
 public class MessageReqBody {
@@ -21,12 +22,13 @@ public class MessageReqBody {
      * 消息结束时间
      */
     private Double endTime;
+
     /**
-     * 分页偏移量
+     * 请求消息类型
      */
-    private Integer page;
+    private MessageFetchTypeEnum type;
     /**
-     * 数量
+     * 起始消息ID
      */
-    private Integer number;
+    private String messageId;
 }

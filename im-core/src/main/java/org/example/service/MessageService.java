@@ -4,6 +4,7 @@ import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ObjectUtil;
 import org.example.config.CourierConfig;
 import org.example.dao.MessageRepository;
+import org.example.enums.MessageFetchTypeEnum;
 import org.example.packets.bean.Message;
 
 import java.util.*;
@@ -19,16 +20,18 @@ public class MessageService {
         messageRepository = new MessageRepository();
     }
 
-    public List<Message> getHistoryMessage(String roomId, Integer page, Integer number, int asc) {
-
-        if (page == null || number == null) {
-            return messageRepository.findSort(eq("roomId", roomId), eq("sendTime", 1));
+    public List<Message> getHistoryMessage(String roomId, String messageId, int asc) {
+        Message message = messageId == null ? getLastMessage(roomId) : getMessage(messageId);
+        if (asc == 1) {
+            var a = message == null ? and(eq("roomId", roomId)) : and(eq("roomId", roomId), lt("sendTime", message.getSendTime()));
+            return messageRepository.find(a, eq("sendTime", -1), 20);
+        } else {
+            return messageRepository.find(and(eq("roomId", roomId), gt("sendTime", message.getSendTime())), eq("sendTime", 1), 20);
         }
-        return messageRepository.find(and(eq("roomId", roomId)), eq("sendTime", asc), page, number);
     }
 
-    public List<Message> getHistoryMessage(String roomId, Integer page, Integer number) {
-        return this.getHistoryMessage(roomId, page, number, -1);
+    public List<Message> getHistoryMessage(String roomId, String messageId, MessageFetchTypeEnum type) {
+        return this.getHistoryMessage(roomId, messageId, MessageFetchTypeEnum.DOWN.equals(type) ? -1 : 1);
     }
 
     public void addReaction(String messageId, String reaction, Boolean remove, String userId) {

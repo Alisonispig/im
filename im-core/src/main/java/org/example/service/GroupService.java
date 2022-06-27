@@ -44,9 +44,9 @@ public class GroupService {
         }
         if (StrUtil.isBlank(message.getContent()) && CollUtil.isNotEmpty(message.getFiles())) {
             if (message.getFiles().size() == 1) {
-                lastMessage.setContent("[附件] - " + message.getFiles().get(0).getName());
+                lastMessage.setContent("[文件] - " + message.getFiles().get(0).getName());
             } else {
-                lastMessage.setContent("[附件] - " + message.getFiles().get(0).getName() + "等多个文件");
+                lastMessage.setContent("[文件] - " + message.getFiles().get(0).getName() + "等多个文件");
             }
         }
 

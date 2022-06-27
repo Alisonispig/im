@@ -35,8 +35,6 @@ public class CommandManager {
             registerCommand(new RemoveGroupUserReqHandler());
             registerCommand(new SetRoomAdminReqHandler());
             registerCommand(new SystemTextMessageHandler());
-            registerCommand(new MessageFileHistoryHandler());
-            registerCommand(new MessageHistoryHandler());
             registerCommand(new HandoverGroupHandler());
             registerCommand(new DisbandGroupHandler());
             registerCommand(new EditGroupProfileReqHandler());

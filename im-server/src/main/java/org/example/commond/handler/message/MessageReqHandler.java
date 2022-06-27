@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSON;
 import org.example.commond.AbstractCmdHandler;
 import org.example.config.Im;
 import org.example.enums.CommandEnum;
+import org.example.enums.MessageFetchTypeEnum;
 import org.example.packets.bean.Message;
 import org.example.packets.bean.User;
 import org.example.packets.handler.message.ChatRespBody;
@@ -30,7 +31,10 @@ public class MessageReqHandler extends AbstractCmdHandler {
 
         WsRequest request = (WsRequest) packet;
         MessageReqBody messageReqBody = JSON.parseObject(request.getWsBodyText(), MessageReqBody.class);
-        List<Message> messages = messageService.getHistoryMessage(messageReqBody.getRoomId(), messageReqBody.getPage(), messageReqBody.getNumber());
+        if (messageReqBody.getType() == null) {
+            messageReqBody.setType(MessageFetchTypeEnum.TOP);
+        }
+        List<Message> messages = messageService.getHistoryMessage(messageReqBody.getRoomId(), messageReqBody.getMessageId(), messageReqBody.getType());
 
         User user = Im.getUser(channelContext);
 
@@ -43,7 +47,7 @@ public class MessageReqHandler extends AbstractCmdHandler {
             return chatRespBody;
         }).collect(Collectors.toList());
 
-        String success = RespBody.success(CommandEnum.COMMAND_GET_MESSAGE_RESP, collect);
+        String success = RespBody.success(CommandEnum.COMMAND_GET_MESSAGE_RESP, collect, messageReqBody.getType().name());
         WsResponse response = WsResponse.fromText(success, Im.CHARSET);
         Im.send(channelContext, response);
 

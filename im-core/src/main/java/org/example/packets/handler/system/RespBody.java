@@ -12,7 +12,7 @@ import java.io.Serializable;
 
 /**
  * 版本: [1.0]
- * 功能说明: 
+ * 功能说明:
  * 作者: WChao 创建时间: 2017年7月26日 上午11:31:48
  */
 @Data
@@ -47,22 +47,25 @@ public class RespBody implements Serializable {
 
 
     public static String success(CommandEnum command) {
-        return success(command, null, 0, 0);
+        return success(command, null,"操作成功", 0, 0);
     }
 
     public static String success(CommandEnum command, Object data) {
-        return success(command, data, 0, 0);
+        return success(command, data,"操作成功", 0, 0);
+    }
+    public static String success(CommandEnum command, Object data, String msg) {
+        return success(command, data,msg, 0, 0);
     }
 
     public static String successPage(CommandEnum command, Object data, int page, int count) {
-        return success(command, data, page, count);
+        return success(command, data,"操作成功", page, count);
     }
 
-    public static String success(CommandEnum command, Object data, int page, int count) {
+    public static String success(CommandEnum command, Object data,String msg, int page, int count) {
         RespBody respBody = new RespBody(command);
         respBody.setData(data);
         respBody.setSuccess(true);
-        respBody.setMsg("操作成功");
+        respBody.setMsg(msg);
         respBody.setPage(page);
         respBody.setCount(count);
 
