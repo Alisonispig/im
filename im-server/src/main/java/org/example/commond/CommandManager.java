@@ -33,6 +33,7 @@ public class CommandManager {
             registerCommand(new MessageReactionReqHandler());
             registerCommand(new EditProfileHandler());
             registerCommand(new RemoveGroupUserReqHandler());
+            registerCommand(new SearchMessagePageReqHandler());
             registerCommand(new SetRoomAdminReqHandler());
             registerCommand(new SystemTextMessageHandler());
             registerCommand(new HandoverGroupHandler());

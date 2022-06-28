@@ -2,7 +2,6 @@ package org.example.service;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ObjectUtil;
-import org.example.config.CourierConfig;
 import org.example.dao.MessageRepository;
 import org.example.enums.MessageFetchTypeEnum;
 import org.example.packets.bean.Message;
@@ -23,10 +22,10 @@ public class MessageService {
     public List<Message> getHistoryMessage(String roomId, String messageId, int asc) {
         Message message = messageId == null ? getLastMessage(roomId) : getMessage(messageId);
         if (asc == 1) {
-            var a = message == null ? and(eq("roomId", roomId)) : and(eq("roomId", roomId), lt("sendTime", message.getSendTime()));
-            return messageRepository.find(a, eq("sendTime", -1), 20);
+            var a = message == null ? and(eq("roomId", roomId)) : and(eq("roomId", roomId), lte(Message.COL_SEND_TIME, message.getSendTime()));
+            return messageRepository.find(a, eq(Message.COL_SEND_TIME, -1), 20);
         } else {
-            return messageRepository.find(and(eq("roomId", roomId), gt("sendTime", message.getSendTime())), eq("sendTime", 1), 20);
+            return messageRepository.find(and(eq("roomId", roomId), gte(Message.COL_SEND_TIME, message.getSendTime())), eq(Message.COL_SEND_TIME, 1), 20);
         }
     }
 
@@ -73,7 +72,7 @@ public class MessageService {
     }
 
     public Message getStartMessage(String roomId) {
-        return messageRepository.findOneLimit(eq("roomId", roomId), eq("sendTime", 1), 1);
+        return messageRepository.findOneLimit(eq("roomId", roomId), eq(Message.COL_SEND_TIME, 1), 1);
     }
 
     public int getCount(String roomId) {
@@ -85,7 +84,7 @@ public class MessageService {
     }
 
     public Message getLastMessage(String roomId) {
-        return messageRepository.findOne(eq("roomId", roomId), eq("sendTime", -1));
+        return messageRepository.findOne(eq("roomId", roomId), eq(Message.COL_SEND_TIME, -1));
     }
 
     public void read(String messageId) {
@@ -96,6 +95,6 @@ public class MessageService {
 
     public List<Message> getMessage(String roomId, String content) {
         Pattern pattern = Pattern.compile("^.*" + content + ".*$", Pattern.CASE_INSENSITIVE);
-        return messageRepository.findSort(and(eq("roomId", roomId), regex("content", pattern)), eq("sendTime", -1));
+        return messageRepository.findSort(and(eq("roomId", roomId), regex("content", pattern)), eq(Message.COL_SEND_TIME, -1));
     }
 }

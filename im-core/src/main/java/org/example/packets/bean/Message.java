@@ -106,4 +106,7 @@ public class Message {
 
 
     private Long sendTime;
+
+
+    public static final String COL_SEND_TIME = "sendTime";
 }

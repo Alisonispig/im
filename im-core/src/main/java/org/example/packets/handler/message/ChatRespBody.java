@@ -22,6 +22,7 @@ public class ChatRespBody {
     @JSONField(name = "_id")
     private String id;
 
+
     /**
      * 消息内容
      */
@@ -113,5 +114,7 @@ public class ChatRespBody {
      * 表情回复消息
      */
     private Map<String, List<String>> reactions;
+
+    private Long sendTime;
 
 }

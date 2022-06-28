@@ -56,4 +56,9 @@ public class LastMessage {
      */
     private Boolean seen;
 
+    /**
+     * 发送时间时间戳
+     */
+    private Long indexId;
+
 }
