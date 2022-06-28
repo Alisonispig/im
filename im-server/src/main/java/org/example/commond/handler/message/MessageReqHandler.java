@@ -10,6 +10,7 @@ import org.example.packets.bean.Message;
 import org.example.packets.bean.User;
 import org.example.packets.handler.message.ChatRespBody;
 import org.example.packets.handler.message.MessageReqBody;
+import org.example.packets.handler.message.MessageRespBody;
 import org.example.packets.handler.system.RespBody;
 import org.tio.core.ChannelContext;
 import org.tio.core.intf.Packet;
@@ -47,7 +48,11 @@ public class MessageReqHandler extends AbstractCmdHandler {
             return chatRespBody;
         }).collect(Collectors.toList());
 
-        String success = RespBody.success(CommandEnum.COMMAND_GET_MESSAGE_RESP, collect, messageReqBody.getType().name());
+        MessageRespBody messageRespBody = new MessageRespBody();
+        messageRespBody.setMessages(collect);
+        messageRespBody.setType(messageReqBody.getType());
+
+        String success = RespBody.success(CommandEnum.COMMAND_GET_MESSAGE_RESP, messageRespBody);
         WsResponse response = WsResponse.fromText(success, Im.CHARSET);
         Im.send(channelContext, response);
 

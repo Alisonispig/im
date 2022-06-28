@@ -269,21 +269,6 @@ public enum CommandEnum {
      */
     COMMAND_REMOVE_GROUP_USER_RESP(33),
 
-    /**
-     * <pre>
-     * 搜索消息初始化第一页请求
-     * </pre>
-     * <code>COMMAND_SEARCH_MESSAGE_PAGE_REQ = 34</code>
-     */
-    COMMAND_SEARCH_MESSAGE_PAGE_REQ(34),
-
-    /**
-     * <pre>
-     * 搜索消息初始化第一页响应
-     * </pre>
-     * <code>COMMAND_SEARCH_MESSAGE_PAGE_RESP = 35</code>
-     */
-    COMMAND_SEARCH_MESSAGE_PAGE_RESP(35),
     // TODO 36 37
     /**
      * <pre>

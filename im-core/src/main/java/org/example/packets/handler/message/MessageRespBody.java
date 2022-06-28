@@ -1,16 +1,17 @@
 package org.example.packets.handler.message;
 
 import lombok.Data;
+import org.example.enums.MessageFetchTypeEnum;
 
 import java.util.List;
 
 @Data
-public class MessageSearchRespBody {
+public class MessageRespBody {
 
     /**
      * 消息ID
      */
-    private String messageId;
+    private MessageFetchTypeEnum type;
 
     /**
      * 消息列表
