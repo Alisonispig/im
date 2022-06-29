@@ -10,18 +10,6 @@ public class MessageReqBody {
      * 群组id;
      */
     private String roomId;
-    /**
-     * 查询内容
-     */
-    private String content;
-    /**
-     * 消息开始时间;
-     */
-    private Double beginTime;
-    /**
-     * 消息结束时间
-     */
-    private Double endTime;
 
     /**
      * 请求消息类型
@@ -31,4 +19,6 @@ public class MessageReqBody {
      * 起始消息ID
      */
     private String messageId;
+
+    private Boolean returnDefault;
 }

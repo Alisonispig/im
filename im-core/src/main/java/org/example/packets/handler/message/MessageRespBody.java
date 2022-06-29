@@ -14,6 +14,11 @@ public class MessageRespBody {
     private MessageFetchTypeEnum type;
 
     /**
+     * 回归正常的第一次请求
+     */
+    private Boolean returnDefault;
+
+    /**
      * 消息列表
      */
     private List<ChatRespBody> messages;

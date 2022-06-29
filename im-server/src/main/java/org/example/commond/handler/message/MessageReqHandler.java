@@ -51,6 +51,7 @@ public class MessageReqHandler extends AbstractCmdHandler {
         MessageRespBody messageRespBody = new MessageRespBody();
         messageRespBody.setMessages(collect);
         messageRespBody.setType(messageReqBody.getType());
+        messageRespBody.setReturnDefault(messageReqBody.getReturnDefault());
 
         String success = RespBody.success(CommandEnum.COMMAND_GET_MESSAGE_RESP, messageRespBody);
         WsResponse response = WsResponse.fromText(success, Im.CHARSET);

@@ -2,6 +2,7 @@ package org.example.service;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ObjectUtil;
+import org.bson.conversions.Bson;
 import org.example.dao.MessageRepository;
 import org.example.enums.MessageFetchTypeEnum;
 import org.example.packets.bean.Message;
@@ -93,8 +94,12 @@ public class MessageService {
         messageRepository.updateById(message);
     }
 
-    public List<Message> getMessage(String roomId, String content) {
+    public List<Message> getMessage(String roomId, String content,Long startTime, Long endTime) {
         Pattern pattern = Pattern.compile("^.*" + content + ".*$", Pattern.CASE_INSENSITIVE);
-        return messageRepository.findSort(and(eq("roomId", roomId), regex("content", pattern)), eq(Message.COL_SEND_TIME, -1));
+        Bson filter = and(eq("roomId", roomId), regex("content", pattern));
+        if(startTime != null && endTime != null){
+            filter = and(eq("roomId", roomId), regex("content", pattern),gte(Message.COL_SEND_TIME,startTime),lte(Message.COL_SEND_TIME,endTime));
+        }
+        return messageRepository.findSort(filter, eq(Message.COL_SEND_TIME, -1));
     }
 }
