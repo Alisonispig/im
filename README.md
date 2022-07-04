@@ -57,7 +57,7 @@ docker run --name mongo --restart=always -p 27017:27017 -v /home/mongodb:/data/d
 3. 安装nginx， 作者使用nginxWebui
 ```
 # Linux
-docker run -itd -v /home/nginxWebUI:/home/nginxWebUI -e BOOT_OPTIONS="--server.port=8080" --privileged=true --net=host cym1102/nginxwebui:latest
+docker run -itd -v /home/nginxWebUI:/home/nginxWebUI -e BOOT_OPTIONS="--server.port=8080" --privileged=true --restart=always --net=host cym1102/nginxwebui:latest
 
 # Windows
 docker run -itd -p 8080:8080 -p 8888:8888 -v E:/docker/nginxWebUI:/home/nginxWebUI -e BOOT_OPTIONS="--server.port=8080" --privileged=true  cym1102/nginxwebui:latest
