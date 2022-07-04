@@ -43,9 +43,7 @@ public final class ThreadPoolUtil {
                 poolSize, 0, TimeUnit.SECONDS, new LinkedBlockingQueue<>(runnables.size())
                 , r -> new Thread(r, "create new Pool thread " + theadCount++));
 
-        runnables.forEach(runnable -> {
-            threadPoolExecutor.execute(runnable);
-        });
+        runnables.forEach(threadPoolExecutor::execute);
         //这里只是通知线程池不在接收新任务了，并且所有任务结束后，线程池要关闭
         threadPoolExecutor.shutdown();
     }

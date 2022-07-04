@@ -77,7 +77,7 @@ public class MinIoUtils {
 
     public void init() throws Exception {
         MinioClient minioClient = MinioClient.builder()
-                .endpoint(CourierConfig.minioHost,CourierConfig.minioPort,true)
+                .endpoint(CourierConfig.minioHost,CourierConfig.minioPort,false)
                 .credentials("AKIAIOSFODNN7EXAMPLE", "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY")
                 .build();
         customMinioClient = new CustomMinioClient(minioClient);

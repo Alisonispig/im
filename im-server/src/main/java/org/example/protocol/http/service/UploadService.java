@@ -6,7 +6,6 @@ import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
 import com.google.common.collect.ImmutableList;
 import org.example.config.CourierConfig;
-import org.example.config.Im;
 import org.example.enums.DefaultEnum;
 import org.example.service.FileService;
 import org.example.util.MinIoUtils;
@@ -56,7 +55,7 @@ public class UploadService {
             byte[] bytes = ResourceUtil.readBytes("img/" + defaultEnum.getValue());
             boolean b = uploadFile(bytes, defaultEnum.getValue());
             if (b) {
-                fileService.setFileUrl(defaultEnum.getKey(), defaultEnum.getValue());
+                fileService.setFileUrl(defaultEnum.getKey(), defaultEnum.getValue(),defaultEnum.getValue(), (long) bytes.length);
             }
         }
         return CourierConfig.fileUrl + defaultEnum.getValue();

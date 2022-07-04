@@ -47,7 +47,9 @@ public class UploadController {
         // md5-可进行秒传判断
         String md5 = ObjectUtil.defaultIfNull(fileInit.getMd5(), "");
 
-        String url = fileService.getFileUrl(md5);
+        Long size = ObjectUtil.defaultIfNull(fileInit.getSize(), 0L);
+
+        String url = fileService.getFileUrl(md5, size, FileNameUtil.getSuffix(filename));
 
         if (StrUtil.isNotBlank(url) && CourierConfig.checkFileMd5) {
             Map<String, Object> su = new HashMap<>();
@@ -75,21 +77,22 @@ public class UploadController {
         String objectName = file.getObjectName();
         String uploadId = file.getUploadId();
         String md5 = file.getMd5();
+        Long size = file.getSize();
+        String name = file.getName();
         Assert.notNull(objectName, "objectName must not be null");
         Assert.notNull(md5, "md5 must not be null");
 
         if (StrUtil.isNotBlank(uploadId)) {
-            CompletableFuture<Boolean> future = CompletableFuture.supplyAsync(() -> UploadService.mergeMultipartUpload(objectName, uploadId),
-                    ThreadPoolUtil.commonPool);
+            CompletableFuture<Boolean> future = CompletableFuture.supplyAsync(() -> UploadService.mergeMultipartUpload(objectName, uploadId), ThreadPoolUtil.commonPool);
 
             future.thenAccept((item) -> {
                 if (item) {
                     System.out.println(item);
-                    fileService.setFileUrl(md5, objectName);
+                    fileService.setFileUrl(md5, objectName, name, size);
                 }
             });
         } else {
-            fileService.setFileUrl(md5, objectName);
+            fileService.setFileUrl(md5, objectName, name, size);
         }
 
         return Resps.txt(request, "true");

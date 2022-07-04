@@ -21,4 +21,6 @@ public class FileInit {
 
     private Integer partCount;
 
+    private Long size;
+
 }
