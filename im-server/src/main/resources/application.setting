@@ -22,6 +22,6 @@ minioPort=9000
 mongoHost=8.142.64.52
 mongoUserName=admin
 mongoPassword=QuniMade!
-fileUrl=https://minio.o0o0oo.com/courier/
+fileUrl=https://miniodev.o0o0oo.com/courier/
 minioHost=miniodev.o0o0oo.com
 minioPort=443
