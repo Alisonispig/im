@@ -43,7 +43,7 @@ public class GroupService {
             lastMessage.setContent("删除了一条消息");
         }
         lastMessage.setIndexId(message.getSendTime());
-        if (StrUtil.isBlank(message.getContent()) && CollUtil.isNotEmpty(message.getFiles())) {
+        if (StrUtil.isBlank(message.getContent()) && CollUtil.isNotEmpty(message.getFiles()) && !message.getDeleted()) {
             if (message.getFiles().size() == 1) {
                 lastMessage.setContent("[文件] - " + message.getFiles().get(0).getName());
             } else {
