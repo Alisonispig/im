@@ -1,7 +1,5 @@
 package org.example.config;
 
-import cn.hutool.core.util.StrUtil;
-import cn.hutool.setting.Setting;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.example.listener.ImUserListener;

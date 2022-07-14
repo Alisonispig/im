@@ -2,7 +2,7 @@ package org.example.config;
 
 import org.example.listener.*;
 import org.example.protocol.ws.WsMsgHandler;
-import org.tio.server.ServerTioConfig;
+import org.tio.server.TioServerConfig;
 import org.tio.websocket.server.WsServerStarter;
 
 import java.io.IOException;
@@ -10,16 +10,16 @@ import java.io.IOException;
 public class ImServerWebSocketStart {
 
     private final WsServerStarter wsServerStarter;
-    private final ServerTioConfig serverTioConfig;
+    private final TioServerConfig serverTioConfig;
 
 
     public ImServerWebSocketStart(int port, WsMsgHandler wsMsgHandler) throws IOException {
         wsServerStarter = new WsServerStarter(port, wsMsgHandler);
 
-        serverTioConfig = wsServerStarter.getServerTioConfig();
+        serverTioConfig = wsServerStarter.getTioServerConfig();
         serverTioConfig.setGroupListener(new ImGroupListenerAdapter(new ImServerGroupListener()));
         serverTioConfig.setName(ImConfig.PROTOCOL_NAME);
-        serverTioConfig.setServerAioListener(ImServerAioListener.me);
+        serverTioConfig.setTioServerListener(ImTioServerListener.me);
         serverTioConfig.ipStats.addDurations(ImConfig.IpStatDuration.IPSTAT_DURATIONS);
         serverTioConfig.setHeartbeatTimeout(CourierConfig.socketHeartbeat);
     }

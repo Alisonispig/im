@@ -17,18 +17,18 @@ import org.tio.core.Node;
 import org.tio.core.Tio;
 import org.tio.core.intf.Packet;
 import org.tio.utils.lock.SetWithLock;
-import org.tio.websocket.server.WsServerAioListener;
+import org.tio.websocket.server.WsTioServerListener;
 
 
 import java.util.List;
 
-public class ImServerAioListener extends WsServerAioListener {
+public class ImTioServerListener extends WsTioServerListener {
 
     private final UserService userService = new UserService();
 
     private final UserGroupService userGroupService = new UserGroupService();
 
-    public static final ImServerAioListener me = new ImServerAioListener();
+    public static final ImTioServerListener me = new ImTioServerListener();
 
     @Override
     public boolean onHeartbeatTimeout(ChannelContext channelContext, Long interval, int heartbeatTimeoutCount) {

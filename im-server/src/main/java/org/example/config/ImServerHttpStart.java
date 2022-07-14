@@ -5,7 +5,7 @@ import org.tio.http.common.HttpConfig;
 import org.tio.http.common.handler.HttpRequestHandler;
 import org.tio.http.server.HttpServerStarter;
 import org.tio.http.server.handler.DefaultHttpRequestHandler;
-import org.tio.server.ServerTioConfig;
+import org.tio.server.TioServerConfig;
 
 public class ImServerHttpStart {
 
@@ -15,7 +15,7 @@ public class ImServerHttpStart {
 
     public static HttpServerStarter httpServerStarter;
 
-    public static ServerTioConfig serverTioConfig;
+    public static TioServerConfig serverTioConfig;
 
     public static void start() throws Exception {
 
@@ -30,7 +30,7 @@ public class ImServerHttpStart {
         requestHandler = new DefaultHttpRequestHandler(httpConfig, ImServer.class);//第二个参数也可以是数组
 
         httpServerStarter = new HttpServerStarter(httpConfig, requestHandler);
-        serverTioConfig = httpServerStarter.getServerTioConfig();
+        serverTioConfig = httpServerStarter.getTioServerConfig();
         httpServerStarter.start(); //启动http服务器
     }
 }
