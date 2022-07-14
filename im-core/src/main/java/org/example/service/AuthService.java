@@ -6,7 +6,6 @@ import com.mongodb.client.model.Filters;
 import org.example.dao.AuthRepository;
 import org.example.packets.bean.Auth;
 import org.example.packets.handler.system.RegisterReqBody;
-import org.tio.utils.crypto.Md5;
 
 import java.util.Date;
 

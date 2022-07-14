@@ -9,7 +9,7 @@ import org.tio.core.intf.GroupListener;
  */
 public class ImGroupListenerAdapter implements GroupListener {
 
-    private ImGroupListener imGroupListener;
+    private final ImGroupListener imGroupListener;
 
     public ImGroupListenerAdapter(ImGroupListener imGroupListener) {
         this.imGroupListener = imGroupListener;
