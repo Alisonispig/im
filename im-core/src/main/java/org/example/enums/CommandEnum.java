@@ -209,17 +209,17 @@ public enum CommandEnum {
      * <pre>
      * 获取当前所有用户请求;
      * </pre>
-     * <code>COMMAND_USER_LIST_REQ = 26;</code>
+     * <code>COMMAND_SEARCH_USER_REQ = 26;</code>
      */
-    COMMAND_USER_LIST_REQ(26),
+    COMMAND_SEARCH_USER_REQ(26),
 
     /**
      * <pre>
      * 获取当前所有用户响应;
      * </pre>
-     * <code>COMMAND_USER_LIST_RESP = 27;</code>
+     * <code>COMMAND_SEARCH_USER_RESP = 27;</code>
      */
-    COMMAND_USER_LIST_RESP(27),
+    COMMAND_SEARCH_USER_RESP(27),
 
     /**
      * <pre>
