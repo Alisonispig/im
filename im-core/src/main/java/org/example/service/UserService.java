@@ -1,12 +1,16 @@
 package org.example.service;
 
+import cn.hutool.core.util.StrUtil;
+import org.bson.conversions.Bson;
 import org.example.dao.UserRepository;
 import org.example.packets.Status;
+import org.example.packets.bean.Message;
 import org.example.packets.bean.User;
 
 import java.util.List;
+import java.util.regex.Pattern;
 
-import static com.mongodb.client.model.Filters.eq;
+import static com.mongodb.client.model.Filters.*;
 
 public class UserService {
 
@@ -32,8 +36,21 @@ public class UserService {
         userRepository.saveOrUpdateById(user.clone());
     }
 
-    public List<User> getUserList() {
-        return userRepository.find();
+    public List<User> getUserList(String name, String userId) {
+
+        Bson filter = null;
+        if (StrUtil.isNotBlank(name) && StrUtil.isNotBlank(userId)) {
+            Pattern pattern = Pattern.compile("^.*" + name + ".*$", Pattern.CASE_INSENSITIVE);
+            filter = and(gte("id", userId), regex("username", pattern));
+        }
+        if (StrUtil.isNotBlank(name) && StrUtil.isBlank(userId)) {
+            Pattern pattern = Pattern.compile("^.*" + name + ".*$", Pattern.CASE_INSENSITIVE);
+            filter =  and(regex("username", pattern));
+        }
+        if (StrUtil.isBlank(name) && StrUtil.isNotBlank(userId)) {
+            filter = and(gte("id", userId));
+        }
+        return userRepository.findSortLimit(filter, eq("id", 1), 20);
     }
 
     public void userOffline(String userId) {

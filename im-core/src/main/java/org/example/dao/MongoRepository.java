@@ -49,8 +49,13 @@ public class MongoRepository<T> {
         return CollUtil.newArrayList(ts);
     }
 
-    public List<T> find(Bson filter, Bson sort,  Integer number) {
-        FindIterable<T> limit = collection.find(filter).sort(sort).limit(number);
+    public List<T> findSortLimit(Bson filter, Bson sort,  Integer number) {
+        FindIterable<T> limit;
+        if(filter == null){
+            limit = collection.find().sort(sort).limit(number);
+        }else {
+            limit = collection.find(filter).sort(sort).limit(number);
+        }
         return CollUtil.newArrayList(limit);
     }
 

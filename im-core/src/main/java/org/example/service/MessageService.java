@@ -24,9 +24,9 @@ public class MessageService {
         Message message = messageId == null ? getLastMessage(roomId) : getMessage(messageId);
         if (asc == 1) {
             var a = message == null ? and(eq("roomId", roomId)) : and(eq("roomId", roomId), lte(Message.COL_SEND_TIME, message.getSendTime()));
-            return messageRepository.find(a, eq(Message.COL_SEND_TIME, -1), 20);
+            return messageRepository.findSortLimit(a, eq(Message.COL_SEND_TIME, -1), 20);
         } else {
-            return messageRepository.find(and(eq("roomId", roomId), gte(Message.COL_SEND_TIME, message.getSendTime())), eq(Message.COL_SEND_TIME, 1), 20);
+            return messageRepository.findSortLimit(and(eq("roomId", roomId), gte(Message.COL_SEND_TIME, message.getSendTime())), eq(Message.COL_SEND_TIME, 1), 20);
         }
     }
 
@@ -94,11 +94,11 @@ public class MessageService {
         messageRepository.updateById(message);
     }
 
-    public List<Message> getMessage(String roomId, String content,Long startTime, Long endTime) {
+    public List<Message> getMessage(String roomId, String content, Long startTime, Long endTime) {
         Pattern pattern = Pattern.compile("^.*" + content + ".*$", Pattern.CASE_INSENSITIVE);
-        Bson filter = and(eq("roomId", roomId), regex("content", pattern));
-        if(startTime != null && endTime != null){
-            filter = and(eq("roomId", roomId), regex("content", pattern),gte(Message.COL_SEND_TIME,startTime),lte(Message.COL_SEND_TIME,endTime));
+        Bson filter = and(eq("roomId", roomId), regex("content", pattern), ne("deleted", true));
+        if (startTime != null && endTime != null) {
+            filter = and(eq("roomId", roomId), regex("content", pattern), gte(Message.COL_SEND_TIME, startTime), lte(Message.COL_SEND_TIME, endTime), ne("deleted", true));
         }
         return messageRepository.findSort(filter, eq(Message.COL_SEND_TIME, -1));
     }
