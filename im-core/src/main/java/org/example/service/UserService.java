@@ -41,14 +41,17 @@ public class UserService {
         Bson filter = null;
         if (StrUtil.isNotBlank(name) && StrUtil.isNotBlank(userId)) {
             Pattern pattern = Pattern.compile("^.*" + name + ".*$", Pattern.CASE_INSENSITIVE);
-            filter = and(gte("id", userId), regex("username", pattern));
+            filter = and(gte("id", userId), regex("username", pattern),ne("isSystem",true));
         }
         if (StrUtil.isNotBlank(name) && StrUtil.isBlank(userId)) {
             Pattern pattern = Pattern.compile("^.*" + name + ".*$", Pattern.CASE_INSENSITIVE);
-            filter =  and(regex("username", pattern));
+            filter =  and(regex("username", pattern),ne("isSystem",true));
         }
         if (StrUtil.isBlank(name) && StrUtil.isNotBlank(userId)) {
-            filter = and(gte("id", userId));
+            filter = and(gte("id", userId),ne("isSystem",true));
+        }
+        if(StrUtil.isBlank(name) && StrUtil.isBlank(userId)){
+            filter = and(ne("isSystem",true));
         }
         return userRepository.findSortLimit(filter, eq("id", 1), 20);
     }

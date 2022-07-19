@@ -5,6 +5,7 @@ import org.example.dao.GroupRepository;
 import org.example.dao.UserGroupRepository;
 import org.example.dao.UserRepository;
 import org.example.enums.RoomRoleEnum;
+import org.example.packets.LastMessage;
 import org.example.packets.bean.Group;
 import org.example.packets.bean.User;
 import org.example.packets.bean.UserGroup;
@@ -63,7 +64,7 @@ public class UserGroupService {
 
     public List<Group> getUserGroups(String userId) {
         List<UserGroup> userIds = userGroupRepository.find(and(eq("userId", userId), ne("roomDeleted", true)));
-        return userIds.stream().map(userGroup -> groupRepository.findById(userGroup.getRoomId())).sorted(Comparator.comparing(Group::getIndex).reversed()).collect(Collectors.toList());
+        return userIds.stream().map(userGroup ->  groupRepository.findById(userGroup.getRoomId())).sorted(Comparator.comparing(Group::getIndex).reversed()).collect(Collectors.toList());
     }
 
     public void remove(String roomId, String userId) {

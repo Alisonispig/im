@@ -12,6 +12,7 @@ import org.example.config.Chat;
 import org.example.config.Im;
 import org.example.enums.CommandEnum;
 import org.example.enums.RoomRoleEnum;
+import org.example.packets.LastMessage;
 import org.example.packets.bean.Group;
 import org.example.packets.bean.User;
 import org.example.packets.handler.message.ChatReqBody;
