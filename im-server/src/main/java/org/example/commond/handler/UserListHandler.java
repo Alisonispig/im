@@ -41,10 +41,9 @@ public class UserListHandler extends AbstractCmdHandler {
         SearchUserRespBody respBody = new SearchUserRespBody();
         respBody.setSearchId(reqBody.getSearchId());
 
-        List<User> userList = userService.getUserList(reqBody.getName(), reqBody.getUserId());
+        List<User> userList = userService.getUserList(reqBody.getName(), reqBody.getUserId(),user.getId());
 
-        List<User> collect = userList.stream().filter(x -> !x.getId().equals(user.getId())).collect(Collectors.toList());
-        respBody.setUserList(collect);
+        respBody.setUserList(userList);
         WsResponse response = WsResponse.fromText(RespBody.success(CommandEnum.COMMAND_SEARCH_USER_RESP, respBody), Im.CHARSET);
 
         Im.send(channelContext,response);

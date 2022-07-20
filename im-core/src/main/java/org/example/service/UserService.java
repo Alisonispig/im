@@ -36,24 +36,24 @@ public class UserService {
         userRepository.saveOrUpdateById(user.clone());
     }
 
-    public List<User> getUserList(String name, String userId) {
+    public List<User> getUserList(String name, String userId, String selfUserId) {
 
         Bson filter = null;
         if (StrUtil.isNotBlank(name) && StrUtil.isNotBlank(userId)) {
             Pattern pattern = Pattern.compile("^.*" + name + ".*$", Pattern.CASE_INSENSITIVE);
-            filter = and(gte("id", userId), regex("username", pattern),ne("isSystem",true));
+            filter = and(gte("_id", userId), regex("username", pattern),ne("isSystem",true),ne("_id",selfUserId));
         }
         if (StrUtil.isNotBlank(name) && StrUtil.isBlank(userId)) {
             Pattern pattern = Pattern.compile("^.*" + name + ".*$", Pattern.CASE_INSENSITIVE);
-            filter =  and(regex("username", pattern),ne("isSystem",true));
+            filter =  and(regex("username", pattern),ne("isSystem",true),ne("_id",selfUserId));
         }
         if (StrUtil.isBlank(name) && StrUtil.isNotBlank(userId)) {
-            filter = and(gte("id", userId),ne("isSystem",true));
+            filter = and(gte("_id", userId),ne("isSystem",true),ne("_id",selfUserId));
         }
         if(StrUtil.isBlank(name) && StrUtil.isBlank(userId)){
-            filter = and(ne("isSystem",true));
+            filter = and(ne("isSystem",true),ne("_id",selfUserId));
         }
-        return userRepository.findSortLimit(filter, eq("id", 1), 20);
+        return userRepository.findSortLimit(filter, eq("_id", 1), 20);
     }
 
     public void userOffline(String userId) {
