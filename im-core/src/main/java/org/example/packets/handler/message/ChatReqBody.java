@@ -13,7 +13,6 @@ public class ChatReqBody {
      */
     private String _id;
 
-
     /**
      * 发送者编号
      */

@@ -32,7 +32,7 @@ public class MessageSearchReqHandler extends AbstractCmdHandler {
 
         WsRequest request = (WsRequest) packet;
 
-        MessageSearchReqBody messageReqBody = JSON.parseObject(request.getWsBodyText(), MessageSearchReqBody.class);
+        MessageSearchReqBody messageReqBody = JSON.parseObject(request.getBody(), MessageSearchReqBody.class);
 
         Long beginTime = null;
         if (StrUtil.isNotBlank(messageReqBody.getStartDate())) {

@@ -36,7 +36,7 @@ public class UserListHandler extends AbstractCmdHandler {
             return null;
         }
 
-        SearchUserReqBody reqBody = JSON.parseObject(request.getWsBodyText(),SearchUserReqBody.class);
+        SearchUserReqBody reqBody = JSON.parseObject(request.getBody(),SearchUserReqBody.class);
 
         SearchUserRespBody respBody = new SearchUserRespBody();
         respBody.setSearchId(reqBody.getSearchId());

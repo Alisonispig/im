@@ -30,7 +30,7 @@ public class MessageReactionReqHandler extends AbstractCmdHandler {
 
         WsRequest request = (WsRequest) packet;
 
-        MessageReactionReqBody messageReactionReqBody = JSON.parseObject(request.getWsBodyText(), MessageReactionReqBody.class);
+        MessageReactionReqBody messageReactionReqBody = JSON.parseObject(request.getBody(), MessageReactionReqBody.class);
 
         log.info("{}", messageReactionReqBody);
 

@@ -33,7 +33,7 @@ public class UserReqHandler extends AbstractCmdHandler {
     public WsResponse handler(Packet packet, ChannelContext channelContext) {
 
         WsRequest wsRequest = (WsRequest) packet;
-        UserReqBody userReqBody = JSON.parseObject(wsRequest.getWsBodyText(), UserReqBody.class);
+        UserReqBody userReqBody = JSON.parseObject(wsRequest.getBody(), UserReqBody.class);
         log.info("userReqBody : {}", userReqBody);
         User user = Im.getUser(channelContext);
 

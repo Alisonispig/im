@@ -36,4 +36,8 @@ public class FriendInfoService {
     public FriendInfo getFriendInfo(String roomId, String userId) {
         return  friendInfoRepository.findOne(and(eq("roomId", roomId), eq("self", userId)));
     }
+
+    public FriendInfo getRoomInfo(String selfId, String userId) {
+        return friendInfoRepository.findOne(and(eq("friendId", userId), eq("self", selfId)));
+    }
 }

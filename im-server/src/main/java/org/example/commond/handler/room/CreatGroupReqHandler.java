@@ -39,8 +39,8 @@ public class CreatGroupReqHandler extends AbstractCmdHandler {
 
         log.info("创建群组");
         WsRequest httpPacket = (WsRequest) packet;
-        System.out.println(httpPacket.getWsBodyText());
-        CreateGroupReqBody request = JSONObject.parseObject(httpPacket.getWsBodyText(), CreateGroupReqBody.class);
+        log.info(httpPacket.getWsBodyText());
+        CreateGroupReqBody request = JSONObject.parseObject(httpPacket.getBody(), CreateGroupReqBody.class);
 
         String roomName = request.getRoomName();
         // 当前用户, 并设置用户为管理员

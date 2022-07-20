@@ -87,7 +87,6 @@ public class UploadController {
 
             future.thenAccept((item) -> {
                 if (item) {
-                    System.out.println(item);
                     fileService.setFileUrl(md5, objectName, name, size);
                 }
             });

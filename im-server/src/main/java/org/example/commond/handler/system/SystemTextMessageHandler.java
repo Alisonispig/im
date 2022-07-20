@@ -83,6 +83,7 @@ public class SystemTextMessageHandler extends AbstractCmdHandler {
             group = Group.builder().roomId(IdUtil.getSnowflake().nextIdStr())
                     .index(System.currentTimeMillis())
                     .avatar(url)
+                    .notice(true)
                     .isFriend(false)
                     .isSystem(true)
                     .isDeleted(false).roomName("系统消息").build();

@@ -30,7 +30,7 @@ public class MessageReadReqHandler extends AbstractCmdHandler {
         WsRequest request = (WsRequest) packet;
 
         // 清理当前房间未读消息
-        MessageReadReqBody messageReadReqBody = JSONObject.parseObject(request.getWsBodyText(), MessageReadReqBody.class);
+        MessageReadReqBody messageReadReqBody = JSONObject.parseObject(request.getBody(), MessageReadReqBody.class);
         List<UnReadMessage> unReadMessage = unReadMessageService.getUnReadMessage(Im.getUser(channelContext).getId(), messageReadReqBody.getRoomId());
 
         unReadMessageService.clearUnReadMessage(Im.getUser(channelContext).getId(), messageReadReqBody.getRoomId());

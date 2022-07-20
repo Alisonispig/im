@@ -34,6 +34,7 @@ public class UserGroupService {
     public void addGroupUser(String roomId, String userId) {
         addGroupUser(roomId, userId, RoomRoleEnum.GENERAL);
     }
+
     public void addGroupUser(String roomId, String userId,Boolean isSystem) {
         addGroupUser(roomId, userId, RoomRoleEnum.GENERAL,isSystem);
     }
@@ -60,7 +61,6 @@ public class UserGroupService {
             return user;
         }).collect(Collectors.toList());
     }
-
 
     public List<Group> getUserGroups(String userId) {
         List<UserGroup> userIds = userGroupRepository.find(and(eq("userId", userId), ne("roomDeleted", true)));

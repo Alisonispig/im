@@ -30,7 +30,7 @@ public class RemoveGroupUserReqHandler extends AbstractCmdHandler {
     @Override
     public WsResponse handler(Packet packet, ChannelContext channelContext) {
         WsRequest request = (WsRequest) packet;
-        GroupUserReqBody body = JSON.parseObject(request.getWsBodyText(), GroupUserReqBody.class);
+        GroupUserReqBody body = JSON.parseObject(request.getBody(), GroupUserReqBody.class);
 
         // 给剩下的人发送人员离开消息
         WsResponse response = WsResponse.fromText(RespBody.success(CommandEnum.COMMAND_REMOVE_GROUP_USER_RESP, body), Im.CHARSET);

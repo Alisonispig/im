@@ -65,7 +65,6 @@ public class JoinGroupReqHandler extends AbstractCmdHandler {
 
         // 绑定到群聊
         for (User addUser : joinGroupNotifyBody.getUsers()) {
-
             // 用户是否在线,在线直接绑定一个群组
             List<ChannelContext> channelByUserId = Im.getChannelByUserId(addUser.getId());
             if (CollUtil.isNotEmpty(channelByUserId)) {

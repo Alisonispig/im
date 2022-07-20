@@ -31,7 +31,7 @@ public class MessageReqHandler extends AbstractCmdHandler {
     public WsResponse handler(Packet packet, ChannelContext channelContext) {
 
         WsRequest request = (WsRequest) packet;
-        MessageReqBody messageReqBody = JSON.parseObject(request.getWsBodyText(), MessageReqBody.class);
+        MessageReqBody messageReqBody = JSON.parseObject(request.getBody(), MessageReqBody.class);
         if (messageReqBody.getType() == null) {
             messageReqBody.setType(MessageFetchTypeEnum.TOP);
         }

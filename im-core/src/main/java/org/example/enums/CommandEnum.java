@@ -269,6 +269,22 @@ public enum CommandEnum {
      */
     COMMAND_REMOVE_GROUP_USER_RESP(33),
 
+    /**
+     * <pre>
+     * 转发消息
+     * </pre>
+     * <code>COMMAND_FORWARD_MESSAGE_REQ = 34</code>
+     */
+    COMMAND_FORWARD_MESSAGE_REQ(34),
+
+    /**
+     * <pre>
+     * 移除用户响应
+     * </pre>
+     * <code>COMMAND_FORWARD_MESSAGE_RESP = 35</code>
+     */
+    COMMAND_FORWARD_MESSAGE_RESP(35),
+
     // TODO 36 37
     /**
      * <pre>

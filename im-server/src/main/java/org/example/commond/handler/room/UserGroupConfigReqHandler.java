@@ -34,7 +34,7 @@ public class UserGroupConfigReqHandler extends AbstractCmdHandler {
 
         WsRequest request = (WsRequest) packet;
 
-        UserGroupConfigReqBody body = JSON.parseObject(request.getWsBodyText(), UserGroupConfigReqBody.class);
+        UserGroupConfigReqBody body = JSON.parseObject(request.getBody(), UserGroupConfigReqBody.class);
 
         switch (body.getType()) {
             case NOTICE:

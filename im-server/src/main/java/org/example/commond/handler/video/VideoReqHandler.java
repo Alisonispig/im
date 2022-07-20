@@ -28,7 +28,7 @@ public class VideoReqHandler extends AbstractCmdHandler {
 
         WsRequest request = (WsRequest) packet;
 
-        VideoReqBody body = JSON.parseObject(request.getWsBodyText(), VideoReqBody.class);
+        VideoReqBody body = JSON.parseObject(request.getBody(), VideoReqBody.class);
 //        body.setFromId(Im.getUser(channelContext).getId());
 
         List<ChannelContext> channels = Im.getChannelByUserId(body.getUserId());

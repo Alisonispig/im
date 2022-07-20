@@ -30,7 +30,7 @@ public class EditProfileHandler extends AbstractCmdHandler {
 
         WsRequest request = (WsRequest) packet;
 
-        EditProfileReqBody editProfileReqBody = JSON.parseObject(request.getWsBodyText(), EditProfileReqBody.class);
+        EditProfileReqBody editProfileReqBody = JSON.parseObject(request.getBody(), EditProfileReqBody.class);
 
         User userInfo = userService.getUserInfo(editProfileReqBody.getUserId());
         if (StrUtil.isNotBlank(editProfileReqBody.getAvatar())) {

@@ -5,6 +5,7 @@ import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.URLUtil;
 import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
 import org.example.commond.AbstractCmdHandler;
@@ -32,13 +33,17 @@ public class ChatReqHandler extends AbstractCmdHandler {
     @Override
     public WsResponse handler(Packet packet, ChannelContext channelContext) {
         WsRequest httpPacket = (WsRequest) packet;
-        System.out.println(httpPacket.getWsBodyText());
+        log.info(httpPacket.getWsBodyText());
         ChatReqBody request = JSONObject.parseObject(httpPacket.getBody(), ChatReqBody.class);
         Date date = new Date();
         request.setDate(DateUtil.formatDate(date));
         request.setTimestamp(DateUtil.formatTime(date));
         if (CollUtil.isNotEmpty(request.getFiles())) {
-            request.getFiles().forEach(x -> x.setUrl(CourierConfig.fileUrl + x.getUrl()));
+            request.getFiles().forEach(x -> {
+                if (!x.getUrl().startsWith("https") && !x.getUrl().startsWith("http")) {
+                    x.setUrl(CourierConfig.fileUrl + x.getUrl());
+                }
+            });
         }
 
         Message message = BeanUtil.copyProperties(request, Message.class);
