@@ -41,6 +41,8 @@ public class EditProfileHandler extends AbstractCmdHandler {
             userInfo.setUsername(editProfileReqBody.getName());
         }
         userService.updateById(userInfo);
+        Im.getUser(channelContext).setUsername(userInfo.getUsername());
+        Im.getUser(channelContext).setAvatar(userInfo.getAvatar());
 
         // 发送修改响应消息
         UserStatusBody userStatusBody = new UserStatusBody();
