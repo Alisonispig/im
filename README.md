@@ -75,7 +75,7 @@ javax.net.ssl.SSLHandshakeException: PKIX path building failed: sun.security.pro
 ```
 
 ### 🐧 特别鸣谢
-[J-IM](https://gitee.com/xchao/j-im) 提供的似乎
+[J-IM](https://gitee.com/xchao/j-im) 提供的思路
 
 ### ⚒️ 交流
 在使用过程中有任何问题和想法，请给我提 [Issue](https://gitee.com/LiLongLong719/im/issues)。
