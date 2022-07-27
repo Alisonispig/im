@@ -5,7 +5,7 @@ import lombok.Data;
 import org.bson.codecs.pojo.annotations.BsonId;
 
 @Data
-public class Emotion {
+public class Emoticon {
 
     @BsonId
     @JSONField(name = "_id")

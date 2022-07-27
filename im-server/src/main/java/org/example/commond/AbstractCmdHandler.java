@@ -11,6 +11,8 @@ public abstract class AbstractCmdHandler implements CmdHandler {
     public MessageService messageService;
     public UnReadMessageService unReadMessageService;
     public AuthService authService;
+    public EmoticonService emoticonService;
+
 
     public AbstractCmdHandler() {
         userService = new UserService();
@@ -20,6 +22,7 @@ public abstract class AbstractCmdHandler implements CmdHandler {
         messageService = new MessageService();
         unReadMessageService = new UnReadMessageService();
         authService = new AuthService();
+        emoticonService = new EmoticonService();
     }
 
 }

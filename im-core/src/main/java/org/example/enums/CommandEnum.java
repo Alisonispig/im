@@ -285,7 +285,22 @@ public enum CommandEnum {
      */
     COMMAND_FORWARD_MESSAGE_RESP(35),
 
-    // TODO 36 37
+    /**
+     * <pre>
+     * 搜索表情
+     * </pre>
+     * <code>COMMAND_EMOTICON_SEARCH_REQ = 36</code>
+     */
+    COMMAND_EMOTICON_SEARCH_REQ(36),
+
+    /**
+     * <pre>
+     * 搜索表情响应
+     * </pre>
+     * <code>COMMAND_EMOTICON_SEARCH_RESP = 37</code>
+     */
+    COMMAND_EMOTICON_SEARCH_RESP(37),
+
     /**
      * <pre>
      * 解散群聊请求
@@ -376,9 +391,9 @@ public enum CommandEnum {
 
     /**
      * <pre>
-     *      * 搜索消息
-     *      * </pre>
-     *      * <code>COMMAND_SEARCH_MESSAGE_RESP = 49</code>
+     *   搜索消息
+     * </pre>
+     * <code>COMMAND_SEARCH_MESSAGE_RESP = 49</code>
      */
     COMMAND_SEARCH_MESSAGE_RESP(49),
 
@@ -436,9 +451,7 @@ public enum CommandEnum {
      * </pre>
      * <code>COMMAND_VIDEO_RESP = 56</code>
      */
-    COMMAND_VIDEO_RESP(56)
-
-    ;
+    COMMAND_VIDEO_RESP(56);
 
     private final int value;
 

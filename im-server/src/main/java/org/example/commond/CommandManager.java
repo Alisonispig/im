@@ -2,6 +2,7 @@ package org.example.commond;
 
 import lombok.extern.slf4j.Slf4j;
 import org.example.commond.handler.*;
+import org.example.commond.handler.emoticon.EmoticonSearchReqHandler;
 import org.example.commond.handler.message.*;
 import org.example.commond.handler.room.*;
 import org.example.commond.handler.system.SystemTextMessageHandler;
@@ -42,6 +43,7 @@ public class CommandManager {
             registerCommand(new MessageDeleteHandler());
             registerCommand(new UserGroupConfigReqHandler());
             registerCommand(new VideoReqHandler());
+            registerCommand(new EmoticonSearchReqHandler());
         } catch (Exception e) {
             log.info("注册处理器失败");
         }

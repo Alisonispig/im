@@ -6,16 +6,13 @@ import cn.hutool.core.util.*;
 import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
 import org.example.config.CourierConfig;
-import org.example.config.Im;
-import org.example.dao.EmotionRepository;
-import org.example.packets.bean.Emotion;
+import org.example.dao.EmoticonRepository;
+import org.example.packets.bean.Emoticon;
 import org.example.packets.file.FileInit;
 import org.example.packets.file.FileMerge;
-import org.example.packets.handler.system.RespBody;
 import org.example.protocol.http.service.UploadService;
 import org.example.service.FileService;
 import org.example.util.ThreadPoolUtil;
-import org.slf4j.Marker;
 import org.tio.http.common.*;
 import org.tio.http.server.annotation.RequestPath;
 import org.tio.http.server.util.Resps;
@@ -32,11 +29,11 @@ public class UploadController {
 
     private final FileService fileService;
 
-    private final EmotionRepository emotionRepository;
+    private final EmoticonRepository emoticonRepository;
 
     public UploadController() {
         fileService = new FileService();
-        emotionRepository =  new EmotionRepository();
+        emoticonRepository =  new EmoticonRepository();
     }
 
     @RequestPath("/multipart/init")
@@ -114,22 +111,22 @@ public class UploadController {
         }
     }
 
-    @RequestPath("/upload/emotion")
-    public HttpResponse uploadEmotion(UploadFile uploadFile,String before, String end, HttpRequest request) {
+    @RequestPath("/upload/emoticon")
+    public HttpResponse uploadEmoticon(UploadFile uploadFile,String before, String end, HttpRequest request) {
         String suffix = FileNameUtil.getSuffix(uploadFile.getName());
         String s = IdUtil.getSnowflake().nextIdStr() + (StrUtil.isNotBlank(suffix) ? CharUtil.DOT : "") + suffix;
 
         boolean b = UploadService.uploadFile(uploadFile.getData(), s);
 
-        Emotion emotion = new Emotion();
-        emotion.setId(IdUtil.getSnowflakeNextIdStr());
-        emotion.setName(uploadFile.getName());
-        emotion.setSize((long) uploadFile.getSize());
-        emotion.setIsPrivate(false);
-        emotion.setType(s);
-        emotion.setUrl(CourierConfig.fileUrl + s);
+        Emoticon emoticon = new Emoticon();
+        emoticon.setId(IdUtil.getSnowflakeNextIdStr());
+        emoticon.setName(uploadFile.getName());
+        emoticon.setSize((long) uploadFile.getSize());
+        emoticon.setIsPrivate(false);
+        emoticon.setType(suffix);
+        emoticon.setUrl(CourierConfig.fileUrl + s);
 
-        emotionRepository.insert(emotion);
+        emoticonRepository.insert(emoticon);
 
         return Resps.txt(request, "OK");
     }
