@@ -2,22 +2,21 @@ package org.example.protocol.http;
 
 import cn.hutool.core.io.file.FileNameUtil;
 import cn.hutool.core.lang.Assert;
-import cn.hutool.core.util.ObjectUtil;
-import cn.hutool.core.util.StrUtil;
-import cn.hutool.core.util.ZipUtil;
+import cn.hutool.core.util.*;
 import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
 import org.example.config.CourierConfig;
 import org.example.config.Im;
+import org.example.dao.EmotionRepository;
+import org.example.packets.bean.Emotion;
 import org.example.packets.file.FileInit;
 import org.example.packets.file.FileMerge;
+import org.example.packets.handler.system.RespBody;
 import org.example.protocol.http.service.UploadService;
 import org.example.service.FileService;
 import org.example.util.ThreadPoolUtil;
-import org.tio.http.common.HeaderName;
-import org.tio.http.common.HeaderValue;
-import org.tio.http.common.HttpRequest;
-import org.tio.http.common.HttpResponse;
+import org.slf4j.Marker;
+import org.tio.http.common.*;
 import org.tio.http.server.annotation.RequestPath;
 import org.tio.http.server.util.Resps;
 
@@ -33,8 +32,11 @@ public class UploadController {
 
     private final FileService fileService;
 
+    private final EmotionRepository emotionRepository;
+
     public UploadController() {
         fileService = new FileService();
+        emotionRepository =  new EmotionRepository();
     }
 
     @RequestPath("/multipart/init")
@@ -110,6 +112,26 @@ public class UploadController {
         } catch (IOException e) {
             return null;
         }
+    }
+
+    @RequestPath("/upload/emotion")
+    public HttpResponse uploadEmotion(UploadFile uploadFile,String before, String end, HttpRequest request) {
+        String suffix = FileNameUtil.getSuffix(uploadFile.getName());
+        String s = IdUtil.getSnowflake().nextIdStr() + (StrUtil.isNotBlank(suffix) ? CharUtil.DOT : "") + suffix;
+
+        boolean b = UploadService.uploadFile(uploadFile.getData(), s);
+
+        Emotion emotion = new Emotion();
+        emotion.setId(IdUtil.getSnowflakeNextIdStr());
+        emotion.setName(uploadFile.getName());
+        emotion.setSize((long) uploadFile.getSize());
+        emotion.setIsPrivate(false);
+        emotion.setType(s);
+        emotion.setUrl(CourierConfig.fileUrl + s);
+
+        emotionRepository.insert(emotion);
+
+        return Resps.txt(request, "OK");
     }
 
 }

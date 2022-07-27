@@ -1,24 +1,18 @@
 package org.example.packets.bean;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import lombok.Data;
 import org.bson.codecs.pojo.annotations.BsonId;
 
 @Data
-public class FileInfo {
+public class Emotion {
 
-    /**
-     * 主键
-     */
     @BsonId
+    @JSONField(name = "_id")
     private String id;
 
     /**
-     * 文件MD5
-     */
-    private String md5;
-
-    /**
-     * 文件路径
+     * 文件URL
      */
     private String url;
 
@@ -37,8 +31,9 @@ public class FileInfo {
      */
     private String type;
 
-    public static final String COL_MD5 = "md5";
-    public static final String COL_SIZE = "size";
-    public static final String COL_NAME = "name";
-    public static final String COL_TYPE = "type";
+    /**
+     * 是否私有
+     */
+    private Boolean isPrivate;
+
 }
