@@ -47,7 +47,7 @@ public class EmoticonOperationReqHandler extends AbstractCmdHandler {
                 respBody.setEmoticon(this.insertToUser(reqBody, user));
                 break;
             case DELETE:
-                this.deleteUserEmoticon(reqBody, user);
+                respBody.setEmoticon(this.deleteUserEmoticon(reqBody, user));
                 break;
             case INSERT_TO_STORE:
                 this.insertToStore(reqBody, user);
@@ -94,7 +94,8 @@ public class EmoticonOperationReqHandler extends AbstractCmdHandler {
         return emoticonService.getEmoticon(id);
     }
 
-    private void deleteUserEmoticon(EmoticonOperationReqBody body, User user) {
+    private Emoticon deleteUserEmoticon(EmoticonOperationReqBody body, User user) {
         userEmoticonService.delete(body.getEmoticonId(), user.getId());
+        return emoticonService.getEmoticon(body.getEmoticonId());
     }
 }

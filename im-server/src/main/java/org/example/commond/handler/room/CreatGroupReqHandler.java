@@ -14,6 +14,7 @@ import org.example.enums.CommandEnum;
 import org.example.enums.DefaultEnum;
 import org.example.enums.JoinGroupEnum;
 import org.example.enums.RoomRoleEnum;
+import org.example.packets.bean.FriendInfo;
 import org.example.packets.bean.Group;
 import org.example.packets.bean.User;
 import org.example.packets.handler.room.CreateGroupReqBody;
@@ -46,6 +47,14 @@ public class CreatGroupReqHandler extends AbstractCmdHandler {
         // 当前用户, 并设置用户为管理员
         User user = Im.getUser(channelContext, false);
         user.setRole(RoomRoleEnum.ADMIN);
+
+        // 如果是好友的情况下校验是不是好友
+        if(request.getIsFriend()) {
+            FriendInfo roomInfo = friendInfoService.getRoomInfo(user.getId(), request.getUsers().get(0).getId());
+            if(roomInfo != null){
+                return null;
+            }
+        }
 
         String url = UploadService.uploadDefault(DefaultEnum.ACCOUNT_GROUP);
         // 创建群聊
