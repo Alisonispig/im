@@ -36,4 +36,6 @@ public class Emoticon {
      */
     private Boolean isPrivate;
 
+    private Long index;
+
 }

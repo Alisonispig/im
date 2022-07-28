@@ -57,6 +57,7 @@ public class EmoticonService {
         emoticon.setIsPrivate(isPrivate);
         emoticon.setType(FileNameUtil.getSuffix(name));
         emoticon.setUrl(url);
+        emoticon.setIndex(System.currentTimeMillis());
 
         emoticonRepository.insert(emoticon);
         return emoticon.getId();
