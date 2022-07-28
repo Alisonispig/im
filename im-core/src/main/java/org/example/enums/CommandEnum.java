@@ -451,7 +451,39 @@ public enum CommandEnum {
      * </pre>
      * <code>COMMAND_VIDEO_RESP = 56</code>
      */
-    COMMAND_VIDEO_RESP(56);
+    COMMAND_VIDEO_RESP(56),
+
+    /**
+     * <pre>
+     * 查询当前用户表情包请求
+     * </pre>
+     * <code>COMMAND_EMOTICON_REQ = 57</code>
+     */
+    COMMAND_EMOTICON_REQ(57),
+
+    /**
+     * <pre>
+     * 查询当前用户表情包响应
+     * </pre>
+     * <code>COMMAND_EMOTICON_RESP = 58</code>
+     */
+    COMMAND_EMOTICON_RESP(58),
+
+    /**
+     * <pre>
+     * 操作表情包, 删除,新增等动作请求
+     * </pre>
+     * <code>COMMAND_EMOTICON_OPERATION_REQ = 59</code>
+     */
+    COMMAND_EMOTICON_OPERATION_REQ(59),
+
+    /**
+     * <pre>
+     * 操作表情包, 删除,新增等动作响应
+     * </pre>
+     * <code>COMMAND_EMOTICON_OPERATION_RESP = 60</code>
+     */
+    COMMAND_EMOTICON_OPERATION_RESP(60);
 
     private final int value;
 

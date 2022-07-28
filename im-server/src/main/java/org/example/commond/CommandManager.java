@@ -2,6 +2,8 @@ package org.example.commond;
 
 import lombok.extern.slf4j.Slf4j;
 import org.example.commond.handler.*;
+import org.example.commond.handler.emoticon.EmoticonOperationReqHandler;
+import org.example.commond.handler.emoticon.EmoticonReqHandler;
 import org.example.commond.handler.emoticon.EmoticonSearchReqHandler;
 import org.example.commond.handler.message.*;
 import org.example.commond.handler.room.*;
@@ -44,6 +46,8 @@ public class CommandManager {
             registerCommand(new UserGroupConfigReqHandler());
             registerCommand(new VideoReqHandler());
             registerCommand(new EmoticonSearchReqHandler());
+            registerCommand(new EmoticonReqHandler());
+            registerCommand(new EmoticonOperationReqHandler());
         } catch (Exception e) {
             log.info("注册处理器失败");
         }

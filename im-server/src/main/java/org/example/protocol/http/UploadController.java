@@ -11,6 +11,7 @@ import org.example.packets.bean.Emoticon;
 import org.example.packets.file.FileInit;
 import org.example.packets.file.FileMerge;
 import org.example.protocol.http.service.UploadService;
+import org.example.service.EmoticonService;
 import org.example.service.FileService;
 import org.example.util.ThreadPoolUtil;
 import org.tio.http.common.*;
@@ -29,11 +30,11 @@ public class UploadController {
 
     private final FileService fileService;
 
-    private final EmoticonRepository emoticonRepository;
+    private final EmoticonService emoticonService;
 
     public UploadController() {
         fileService = new FileService();
-        emoticonRepository =  new EmoticonRepository();
+        emoticonService = new EmoticonService();
     }
 
     @RequestPath("/multipart/init")
@@ -112,21 +113,13 @@ public class UploadController {
     }
 
     @RequestPath("/upload/emoticon")
-    public HttpResponse uploadEmoticon(UploadFile uploadFile,String before, String end, HttpRequest request) {
+    public HttpResponse uploadEmoticon(UploadFile uploadFile, String before, String end, HttpRequest request) {
         String suffix = FileNameUtil.getSuffix(uploadFile.getName());
-        String s = IdUtil.getSnowflake().nextIdStr() + (StrUtil.isNotBlank(suffix) ? CharUtil.DOT : "") + suffix;
+        String url = IdUtil.getSnowflake().nextIdStr() + (StrUtil.isNotBlank(suffix) ? CharUtil.DOT : "") + suffix;
 
-        boolean b = UploadService.uploadFile(uploadFile.getData(), s);
+        boolean b = UploadService.uploadFile(uploadFile.getData(), url);
 
-        Emoticon emoticon = new Emoticon();
-        emoticon.setId(IdUtil.getSnowflakeNextIdStr());
-        emoticon.setName(uploadFile.getName());
-        emoticon.setSize((long) uploadFile.getSize());
-        emoticon.setIsPrivate(false);
-        emoticon.setType(suffix);
-        emoticon.setUrl(CourierConfig.fileUrl + s);
-
-        emoticonRepository.insert(emoticon);
+        emoticonService.insert(uploadFile.getName(), uploadFile.getSize(), url, false);
 
         return Resps.txt(request, "OK");
     }
