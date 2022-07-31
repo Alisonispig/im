@@ -53,7 +53,10 @@ public class UserReqHandler extends AbstractCmdHandler {
         WsResponse response = WsResponse.fromText(RespBody.success(CommandEnum.COMMAND_GET_USER_RESP, user), ImConfig.CHARSET);
         Im.send(channelContext, response);
 
-        for (Group group : user.getGroups()) {
+        // 倒着循环, 解决未读上线的问题
+        for (int i = user.getGroups().size() - 1; i >= 0; i--) {
+            Group group = user.getGroups().get(i);
+
             // 获取到最后一条消息未读消息,并且发重新发送
             List<UnReadMessage> unReadMessages = unReadMessageService.getUnReadMessage(user.getId(), group.getRoomId());
             if (CollUtil.isNotEmpty(unReadMessages)) {
@@ -68,7 +71,6 @@ public class UserReqHandler extends AbstractCmdHandler {
                 Im.send(channelContext, wsResponse);
             }
         }
-
         return null;
     }
 }

@@ -62,6 +62,15 @@ public class UserGroupService {
         }).collect(Collectors.toList());
     }
 
+    public List<User> getGroupUsers(String roomId, List<String> ids) {
+        List<UserGroup> roomIds = userGroupRepository.find(eq("roomId", roomId));
+        return roomIds.stream().filter(x -> !ids.contains(x.getUserId())).map(userGroup -> {
+            User user = userRepository.findById(userGroup.getUserId());
+            user.setRole(userGroup.getRole());
+            return user;
+        }).collect(Collectors.toList());
+    }
+
     public List<Group> getUserGroups(String userId) {
         List<UserGroup> userIds = userGroupRepository.find(and(eq("userId", userId), ne("roomDeleted", true)));
         return userIds.stream().map(userGroup ->  groupRepository.findById(userGroup.getRoomId())).sorted(Comparator.comparing(Group::getIndex).reversed()).collect(Collectors.toList());

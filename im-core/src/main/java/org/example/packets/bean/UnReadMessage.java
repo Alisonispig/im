@@ -15,4 +15,6 @@ public class UnReadMessage {
 
     private String userId;
 
+    private Long sendTime;
+
 }

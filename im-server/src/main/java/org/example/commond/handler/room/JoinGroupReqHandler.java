@@ -81,6 +81,12 @@ public class JoinGroupReqHandler extends AbstractCmdHandler {
         WsResponse wsResponse = WsResponse.fromText(RespBody.success(CommandEnum.COMMAND_JOIN_GROUP_RESP, joinGroupNotifyBody), Im.CHARSET);
         Im.send(channelContext, wsResponse);
 
+        List<String> joinUsers = joinGroupNotifyBody.getUsers().stream().map(User::getId).collect(Collectors.toList());
+
+        List<User> groupUsers = userGroupService.getGroupUsers(joinGroupNotifyBody.getGroup().getRoomId(),joinUsers);
+
+        joinGroupNotifyBody.setOtherUsers(groupUsers);
+
         // 发送加入群组消息
         Chat.sendToGroup(joinGroupNotifyBody);
 

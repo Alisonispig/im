@@ -60,7 +60,7 @@ public class Chat {
         for (User groupUser : groupUsers) {
             if(!groupUser.getId().equals(chatRespBody.getSenderId())){
                 // 给这个用户设置未读消息
-                unReadMessageService.putUnReadMessage(groupUser.getId(), chatRespBody.getRoomId(), chatRespBody.getId());
+                unReadMessageService.putUnReadMessage(groupUser.getId(), chatRespBody.getRoomId(), chatRespBody.getId(),chatRespBody.getSendTime());
             }
 
             // 取出未读消息, 并设置未读数量
@@ -135,6 +135,11 @@ public class Chat {
 
     }
 
+    /**
+     * 因为好友是双向的, 必须重置消息获取对方的名称
+     * @param group 群组
+     * @param userId 用户ID
+     */
     public static void resetGroup(Group group, String userId) {
         log.info("{}", group);
         if (!group.getIsFriend()) {

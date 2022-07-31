@@ -34,4 +34,9 @@ public class JoinGroupNotifyBody {
      * 相关消息: 区分为创建成功, 加入群聊 退出群聊 移出群聊
      */
     private String message;
+
+    /**
+     * 拉人进群时, 其他用户将会在这个群组中体现, 主要是避免发消息的问题
+     */
+    private List<User> otherUsers;
 }

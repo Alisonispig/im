@@ -17,13 +17,13 @@ public class UnReadMessageService {
     }
 
 
-    public void putUnReadMessage(String userId, String roomId, String messageId) {
-        UnReadMessage unReadMessage = new UnReadMessage(messageId, roomId, userId);
+    public void putUnReadMessage(String userId, String roomId, String messageId, Long sendTime) {
+        UnReadMessage unReadMessage = new UnReadMessage(messageId, roomId, userId,sendTime);
         unReadMessageRepository.insert(unReadMessage);
     }
 
     public List<UnReadMessage> getUnReadMessage(String userId, String roomId) {
-        return unReadMessageRepository.find(and(eq("userId", userId), eq("roomId", roomId)));
+        return unReadMessageRepository.findSort(and(eq("userId", userId), eq("roomId", roomId)),eq("sendTime",1));
     }
 
     public UnReadMessage getLastUnReadMessage(String userId, String roomId) {

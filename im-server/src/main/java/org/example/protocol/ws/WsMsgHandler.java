@@ -61,8 +61,10 @@ public class WsMsgHandler implements IWsMsgHandler {
 
     @Override
     public Object onText(WsRequest wsRequest, String text, ChannelContext channelContext) {
-        log.info("socket消息:{}", text);
         Integer cmd = JSON.parseObject(text).getInteger("cmd");
+        if(cmd != 13){
+            log.info("socket消息:{}", text);
+        }
         CommandEnum commandEnum = CommandEnum.forNumber(cmd);
         AbstractCmdHandler command = CommandManager.getCommand(commandEnum);
         WsResponse wsResponse = command.handler(wsRequest, channelContext);
