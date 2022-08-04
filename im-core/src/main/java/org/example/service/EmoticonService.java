@@ -23,22 +23,22 @@ public class EmoticonService {
     }
 
     public List<Emoticon> getEmoticons(String id, String content) {
-
+        Emoticon emoticon = getEmoticon(id);
         Pattern pattern = Pattern.compile("^.*" + content + ".*$", Pattern.CASE_INSENSITIVE);
         Bson filter = and(eq("isPrivate", false));
         if (StrUtil.isNotBlank(id) && StrUtil.isNotBlank(content)) {
-            filter = and(eq("isPrivate", false), gt("_id", id), regex("name", pattern));
+            filter = and(eq("isPrivate", false), lt("index", emoticon.getIndex()), regex("name", pattern));
         }
 
         if(StrUtil.isNotBlank(id) && StrUtil.isBlank(content)) {
-            filter = and(eq("isPrivate", false), gt("_id", id));
+            filter = and(eq("isPrivate", false), lt("index", emoticon.getIndex()));
         }
 
         if(StrUtil.isBlank(id) && StrUtil.isNotBlank(content)) {
             filter = and(eq("isPrivate", false), regex("name", pattern));
         }
 
-        return emoticonRepository.findSortLimit(filter, eq("_id", 1), 20);
+        return emoticonRepository.findSortLimit(filter, eq("index", -1), 20);
     }
 
     public Emoticon getEmoticon(String emoticonId) {

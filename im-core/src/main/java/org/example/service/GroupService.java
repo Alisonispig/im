@@ -44,13 +44,11 @@ public class GroupService {
         }
         lastMessage.setIndexId(message.getSendTime());
         if (StrUtil.isBlank(message.getContent()) && CollUtil.isNotEmpty(message.getFiles()) && !message.getDeleted()) {
-            if (message.getFiles().size() == 1 && message.getFiles().get(0).getIsEmoticon()) {
+            if (message.getFiles().size() == 1 && Boolean.TRUE.equals(message.getFiles().get(0).getIsEmoticon())) {
                 lastMessage.setContent("[表情包]");
-            }
-            else if (message.getFiles().size() == 1 && !message.getFiles().get(0).getIsEmoticon()) {
+            } else if (message.getFiles().size() == 1 && !Boolean.TRUE.equals(message.getFiles().get(0).getIsEmoticon())) {
                 lastMessage.setContent("[文件] - " + message.getFiles().get(0).getName());
-            }
-            else {
+            } else {
                 lastMessage.setContent("[文件] - " + message.getFiles().get(0).getName() + "等多个文件");
             }
         }
