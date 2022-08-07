@@ -60,8 +60,8 @@ public class LoginReqHandler extends AbstractCmdHandler {
         user.setStatus(Status.online());
         user.setGroups(groups);
 
-        String success = RespBody.success(CommandEnum.COMMAND_LOGIN_RESP, new LoginRespBody(user.getId()));
-        Im.bSend(channelContext, WsResponse.fromText(success, ImConfig.CHARSET));
+//        String success = RespBody.success(CommandEnum.COMMAND_LOGIN_RESP, new LoginRespBody(user.getId()));
+//        Im.bSend(channelContext, WsResponse.fromText(success, ImConfig.CHARSET));
 
         log.info("登录{}", uid);
         Im.bindUser(channelContext, user);

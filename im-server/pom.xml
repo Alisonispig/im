@@ -60,8 +60,6 @@
 
                     <excludes>
                         <exclude>config/**/*</exclude>
-                        <exclude>*.properties</exclude>
-                        <exclude>*.xml</exclude>
                     </excludes>
                 </configuration>
             </plugin>

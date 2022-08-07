@@ -77,8 +77,8 @@ public class MinIoUtils {
 
     public void init() throws Exception {
         MinioClient minioClient = MinioClient.builder()
-                .endpoint(CourierConfig.minioHost,CourierConfig.minioPort,true)
-                .credentials("AKIAIOSFODNN7EXAMPLE", "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY")
+                .endpoint(CourierConfig.minioHost,CourierConfig.minioPort,CourierConfig.minioUseSSL)
+                .credentials(CourierConfig.minioAccessKey, CourierConfig.minioSecretKey)
                 .build();
         customMinioClient = new CustomMinioClient(minioClient);
         BucketExistsArgs build = BucketExistsArgs.builder().bucket(MINIO_BUCKET).build();

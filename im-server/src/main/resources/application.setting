@@ -11,12 +11,15 @@ httpCheckHost=false
 checkFileMd5=true
 
 [dev]
-mongoHost=192.168.3.128
+mongoHost=127.0.0.1
 mongoUserName=admin
 mongoPassword=QuniMade!
-fileUrl=https://192.168.3.128:8888/courier/
-minioHost=192.168.3.128
+fileUrl=https://127.0.0.1:9000/courier/
+minioHost=127.0.0.1
 minioPort=9000
+minioUseSSL=false
+minioAccessKey=minioadmin
+minioSecretKey=minioadmin
 
 [prod]
 mongoHost=8.142.64.52
@@ -25,3 +28,6 @@ mongoPassword=QuniMade!
 fileUrl=https://miniodev.o0o0oo.com/courier/
 minioHost=miniodev.o0o0oo.com
 minioPort=443
+minioUseSSL=true
+minioAccessKey=AKIAIOSFODNN7EXAMPLE
+minioSecretKey=wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
