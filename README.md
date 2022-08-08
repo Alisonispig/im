@@ -48,7 +48,7 @@ docker run -d -p 9000:9000 -p 9001:9001 --name minio -v /home/minio/data:/data -
 ```
 2. 安装MongoDB
 ```
-docker run --name mongo --restart=always -p 27017:27017 -v /home/mongodb:/data/db -e MONGO_INITDB_ROOT_USERNAME=admin -e MONGO_INITDB_ROOT_PASSWORD=密码  -d mongo:latest mongod --auth
+docker run --name mongo --restart=always -p 27017:27017 -v /home/mongodb:/data/db -e MONGO_INITDB_ROOT_USERNAME=admin -e MONGO_INITDB_ROOT_PASSWORD=QuniMade!  -d mongo:latest mongod --auth
 ```
 3. 安装nginx， 作者使用nginxWebui
 ```
