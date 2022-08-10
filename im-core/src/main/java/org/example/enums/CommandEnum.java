@@ -483,7 +483,40 @@ public enum CommandEnum {
      * </pre>
      * <code>COMMAND_EMOTICON_OPERATION_RESP = 60</code>
      */
-    COMMAND_EMOTICON_OPERATION_RESP(60);
+    COMMAND_EMOTICON_OPERATION_RESP(60),
+
+    /**
+     * <pre>
+     * 设置是否公开群组
+     * </pre>
+     * <code>COMMAND_SET_PUBLIC_ROOM_REQ = 61</code>
+     */
+    COMMAND_SET_PUBLIC_ROOM_REQ(61),
+
+    /**
+     * <pre>
+     * 设置是否公开群组
+     * </pre>
+     * <code>COMMAND_SET_PUBLIC_ROOM_RESP = 62</code>
+     */
+    COMMAND_SET_PUBLIC_ROOM_RESP(62),
+
+    /**
+     * <pre>
+     * 设置是否公开群组
+     * </pre>
+     * <code>COMMAND_SEARCH_ROOM_REQ = 63</code>
+     */
+    COMMAND_SEARCH_ROOM_REQ(63),
+
+    /**
+     * <pre>
+     * 设置是否公开群组
+     * </pre>
+     * <code>COMMAND_SEARCH_ROOM_RESP = 64</code>
+     */
+    COMMAND_SEARCH_ROOM_RESP(64);
+
 
     private final int value;
 

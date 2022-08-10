@@ -48,6 +48,8 @@ public class CommandManager {
             registerCommand(new EmoticonSearchReqHandler());
             registerCommand(new EmoticonReqHandler());
             registerCommand(new EmoticonOperationReqHandler());
+            registerCommand(new SetPublicRoomReqHandler());
+            registerCommand(new SearchRoomReqHandler());
         } catch (Exception e) {
             log.info("注册处理器失败");
         }

@@ -75,6 +75,11 @@ public class Group implements Serializable {
      */
     private List<User> users;
 
+    /**
+     * 是否公开群组
+     */
+    private Boolean publicRoom;
+
     public Group clone(){
         return BeanUtil.copyProperties(this,Group.class,"users");
     }

@@ -27,4 +27,9 @@ public class CreateGroupReqBody {
      * 群组创建时携带的人
      */
     private List<User> users;
+
+    /**
+     * 是否公开群组
+     */
+    private Boolean publicRoom;
 }

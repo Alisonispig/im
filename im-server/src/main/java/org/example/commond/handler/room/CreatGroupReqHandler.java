@@ -58,7 +58,10 @@ public class CreatGroupReqHandler extends AbstractCmdHandler {
 
         String url = UploadService.uploadDefault(DefaultEnum.ACCOUNT_GROUP);
         // 创建群聊
-        Group build = Group.builder().roomId(IdUtil.getSnowflake().nextIdStr()).isFriend(request.getIsFriend()).index(System.currentTimeMillis()).roomName(roomName).users(new ArrayList<>())
+        Group build = Group.builder().roomId(IdUtil.getSnowflake().nextIdStr())
+                .isFriend(request.getIsFriend()).index(System.currentTimeMillis()).roomName(roomName)
+                .publicRoom(request.getPublicRoom())
+                .users(new ArrayList<>())
                 .build();
         request.getUsers().add(user);
         if (!request.getIsFriend()) {
