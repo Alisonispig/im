@@ -96,8 +96,14 @@ public class JoinGroupReqHandler extends AbstractCmdHandler {
             AbstractCmdHandler command = CommandManager.getCommand(CommandEnum.COMMAND_CHAT_REQ);
 
             String collect = joinGroupNotifyBody.getUsers().stream().map(User::getUsername).collect(Collectors.joining("、"));
+            String msg = "";
+            if(joinGroupNotifyBody.getUsers().size() == 1 && nowUser.getId().equals(joinGroupNotifyBody.getUsers().get(0).getId())) {
+                msg = "\"" + collect + "\" 通过群组搜索加入群聊";
+            } else {
+                msg = "\"" + nowUser.getUsername()+  "\" 邀请 \"" + collect + "\" 加入群聊";
+            }
 
-            ChatReqBody chatReqBody = ChatReqBody.buildSystem(joinGroupNotifyBody.getGroup().getRoomId(), nowUser.getId(), "\"" + collect + "\" 已加入群聊");
+            ChatReqBody chatReqBody = ChatReqBody.buildSystem(joinGroupNotifyBody.getGroup().getRoomId(), nowUser.getId(), msg);
             WsRequest wsRequest = WsRequest.fromText(JSON.toJSONString(chatReqBody, SerializerFeature.DisableCircularReferenceDetect), Im.CHARSET);
             command.handler(wsRequest, channelContext);
 
