@@ -1,4 +1,4 @@
-package org.example.commond.handler;
+package org.example.commond.handler.system;
 
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;

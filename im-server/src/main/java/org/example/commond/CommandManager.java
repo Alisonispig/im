@@ -7,6 +7,8 @@ import org.example.commond.handler.emoticon.EmoticonReqHandler;
 import org.example.commond.handler.emoticon.EmoticonSearchReqHandler;
 import org.example.commond.handler.message.*;
 import org.example.commond.handler.room.*;
+import org.example.commond.handler.system.EditProfileHandler;
+import org.example.commond.handler.system.SetNewPasswordReqHandler;
 import org.example.commond.handler.system.SystemTextMessageHandler;
 import org.example.commond.handler.video.VideoReqHandler;
 import org.example.enums.CommandEnum;
@@ -36,6 +38,7 @@ public class CommandManager {
             registerCommand(new MessageReactionReqHandler());
             registerCommand(new MessageForwardReqHandler());
             registerCommand(new EditProfileHandler());
+            registerCommand(new SetNewPasswordReqHandler());
             registerCommand(new RemoveGroupUserReqHandler());
             registerCommand(new SetRoomAdminReqHandler());
             registerCommand(new SystemTextMessageHandler());

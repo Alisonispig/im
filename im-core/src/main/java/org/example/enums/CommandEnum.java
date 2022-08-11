@@ -515,7 +515,23 @@ public enum CommandEnum {
      * </pre>
      * <code>COMMAND_SEARCH_ROOM_RESP = 64</code>
      */
-    COMMAND_SEARCH_ROOM_RESP(64);
+    COMMAND_SEARCH_ROOM_RESP(64),
+
+    /**
+     * <pre>
+     * 设置新密码请求
+     * </pre>
+     * <code>COMMAND_SET_NEW_PASSWORD_REQ = 65</code>
+     */
+    COMMAND_SET_NEW_PASSWORD_REQ(65),
+
+    /**
+     * <pre>
+     * 设置新密码响应
+     * </pre>
+     * <code>COMMAND_SET_NEW_PASSWORD_RESP = 66</code>
+     */
+    COMMAND_SET_NEW_PASSWORD_RESP(66);
 
 
     private final int value;
