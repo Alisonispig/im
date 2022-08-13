@@ -50,7 +50,7 @@ public class EmoticonOperationReqHandler extends AbstractCmdHandler {
                 respBody.setEmoticon(this.deleteUserEmoticon(reqBody, user));
                 break;
             case INSERT_TO_STORE:
-                this.insertToStore(reqBody, user);
+                respBody.setEmoticon(this.insertToStore(reqBody, user));
                 break;
             case INSERT_TO_USER_AND_STORE:
                 this.insertToUserAndStore(reqBody, user);
@@ -58,12 +58,22 @@ public class EmoticonOperationReqHandler extends AbstractCmdHandler {
             case INSERT_EMOTICON_TO_USER:
                 respBody.setEmoticon(this.insertEmoticonToUser(reqBody, user));
                 break;
+            case MOVE_TOP:
+                respBody.setEmoticon(this.moveTop(reqBody, user));
+                break;
         }
 
         String success = RespBody.success(CommandEnum.COMMAND_EMOTICON_OPERATION_RESP, respBody);
         WsResponse response = WsResponse.fromText(success, Im.CHARSET);
         Im.send(channelContext, response);
         return null;
+    }
+
+    private Emoticon moveTop(EmoticonOperationReqBody reqBody, User user) {
+        Emoticon emoticon = emoticonService.getEmoticon(reqBody.getEmoticonId());
+        emoticon.setIndex(System.currentTimeMillis());
+        emoticonService.update(emoticon);
+        return emoticon;
     }
 
     private Emoticon insertEmoticonToUser(EmoticonOperationReqBody reqBody, User user) {
@@ -79,10 +89,12 @@ public class EmoticonOperationReqHandler extends AbstractCmdHandler {
         userEmoticonService.insert(id, user.getId());
     }
 
-    private void insertToStore(EmoticonOperationReqBody reqBody, User user) {
+    private Emoticon insertToStore(EmoticonOperationReqBody reqBody, User user) {
         Emoticon emoticon = emoticonService.getEmoticon(reqBody.getEmoticonId());
+        emoticon.setIndex(System.currentTimeMillis());
         emoticon.setIsPrivate(false);
         emoticonService.update(emoticon);
+        return emoticon;
     }
 
     private Emoticon insertToUser(EmoticonOperationReqBody body, User user) {

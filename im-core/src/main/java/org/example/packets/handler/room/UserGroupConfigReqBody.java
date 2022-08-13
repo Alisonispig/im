@@ -23,6 +23,16 @@ public class UserGroupConfigReqBody {
     private Boolean notice;
 
     /**
+     * 置顶或取消置顶
+     */
+    private Boolean moveTop;
+
+    /**
+     * 置顶或取消置顶返回的排序号
+     */
+    private Long index;
+
+    /**
      * 配置类型
      */
     private UserGroupConfigTypeEnum type;

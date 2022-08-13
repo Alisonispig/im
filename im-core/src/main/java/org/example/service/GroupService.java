@@ -13,7 +13,6 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 import static com.mongodb.client.model.Filters.*;
-import static com.mongodb.client.model.Filters.ne;
 
 public class GroupService {
     private final GroupRepository groupRepository;
@@ -77,21 +76,21 @@ public class GroupService {
         groupRepository.updateById(groupInfo);
     }
 
-    public List<Group> getUserList(String name, String roomId) {
+    public List<Group> getRoomList(String name, String roomId) {
         Bson filter = null;
         if (StrUtil.isNotBlank(name) && StrUtil.isNotBlank(roomId)) {
             Pattern pattern = Pattern.compile("^.*" + name + ".*$", Pattern.CASE_INSENSITIVE);
-            filter = and(gte("_id", roomId), regex("roomName", pattern),eq("publicRoom",true));
+            filter = and(gte("_id", roomId), regex("roomName", pattern),eq("publicRoom",true),ne("isDeleted", true));
         }
         if (StrUtil.isNotBlank(name) && StrUtil.isBlank(roomId)) {
             Pattern pattern = Pattern.compile("^.*" + name + ".*$", Pattern.CASE_INSENSITIVE);
-            filter =  and(regex("roomName", pattern),eq("publicRoom",true));
+            filter =  and(regex("roomName", pattern),eq("publicRoom",true),ne("isDeleted", true));
         }
         if (StrUtil.isBlank(name) && StrUtil.isNotBlank(roomId)) {
-            filter = and(gte("_id", roomId),eq("publicRoom",true));
+            filter = and(gte("_id", roomId),eq("publicRoom",true),ne("isDeleted", true));
         }
         if(StrUtil.isBlank(name) && StrUtil.isBlank(roomId)){
-            filter = and(eq("publicRoom",true));
+            filter = and(eq("publicRoom",true),ne("isDeleted", true));
         }
         return groupRepository.findSortLimit(filter, eq("_id", 1), 20);
     }

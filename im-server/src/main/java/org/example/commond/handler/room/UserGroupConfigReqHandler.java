@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import org.example.commond.AbstractCmdHandler;
 import org.example.config.Im;
 import org.example.enums.CommandEnum;
+import org.example.packets.bean.Group;
 import org.example.packets.bean.User;
 import org.example.packets.bean.UserGroup;
 import org.example.packets.handler.system.RespBody;
@@ -43,11 +44,33 @@ public class UserGroupConfigReqHandler extends AbstractCmdHandler {
             case GROUP_REMARK:
                 setGroupRemark(body, channelContext);
                 break;
+            case MOVE_TOP:
+                setMoveTop(body, channelContext);
+                break;
             default:
                 break;
         }
 
         return null;
+    }
+
+    private void setMoveTop(UserGroupConfigReqBody body, ChannelContext channelContext) {
+        User user = Im.getUser(channelContext);
+        UserGroup userGroup = userGroupService.getUserGroup(body.getRoomId(), user.getId());
+        userGroup.setTop(body.getMoveTop());
+        userGroupService.update(userGroup);
+
+        if (Boolean.TRUE.equals(body.getMoveTop())) {
+            body.setIndex(9999999999999L);
+        } else {
+            Group group = groupService.getGroupInfo(body.getRoomId());
+            body.setIndex(group.getIndex());
+        }
+
+        String success = RespBody.success(CommandEnum.COMMAND_USER_GROUP_CONFIG_RESP, body);
+        WsResponse response = WsResponse.fromText(success, Im.CHARSET);
+        Im.send(channelContext, response);
+
     }
 
     /**

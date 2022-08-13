@@ -21,4 +21,9 @@ public enum UserGroupConfigTypeEnum {
      */
     GROUP_REMARK,
 
+    /**
+     * 置顶
+     */
+    MOVE_TOP,
+
 }

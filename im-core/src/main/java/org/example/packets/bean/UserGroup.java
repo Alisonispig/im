@@ -35,6 +35,11 @@ public class UserGroup {
      * 是否开启通知
      */
     private Boolean notice;
+
+    /**
+     * 置顶
+     */
+    private Boolean top;
 }
 
 

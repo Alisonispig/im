@@ -40,7 +40,7 @@ public class SearchRoomReqHandler extends AbstractCmdHandler {
         SearchRoomRespBody respBody = new SearchRoomRespBody();
         respBody.setSearchId(reqBody.getSearchId());
 
-        List<Group> roomList = groupService.getUserList(reqBody.getName(), reqBody.getRoomId());
+        List<Group> roomList = groupService.getRoomList(reqBody.getName(), reqBody.getRoomId());
 
         respBody.setRoomList(roomList);
         WsResponse response = WsResponse.fromText(RespBody.success(CommandEnum.COMMAND_SEARCH_ROOM_RESP, respBody), Im.CHARSET);

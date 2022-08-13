@@ -531,7 +531,23 @@ public enum CommandEnum {
      * </pre>
      * <code>COMMAND_SET_NEW_PASSWORD_RESP = 66</code>
      */
-    COMMAND_SET_NEW_PASSWORD_RESP(66);
+    COMMAND_SET_NEW_PASSWORD_RESP(66),
+
+    /**
+     * <pre>
+     * 会话置顶请求
+     * </pre>
+     * <code>COMMAND_MOVE_TOP_ROOM_REQ = 67</code>
+     */
+    COMMAND_MOVE_TOP_ROOM_REQ(67),
+
+    /**
+     * <pre>
+     * 会话置顶响应
+     * </pre>
+     * <code>COMMAND_MOVE_TOP_ROOM_RESP = 68</code>
+     */
+    COMMAND_MOVE_TOP_ROOM_RESP(68);
 
 
     private final int value;

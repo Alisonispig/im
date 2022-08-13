@@ -46,6 +46,7 @@ public class UserReqHandler extends AbstractCmdHandler {
             group.setUsers(groupUsers);
             UserGroup userGroup = userGroupService.getUserGroup(group.getRoomId(), user.getId());
             group.setNotice(userGroup.getNotice());
+            group.setIndex(Boolean.TRUE.equals(userGroup.getTop()) ? 9999999999999L : group.getIndex());
             Chat.resetGroup(group, user.getId());
         }
         user.setChats(chats);

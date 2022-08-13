@@ -73,7 +73,8 @@ public class UserGroupService {
 
     public List<Group> getUserGroups(String userId) {
         List<UserGroup> userIds = userGroupRepository.find(and(eq("userId", userId), ne("roomDeleted", true)));
-        return userIds.stream().map(userGroup ->  groupRepository.findById(userGroup.getRoomId())).sorted(Comparator.comparing(Group::getIndex).reversed()).collect(Collectors.toList());
+        return userIds.stream().map(userGroup ->  groupRepository.findById(userGroup.getRoomId()))
+                .sorted(Comparator.comparing(Group::getIndex).reversed()).collect(Collectors.toList());
     }
 
     public void remove(String roomId, String userId) {
