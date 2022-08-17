@@ -1,6 +1,8 @@
 package org.example.protocol.http;
 
 import cn.hutool.core.util.IdUtil;
+import cn.hutool.core.util.StrUtil;
+import cn.hutool.crypto.SecureUtil;
 import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
 import org.example.enums.CommandEnum;
@@ -39,7 +41,7 @@ public class RegisterController {
 
         Auth authData = authService.getByAccount(reqBody.getAccount());
         if (authData != null) {
-           return Resps.txt(httpRequest, RespBody.fail(CommandEnum.COMMAND_REGISTER_RESP, "该登录账户已存在"));
+            return Resps.txt(httpRequest, RespBody.fail(CommandEnum.COMMAND_REGISTER_RESP, "该登录账户已存在"));
         }
 
         String url = UploadService.uploadDefault(DefaultEnum.ACCOUNT);
@@ -49,7 +51,7 @@ public class RegisterController {
 
         userService.saveOrUpdate(user);
 
-        Auth auth = authService.createAccount(reqBody,user.getId());
+        Auth auth = authService.createAccount(reqBody, user.getId());
 
         return Resps.txt(httpRequest, RespBody.success(CommandEnum.COMMAND_REGISTER_RESP));
     }
@@ -58,9 +60,42 @@ public class RegisterController {
     public HttpResponse checkAccount(String account, HttpRequest request) {
         Auth auth = authService.getByAccount(account);
         if (auth != null) {
-           return Resps.txt(request, RespBody.fail(CommandEnum.COMMAND_REGISTER_RESP, "该登录账户已存在"));
+            return Resps.txt(request, RespBody.fail(CommandEnum.COMMAND_REGISTER_RESP, "该登录账户已存在"));
         }
         return Resps.txt(request, RespBody.success(CommandEnum.COMMAND_REGISTER_RESP));
+    }
+
+    @RequestPath(value = "/check/question")
+    public HttpResponse checkAccountQuestion(String account, String question, String answer, HttpRequest request) {
+        Auth auth = authService.getByAccount(account);
+        if (auth != null) {
+            if (StrUtil.isBlank(auth.getQuestion())){
+                auth.setQuestion(question);
+                auth.setAnswer(answer);
+                authService.update(auth);
+                return Resps.txt(request, RespBody.success(CommandEnum.COMMAND_REGISTER_RESP, "验证通过"));
+            }
+            if (auth.getQuestion().equals(question) && auth.getAnswer().equals(answer)) {
+                return Resps.txt(request, RespBody.success(CommandEnum.COMMAND_REGISTER_RESP, "验证通过"));
+            }
+        }
+        return Resps.txt(request, RespBody.fail(CommandEnum.COMMAND_REGISTER_RESP, "问题或答案不正确"));
+    }
+
+    @RequestPath(value = "/reset")
+    public HttpResponse reset(HttpRequest request) {
+        RegisterReqBody reqBody = JSONObject.parseObject(request.getBodyString(), RegisterReqBody.class);
+
+        Auth auth = authService.getByAccount(reqBody.getAccount());
+        if (auth != null) {
+            if (auth.getQuestion().equals(reqBody.getQuestion()) && auth.getAnswer().equals(reqBody.getAnswer())
+                && reqBody.getPassword().equals(reqBody.getRepeatPassword())) {
+                auth.setPassword(SecureUtil.md5(reqBody.getPassword()));
+                authService.update(auth);
+                return Resps.txt(request, RespBody.success(CommandEnum.COMMAND_REGISTER_RESP, "修改成功"));
+            }
+        }
+        return Resps.txt(request, RespBody.fail(CommandEnum.COMMAND_REGISTER_RESP, "非法请求"));
     }
 
 }

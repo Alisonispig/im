@@ -8,6 +8,7 @@ import cn.hutool.jwt.JWTUtil;
 import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
 import org.example.commond.AbstractCmdHandler;
+import org.example.commond.CommandManager;
 import org.example.config.Chat;
 import org.example.config.Im;
 import org.example.config.ImConfig;
@@ -20,6 +21,7 @@ import org.example.packets.bean.UserGroup;
 import org.example.packets.handler.system.LoginReqBody;
 import org.example.packets.handler.system.LoginRespBody;
 import org.example.packets.handler.system.RespBody;
+import org.example.packets.handler.user.UserReqBody;
 import org.example.packets.handler.user.UserStatusBody;
 import org.tio.core.ChannelContext;
 import org.tio.core.intf.Packet;
@@ -81,6 +83,12 @@ public class LoginReqHandler extends AbstractCmdHandler {
         }
         auth.setLastLoginIp(channelContext.getClientNode().getIp());
         authService.update(auth);
+
+        UserReqHandler userReqHandler = (UserReqHandler) CommandManager.getCommand(CommandEnum.COMMAND_GET_USER_REQ);
+        UserReqBody userReqBody = new UserReqBody();
+        userReqBody.setUserId(user.getId());
+        WsRequest wsRequest = WsRequest.fromText(JSON.toJSONString(userReqBody), ImConfig.CHARSET);
+        userReqHandler.handler(wsRequest, channelContext);
         return null;
     }
 

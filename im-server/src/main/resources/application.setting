@@ -17,12 +17,12 @@ mongoPassword=QuniMade!
 fileUrl=https://192.168.3.206:9999/courier/
 minioHost=192.168.3.206
 minioPort=9000
-minioUseSSL=true
+minioUseSSL=truebv
 minioAccessKey=AKIAIOSFODNN7EXAMPLE
 minioSecretKey=wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
 
 [prod]
-mongoHost=8.142.64.52
+mongoHost=127.0.0.1
 mongoUserName=admin
 mongoPassword=QuniMade!
 fileUrl=https://miniodev.o0o0oo.com/courier/

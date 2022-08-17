@@ -32,6 +32,8 @@ public class AuthService {
         auth.setAccount(reqBody.getAccount());
         auth.setRegisterDate(new Date());
         auth.setUserId(userId);
+        auth.setQuestion(reqBody.getQuestion());
+        auth.setAnswer(reqBody.getAnswer());
         authRepository.insert(auth);
         return auth;
     }

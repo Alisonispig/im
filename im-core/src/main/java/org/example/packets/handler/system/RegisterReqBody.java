@@ -25,4 +25,14 @@ public class RegisterReqBody {
      */
     private String repeatPassword;
 
+    /**
+     * 问题
+     */
+    private String question;
+
+    /**
+     * 答案
+     */
+    private String answer;
+
 }
