@@ -1,8 +1,6 @@
 ##  信使  简洁轻量的即时通讯工具 
 
-[国内访问](https://gitee.com/LiLongLong719/im) 
-
-[GitHub](https://github.com/Alisonispig/im)
+[国内访问](https://gitee.com/LiLongLong719/im) [GitHub](https://github.com/Alisonispig/im)
 
 ### 😯 演示地址(万水千山都是情,点个Star行不行)
 
